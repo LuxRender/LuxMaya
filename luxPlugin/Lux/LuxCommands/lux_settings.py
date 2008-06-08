@@ -23,7 +23,7 @@ class lux_settings:
     """
 
     # IMPORTANT!! Be sure to update this constant if you make changes to this file
-    CURRENT_SC_VERSION = 11
+    CURRENT_SC_VERSION = 12
 
     def addString(self, ln):
         """
@@ -141,13 +141,16 @@ class lux_settings:
         self.addBool(ln = 'scene_export_nurbs' , dv = 0)
         self.addBool(ln = 'scene_export_volumes' , dv = 0)
         
+        self.addBool(ln = 'scene_reverse_gamma', dv = 1)
+        self.addBool(ln = 'scene_clamp_color', dv = 1)
+        
         # Camera settings
         self.addFloat ( ln = 'camera_exposuretime', dv = 1 )
         self.addEnum  ( ln = 'camera_persptype', options = 'Perspective:Environment') #:Realistic' )
         self.addBool  ( ln = 'camera_autofocus', dv = 0 )
         
         # Renderer settings
-        self.addEnum( ln = 'pixel_sampler', options = 'Random:Low Discrepancy:Halton:Metropolis:erpt', dv = 1 )
+        self.addEnum ( ln = 'pixel_sampler', options = 'Random:Low Discrepancy:Halton:Metropolis:erpt', dv = 1 )
         #  pixel sampler settings
         self.addShort( ln = 'pixel_sampler_xsamples', dv = 2 )
         self.addShort( ln = 'pixel_sampler_ysamples', dv = 2 )
@@ -179,7 +182,7 @@ class lux_settings:
         self.addLong ( ln = 'accelerator_maxprims', dv = 1 )
         self.addLong ( ln = 'accelerator_maxdepth', dv = -1 )
         
-        self.addEnum( ln = 'surface_integrator', options = 'Bidirectional:Directlighting:Particletracing:Path:Exphotonmap', dv = 3)
+        self.addEnum ( ln = 'surface_integrator', options = 'Bidirectional:Directlighting:Particletracing:Path:Exphotonmap', dv = 3)
         #  Surface integrator settings
         self.addShort( ln = 'surface_integrator_eyemaxdepth', dv = 8 )
         self.addShort( ln = 'surface_integrator_lightmaxdepth', dv = 8 )
@@ -195,13 +198,13 @@ class lux_settings:
         # self.addFloat( ln = 'rrthreshold' ) # UNUSED ?!
         self.addFloat( ln = 'surface_integrator_gatherangle', dv = 10.0)
         
-        self.addEnum( ln = 'volume_integrator', options = 'Emission:Single', dv = 1 )
+        self.addEnum ( ln = 'volume_integrator', options = 'Emission:Single', dv = 1 )
         #  volume integrator settings
         self.addFloat( ln = 'volume_integrator_stepsize', dv = 1 )
         
         
         # Film Settings
-        self.addEnum( ln = 'film', options = 'Fleximage' )
+        self.addEnum ( ln = 'film', options = 'Fleximage' )
         #  fleximage settings
         # xresolution is set by exporter
         # yresolution is set by exporter

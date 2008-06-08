@@ -134,11 +134,11 @@ class luxEnvironmentLightLoader(ExportModule):
         hdrFileName = fileNamePlug.asString()
         
         lPlug = self.dpNode.findPlug("outColorLR")
-        lColorR = lPlug.asFloat()
+        lColorR = self.rgcAndClamp( lPlug.asFloat() )
         lPlug = self.dpNode.findPlug("outColorLG")
-        lColorG = lPlug.asFloat()
+        lColorG = self.rgcAndClamp( lPlug.asFloat() )
         lPlug = self.dpNode.findPlug("outColorLB")
-        lColorB = lPlug.asFloat()
+        lColorB = self.rgcAndClamp( lPlug.asFloat() )
         
         samplesPlug = self.dpNode.findPlug("numSamples")
         numSamples = samplesPlug.asInt()

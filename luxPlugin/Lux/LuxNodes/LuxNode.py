@@ -19,6 +19,8 @@ os.altsep = '/'
 from maya import OpenMaya
 from maya import cmds
 
+from Lux.LuxExportModules.ExportModule import ExportModule
+
 class LuxNode:
 	"""
 	Custom Lux node base class
@@ -140,7 +142,7 @@ class FileCollector:
 		
 		return fileName
 			
-class NodeAttribute:
+class NodeAttribute(ExportModule):
 	"""
 	Custom Lux node attribute base class
 	"""
@@ -276,13 +278,13 @@ class ShaderColorAttribute(NodeAttribute):
 			self.exportName = '%s.%s' % (texName, self.plugName)
 		else:
 			colorPlug = shaderNode.findPlug(self.plugName + "R")
-			colorR = colorPlug.asFloat()
+			colorR = self.rgcAndClamp( colorPlug.asFloat() )
 			
 			colorPlug = shaderNode.findPlug(self.plugName + "G")
-			colorG = colorPlug.asFloat()
+			colorG = self.rgcAndClamp( colorPlug.asFloat() )
 			
 			colorPlug = shaderNode.findPlug(self.plugName + "B")
-			colorB = colorPlug.asFloat()
+			colorB = self.rgcAndClamp( colorPlug.asFloat() )
 			
 			self.addToOutput( 'Texture "%s.%s"' % (self.shaderName, self.luxName) )
 			self.addToOutput( '\t"color" "constant"' )
@@ -409,11 +411,12 @@ class TextureColorAttribute(NodeAttribute):
 			self.addToOutput( '\t\t"texture %s" ["%s"]' % (cPlug, nTextName ))
 		else:
 			myPlugR = textureNode.findPlug( cPlug + 'R' )
-			valueR = myPlugR.asFloat()
+			valueR = self.rgcAndClamp( myPlugR.asFloat() )
 			myPlugG = textureNode.findPlug( cPlug + 'G' )
-			valueG = myPlugG.asFloat()
+			valueG = self.rgcAndClamp( myPlugG.asFloat() )
 			myPlugB = textureNode.findPlug( cPlug + 'B' )
-			valueB = myPlugB.asFloat()
+			valueB = self.rgcAndClamp( myPlugB.asFloat() )
+            
 			self.addToOutput( '\t\t"color %s" [%f %f %f]' % (cPlug, valueR, valueG, valueB) )
 		
 		return self.outputString

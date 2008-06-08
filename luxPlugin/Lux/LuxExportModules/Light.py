@@ -86,13 +86,17 @@ class SpotLight(Light):
 		"""
 		
 		color = self.light.color()
-		intensity = self.light.intensity()	
+		intensity = self.light.intensity()
+		
+		colorR = self.rgcAndClamp( color.r * intensity )
+		colorG = self.rgcAndClamp( color.g * intensity )
+		colorB = self.rgcAndClamp( color.b * intensity )
 	
 		self.addToOutput( '# Spot Light ' + self.dagPath.fullPathName() )
 		self.addToOutput( 'TransformBegin' )
 		self.addToOutput( self.translationMatrix( self.dagPath ) )
 		self.addToOutput( '\tLightSource "spot"' )
-		self.addToOutput( '\t\t"color I" [%f %f %f]' % (color.r*intensity, color.g*intensity, color.b*intensity) )
+		self.addToOutput( '\t\t"color I" [%f %f %f]' % (colorR, colorG, colorB) )
 		self.addToOutput( '\t\t"point from" [0 0 0]')
 		self.addToOutput( '\t\t"point to" [0 0 -1]' )
 		self.addToOutput( '\t\t"float coneangle" [%f]' % ( self.light.coneAngle()*180/math.pi ) )
@@ -128,13 +132,17 @@ class PointLight(Light):
 		"""
 		
 		color = self.light.color()
-		intensity = self.light.intensity()	
+		intensity = self.light.intensity()
+		
+		colorR = self.rgcAndClamp( color.r * intensity )
+		colorG = self.rgcAndClamp( color.g * intensity )
+		colorB = self.rgcAndClamp( color.b * intensity )
 		
 		self.addToOutput( '# Point Light ' + self.dagPath.fullPathName() )
 		self.addToOutput( 'TransformBegin' )
 		self.addToOutput( self.translationMatrix( self.dagPath ) )
 		self.addToOutput( '\tLightSource "point"' )
-		self.addToOutput( '\t\t"color I" [%f %f %f]' % (color.r*intensity, color.g*intensity, color.b*intensity) )
+		self.addToOutput( '\t\t"color I" [%f %f %f]' % (colorR, colorG, colorB) )
 		self.addToOutput( 'TransformEnd' )
 		self.addToOutput( '' )
 	#end def getOutput

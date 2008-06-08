@@ -17,6 +17,7 @@
 import os, math
 os.altsep = '/'
 from maya import OpenMaya
+from maya import cmds
 
 class ExportModule:
     """
@@ -39,6 +40,19 @@ class ExportModule:
     
 #    def __init__(self, dagPath):
 #        pass
+
+    @staticmethod
+    def rgcAndClamp(colorValue):
+        if cmds.getAttr( 'lux_settings.scene_reverse_gamma' ) == 1:
+            gamma = cmds.getAttr( 'lux_settings.film_gamma' )
+            colorValue = colorValue**gamma
+            
+        if cmds.getAttr( 'lux_settings.scene_clamp_color' ) == 1:
+            colorValue *= 0.9
+            if colorValue > 0.9: colorValue = 0.9
+            if colorValue < 0.0: colorValue = 0.0
+            
+        return colorValue
     
     def intToBoolString(self, int):
         if int == 1: return 'true'
@@ -136,13 +150,13 @@ class ExportModule:
         """
         
         colorPlug = shaderNode.findPlug("arealightLR")
-        colorR = colorPlug.asFloat()
+        colorR = self.rgcAndClamp( colorPlug.asFloat() )
         
         colorPlug = shaderNode.findPlug("arealightLG")
-        colorG = colorPlug.asFloat()
+        colorG = self.rgcAndClamp( colorPlug.asFloat() )
         
         colorPlug = shaderNode.findPlug("arealightLB")
-        colorB = colorPlug.asFloat()
+        colorB = self.rgcAndClamp( colorPlug.asFloat() )
         
         outStr  = 'AreaLightSource "area"' + os.linesep
         outStr += ( '\t"integer nsamples" [%i]' % 1 ) + os.linesep

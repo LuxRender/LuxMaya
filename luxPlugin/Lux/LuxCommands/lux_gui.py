@@ -438,18 +438,42 @@ class lux_gui:
 		self.endRow() # fileRow4
 		#--
 		
-		fileRow5 = self.newRow( parent = fileFrame )
-		
+		fileRow6 = self.newRow( parent = fileFrame )
 		#---
-		self.newText( label = '', parent = fileRow5 )
+		self.newText( label = '', parent = fileRow6 )
 		fileAnimLevel = self.startLevel()
 		lux_file_animation = self.addCheckBox( parent = fileAnimLevel, label = 'Render animation', value = False)
 		cmds.connectControl( lux_file_animation, 'lux_settings.render_animation' )
 		self.endLevel()
 		#---
-		
 		self.endRow()
 		#--
+		
+		
+		fileRow7 = self.newRow( parent = fileFrame )
+		#---
+		self.newText( label = 'Color Controls' , parent = fileRow7 )
+		fileColorRow = self.startLevel()
+		#----
+		rgcRow = self.newRow( parent = fileColorRow, numberOfColumns = 1)
+		#-----
+		lux_file_rgc = self.addCheckBox( parent = rgcRow, label = 'Reverse Gamma Correction', value = True )
+		cmds.connectControl( lux_file_rgc, 'lux_settings.scene_reverse_gamma' )
+		#-----
+		self.endRow()
+		#----
+		clampRow = self.newRow( parent = fileColorRow, numberOfColumns = 1)
+		#-----
+		lux_file_clamp = self.addCheckBox( parent = clampRow, label = 'Clamp: 0 <= c <= 0.9', value = True )
+		cmds.connectControl( lux_file_clamp, 'lux_settings.scene_clamp_color' )
+		#-----
+		self.endRow()
+		#----
+		self.endLevel()
+		#---
+		self.endRow()
+		#--
+		
 		
 		# LEVEL 2 Add button and progress bar
 		exportButton  = cmds.button( width = (self.lux_GUI_width),
