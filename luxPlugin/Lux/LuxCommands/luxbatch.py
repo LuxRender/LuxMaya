@@ -61,7 +61,7 @@ class luxbatch:
         Start the batch export process.
         1. For each frame to export, export it
         2. Append exported scene filename to fileList
-        3. pass fileLiust to makeBatchFile()
+        3. pass fileList to makeBatchFile()
         """
         
         fileList = []
@@ -72,6 +72,7 @@ class luxbatch:
         self.mProgress.setProgress(0)
         self.mProgress.startProgress()
         
+
         if startFrame == endFrame:
             # single frame export
             fileList.append( self.exportFile(startFrame) )
@@ -82,14 +83,14 @@ class luxbatch:
             for f in range(int(startFrame), int(endFrame)+1): 
                 self.mProgress.setTitle( 'Frames %i - %i: %i' % (int(startFrame), int(endFrame), f) )
                 cmds.currentTime( f )
-                fileList.append(self.exportFile(f))
+                fileList.append( self.exportFile(f) )
                 self.mProgress.advanceProgress(1)
                 if self.mProgress.isCancelled(): break
             
             cmds.currentTime( ct )
         
         self.makeBatchFile(fileList)
-        
+        OpenMaya.MGlobal.displayInfo( 'Lux Export Successful' )
         self.mProgress.endProgress()
             
     
@@ -139,7 +140,12 @@ class luxbatch:
         leArgs.addArg( renderWidth )
         leArgs.addArg( renderHeight )
         leArgs.addArg( render_cam )
-        le.doIt( leArgs )
+        
+        try:
+            le.doIt( leArgs )
+        except:
+            self.mProgress.endProgress()
+            raise
 
         return sceneFileName
     

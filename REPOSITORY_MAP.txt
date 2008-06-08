@@ -2,14 +2,14 @@ What's in this respository ?
 ----------------------------
 
 
-trunk/installer/																Installer scripts
+./installer/																	Installer scripts
 
 	linuxInstallerSrc.sh														Linux installer bootstrap script
 	linuxInstallScript.sh														Linux installer payload script
 	makeDist.sh																	Distribution package maker
 	windowsInstaller.nsi														Windows installer NSIS script
 
-trunk/src/																		MEL Scripts, Icons and other package files.
+./src/																			MEL Scripts, Icons and other package files.
 
 	*.txt																		Info included in distribution packages
 	Mel/*																		LuxMaya MEL scripts
@@ -18,12 +18,12 @@ trunk/src/																		MEL Scripts, Icons and other package files.
 	Icons/src/*																	LuxMaya icon srouce files. SVG + PSD.
 	attrPresets/script/*														LuxMaya Render settings presets
 
-trunk/matlib/																	Material library/Lux online integration
+./matlib/																		Material library/Lux online integration
 
 	safeeval.py																	Safe Eval() class
 	webfetch.py																	Class to fetch preset data fom the web
 
-trunk/luxPlugin/																Lux Plugin sources
+./luxPlugin/																	Lux Plugin sources
 
 	luxPlugin.py																Plugin loader
 
