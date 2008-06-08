@@ -1,0 +1,64 @@
+/**
+ * ------------------------------------------------------------------------------
+ * Lux exporter python script plugin for Maya
+ *
+ * by Doug Hammond 02/2008
+ *
+ * This file is licensed under the GPL
+ * http://www.gnu.org/licenses/gpl-3.0.txt
+ *
+ * $Id$
+ *
+ * ------------------------------------------------------------------------------
+ *
+ * This is the Attribute Editor template for luxSunsky
+ *
+ * ------------------------------------------------------------------------------
+ */
+ 
+ global proc AEluxSunskyTemplate( string $nodeName )
+{
+	AEswatchDisplay $nodeName;
+	
+	editorTemplate -beginScrollLayout;
+	
+		editorTemplate -beginLayout "Lux Sun+Sky Attributes" -collapse 0;
+			editorTemplate -addControl "nsamples";
+			editorTemplate -addControl "gain";
+			editorTemplate -addControl "turbidity";
+			editorTemplate -addControl "relsize";
+		editorTemplate -endLayout;
+		
+		editorTemplate -beginLayout "Geographic Sun Calculator" -collapse 0;
+			editorTemplate -addDynamicControl "latitude";
+			editorTemplate -addDynamicControl "longitude";
+			editorTemplate -addDynamicControl "timeZone";
+			editorTemplate -addDynamicControl "localHour";
+			editorTemplate -addDynamicControl "localMinute";
+			editorTemplate -addDynamicControl "useHourValue";
+			editorTemplate -addDynamicControl "localHourValue";
+			editorTemplate -addDynamicControl "day";
+			editorTemplate -addDynamicControl "month";
+			editorTemplate -addDynamicControl "year";
+			editorTemplate -addDynamicControl "useDayValue";
+			editorTemplate -addDynamicControl "dayValue";
+//			editorTemplate -addSeparator;
+//			editorTemplate -addControl "effectiveLocalHour";
+//			editorTemplate -addControl "effectiveLocalMinute";
+//			editorTemplate -addControl "effectiveDay";
+//			editorTemplate -addControl "effectiveMonth";
+//			editorTemplate -addControl "elevation";
+//			editorTemplate -addControl "azimuth";
+		editorTemplate -endLayout;
+		
+		editorTemplate -beginLayout "Other Attributes" -collapse 0;
+			AElocatorCommon $nodeName;
+		editorTemplate -endLayout;
+
+		AElocatorInclude $nodeName;
+
+		//	This will add the standard UI controls for the node
+		editorTemplate -addExtraControls;
+
+	editorTemplate -endScrollLayout;
+}

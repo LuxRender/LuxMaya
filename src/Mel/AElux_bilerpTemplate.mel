@@ -1,0 +1,45 @@
+/**
+ * ------------------------------------------------------------------------------
+ * Lux exporter python script plugin for Maya
+ *
+ * by Doug Hammond 02/2008
+ *
+ * This file is licensed under the GPL
+ * http://www.gnu.org/licenses/gpl-3.0.txt
+ *
+ * $Id$
+ *
+ * ------------------------------------------------------------------------------
+ *
+ * This is the Attribute Editor template for lux_bilerp
+ *
+ * ------------------------------------------------------------------------------
+ */
+ 
+ global proc AElux_bilerpTemplate( string $nodeName )
+{
+	//AEswatchDisplay $nodeName;
+	
+	editorTemplate -beginScrollLayout;
+	
+		editorTemplate -beginLayout "Bilerp Texture Attributes" -collapse 0;
+			editorTemplate -addControl "mapping";
+			editorTemplate -label "Planar mapping vector 1" -addControl "v1";
+			editorTemplate -label "Planar mapping vector 2" -addControl "v2";
+
+			editorTemplate -addControl "uscale";
+			editorTemplate -addControl "vscale";
+			editorTemplate -addControl "udelta";
+			editorTemplate -addControl "vdelta";
+			
+			editorTemplate -label "Bilerp Color 1" -addControl "v00";
+			editorTemplate -label "Bilerp Color 2" -addControl "v01";
+			editorTemplate -label "Bilerp Color 3" -addControl "v10";
+			editorTemplate -label "Bilerp Color 4" -addControl "v11";
+		editorTemplate -endLayout;
+				
+		// include/call base class/node attributes
+		AEdependNodeTemplate $nodeName;
+		
+	editorTemplate -endScrollLayout;
+}

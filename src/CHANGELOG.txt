@@ -1,0 +1,702 @@
+CHANGELOG
+---------
+
+------------------------------------------------------------------------
+r149 | doug | 2008-05-29 21:58:35 +0100 (Thu, 29 May 2008) | 2 lines
+
+Set svn:keywords Id on all new files.
+Adde lux_mix AETemplate
+------------------------------------------------------------------------
+r148 | doug | 2008-05-29 21:55:11 +0100 (Thu, 29 May 2008) | 2 lines
+
+Moved bump map into TextureNodes as another dummy texture type. Bump maps currently only work with fileTextures on bumpDepth, however the bumpValue now scales the bump map :)
+Commented out all AttributeAffects lines in all textures.
+------------------------------------------------------------------------
+r147 | doug | 2008-05-29 17:44:26 +0100 (Thu, 29 May 2008) | 1 line
+
+Added blender musgrave texture, made texture enum attributes work.
+------------------------------------------------------------------------
+r146 | doug | 2008-05-29 15:27:53 +0100 (Thu, 29 May 2008) | 1 line
+
+Added mixTexture, and corrected output for FloatAttributes
+------------------------------------------------------------------------
+r145 | doug | 2008-05-29 14:45:47 +0100 (Thu, 29 May 2008) | 1 line
+
+Got correct output of complete shading network :)
+------------------------------------------------------------------------
+r144 | doug | 2008-05-28 21:08:30 +0100 (Wed, 28 May 2008) | 1 line
+
+Removed lots of old commented code, and commented out some unused code.
+------------------------------------------------------------------------
+r143 | doug | 2008-05-28 20:26:19 +0100 (Wed, 28 May 2008) | 1 line
+
+REmoved lots of old code from GUI module, and some from luxexport
+------------------------------------------------------------------------
+r142 | doug | 2008-05-28 17:02:23 +0100 (Wed, 28 May 2008) | 1 line
+
+dotsTexture was mistakenly 3D - changed to 2D.
+------------------------------------------------------------------------
+r141 | doug | 2008-05-28 16:51:30 +0100 (Wed, 28 May 2008) | 1 line
+
+All texture blocks are outputting parameters in corect order, but the blocks themselves are in reverse order.
+------------------------------------------------------------------------
+r140 | doug | 2008-05-28 16:12:34 +0100 (Wed, 28 May 2008) | 1 line
+
+Working on recursive texture search. All parts are there, but in wrong order !
+------------------------------------------------------------------------
+r139 | doug | 2008-05-28 14:30:56 +0100 (Wed, 28 May 2008) | 1 line
+
+Got texture factory working. Doesn't currently recurse.
+------------------------------------------------------------------------
+r138 | doug | 2008-05-28 12:30:12 +0100 (Wed, 28 May 2008) | 4 lines
+
+Refactored Texture output to use generic Factory. Each texture node now needs either:
+- output it's own attributes
+or *better solution*,
+- make a generic attribute iterator in TextureNode and make it happen automatically :)
+------------------------------------------------------------------------
+r137 | doug | 2008-05-28 11:34:30 +0100 (Wed, 28 May 2008) | 1 line
+
+New icons
+------------------------------------------------------------------------
+r136 | doug | 2008-05-28 11:34:11 +0100 (Wed, 28 May 2008) | 1 line
+
+Added all Id Keywords, and made new Icons.
+------------------------------------------------------------------------
+r135 | doug | 2008-05-27 22:10:45 +0100 (Tue, 27 May 2008) | 1 line
+
+Added remaining Lux texture nodes.
+------------------------------------------------------------------------
+r134 | doug | 2008-05-27 19:23:30 +0100 (Tue, 27 May 2008) | 3 lines
+
+Disabled all compute() methods in custom textures.
+Added bilerp AETemplate.
+Removed all swatches from custom texture AETemplates.
+------------------------------------------------------------------------
+r133 | doug | 2008-05-27 18:14:31 +0100 (Tue, 27 May 2008) | 2 lines
+
+Added skelton classes for all lux texture types.
+Added icons for all new nodes.
+------------------------------------------------------------------------
+r132 | doug | 2008-05-27 15:47:00 +0100 (Tue, 27 May 2008) | 1 line
+
+Changed comment in file header.
+------------------------------------------------------------------------
+r131 | doug | 2008-05-27 15:45:58 +0100 (Tue, 27 May 2008) | 1 line
+
+Changed sun to use less MEL, and only 1 expression.
+------------------------------------------------------------------------
+r130 | doug | 2008-05-27 12:08:15 +0100 (Tue, 27 May 2008) | 1 line
+
+Changed luxshader AETemplate to show friendly attr names.
+------------------------------------------------------------------------
+r129 | doug | 2008-05-27 11:45:35 +0100 (Tue, 27 May 2008) | 1 line
+
+Added proof of concept web config fetcher.
+------------------------------------------------------------------------
+r128 | doug | 2008-05-26 15:12:27 +0100 (Mon, 26 May 2008) | 1 line
+
+Added sunsky parameters to MiscNodes.luxSunskyLoader
+------------------------------------------------------------------------
+r127 | doug | 2008-05-26 15:07:30 +0100 (Mon, 26 May 2008) | 2 lines
+
+Added remainins parameters to sunsky.
+Extended FileCollector to work with tex/bump/hdr settings.
+------------------------------------------------------------------------
+r126 | doug | 2008-05-26 14:11:50 +0100 (Mon, 26 May 2008) | 1 line
+
+Fully tabbed and sub-tabbed GUI. No awkward optionMenu callbacks any more :)
+------------------------------------------------------------------------
+r125 | doug | 2008-05-25 22:28:32 +0100 (Sun, 25 May 2008) | 1 line
+
+Experimental GUI #2, tabbed layout.
+------------------------------------------------------------------------
+r124 | doug | 2008-05-25 21:58:27 +0100 (Sun, 25 May 2008) | 1 line
+
+Made MProgressWindow work as intended.
+------------------------------------------------------------------------
+r123 | doug | 2008-05-25 21:51:53 +0100 (Sun, 25 May 2008) | 2 lines
+
+Trial 2-column GUI layout.
+Modified MProgressWindow to advance progress bar on frames. (per-frame info still set on PW title).
+------------------------------------------------------------------------
+r122 | doug | 2008-05-25 21:11:33 +0100 (Sun, 25 May 2008) | 1 line
+
+Made geoSun use less MEL. Would be nice to find a replacement for the expressions.
+------------------------------------------------------------------------
+r121 | doug | 2008-05-25 17:36:20 +0100 (Sun, 25 May 2008) | 1 line
+
+Added luxSunsky Node. The expressions in the AETemplate for it are buggy - some proper callbacks would be better.
+------------------------------------------------------------------------
+r120 | doug | 2008-05-25 11:59:35 +0100 (Sun, 25 May 2008) | 1 line
+
+Fixed numerous other errors in env light.
+------------------------------------------------------------------------
+r119 | doug | 2008-05-25 11:09:11 +0100 (Sun, 25 May 2008) | 1 line
+
+Error in env light attributes.
+------------------------------------------------------------------------
+r118 | doug | 2008-05-25 11:05:29 +0100 (Sun, 25 May 2008) | 2 lines
+
+Added the rest of infinite light attributes.
+Added volume integrator settings to Rendersettings output.
+------------------------------------------------------------------------
+r117 | doug | 2008-05-24 23:46:53 +0100 (Sat, 24 May 2008) | 3 lines
+
+Made Environment light (HDRI) light (implemented as a locator).
+Improved windows batch file output when using luxconsole.
+Started translating GeoSun functions ready for sunsky.
+------------------------------------------------------------------------
+r116 | doug | 2008-05-24 20:14:56 +0100 (Sat, 24 May 2008) | 1 line
+
+Fixed error reporting for unsupported shaders.
+------------------------------------------------------------------------
+r115 | doug | 2008-05-24 20:02:15 +0100 (Sat, 24 May 2008) | 1 line
+
+Fixed check for choosing Export from Lux menu before lux_settings exists.
+------------------------------------------------------------------------
+r114 | doug | 2008-05-24 18:25:34 +0100 (Sat, 24 May 2008) | 1 line
+
+Implemented environment camera and automatic lux_settings upgrade.
+------------------------------------------------------------------------
+r113 | doug | 2008-05-24 16:48:45 +0100 (Sat, 24 May 2008) | 1 line
+
+Fixed issues with incorrect imagemap scalle values.
+------------------------------------------------------------------------
+r112 | doug | 2008-05-24 15:52:14 +0100 (Sat, 24 May 2008) | 2 lines
+
+Tentatively fixed outAlpha issues with texture nodes.
+Texture computation is still bloody slow though.
+------------------------------------------------------------------------
+r111 | doug | 2008-05-24 15:27:47 +0100 (Sat, 24 May 2008) | 1 line
+
+Temp disabled outAlphas on custom 3d textures. Auto connection was causing Maya to lock up.
+------------------------------------------------------------------------
+r110 | doug | 2008-05-24 14:45:00 +0100 (Sat, 24 May 2008) | 4 lines
+
+Removed redundant luxlaunch class.
+Removed MPxCommand inheritance from all LuxCommand classes since we're not registering them in Maya.
+Added camera settings to frame (also added Realistic camera support, but it's disabled because it's broken in Lux).
+
+------------------------------------------------------------------------
+r109 | doug | 2008-05-23 22:01:29 +0100 (Fri, 23 May 2008) | 2 lines
+
+Fixed linux batch commands. Linux still won't launch process though.
+Fixed Collect texture path.
+------------------------------------------------------------------------
+r108 | doug | 2008-05-23 21:31:01 +0100 (Fri, 23 May 2008) | 1 line
+
+Added linux commands, and priority->nice value translation
+------------------------------------------------------------------------
+r107 | doug | 2008-05-23 20:49:31 +0100 (Fri, 23 May 2008) | 1 line
+
+Added windows animation support. Linux rendering broken until I write the shell script.
+------------------------------------------------------------------------
+r106 | doug | 2008-05-23 18:11:10 +0100 (Fri, 23 May 2008) | 1 line
+
+Missed one propset.
+------------------------------------------------------------------------
+r105 | doug | 2008-05-23 18:10:19 +0100 (Fri, 23 May 2008) | 4 lines
+
+Removed unused luxview command.
+Added skeleton for luxbatch batch render procedures.
+Added skeleton for camera settings in GUI.
+(added svn:keywords to all files)
+------------------------------------------------------------------------
+r104 | doug | 2008-05-23 16:34:24 +0100 (Fri, 23 May 2008) | 2 lines
+
+Implemented fluid export via Volume "volumegrid".
+No colour support yet. No proper x/y/z resolution yet. Fluid container must have equal X Y Z resolutions.
+------------------------------------------------------------------------
+r103 | doug | 2008-05-23 14:54:42 +0100 (Fri, 23 May 2008) | 1 line
+
+Made DOF work - but only so far for scenes in cm scaling. Somehow scale factor needs to be passed to camera module.
+------------------------------------------------------------------------
+r102 | doug | 2008-05-23 00:08:24 +0100 (Fri, 23 May 2008) | 2 lines
+
+Addes sketch of how volume export might work.
+Did a manual copy+paste from maya into scene file and it seems to work.
+------------------------------------------------------------------------
+r101 | doug | 2008-05-22 23:32:48 +0100 (Thu, 22 May 2008) | 1 line
+
+linux Maya.env needs : as path separator. changed file but not tested.
+------------------------------------------------------------------------
+r100 | doug | 2008-05-22 22:48:00 +0100 (Thu, 22 May 2008) | 3 lines
+
+Changes to make linux installer work.
+Plugin won't autoload.
+Reverted changes to try and make images save in renders/ folder. it messed up the scene file paths too.
+------------------------------------------------------------------------
+r99 | doug | 2008-05-22 22:08:05 +0100 (Thu, 22 May 2008) | 1 line
+
+Work in manual install instructions and manual install .zip generator.
+------------------------------------------------------------------------
+r98 | doug | 2008-05-22 21:07:44 +0100 (Thu, 22 May 2008) | 2 lines
+
+Made all render images to be saved in [scenePath]/renders/
+We now have all relative paths in the scene files.
+------------------------------------------------------------------------
+r97 | doug | 2008-05-22 20:56:56 +0100 (Thu, 22 May 2008) | 3 lines
+
+Added texture/bump file collect option.
+Added fixes for os.altsep not existing on linux. Now using os.altsep throughout instead of os.sep.
+-> os.sep is not valid in a quoted string in a lux scene file !
+------------------------------------------------------------------------
+r96 | doug | 2008-05-22 19:15:14 +0100 (Thu, 22 May 2008) | 1 line
+
+Fixed camera FOV calculation.
+------------------------------------------------------------------------
+r95 | doug | 2008-05-22 18:49:49 +0100 (Thu, 22 May 2008) | 2 lines
+
+Added more error handling to mesh output. Meshes without UVs will now be exported OK, and without a UV set.
+Added INSTALL.txt template, and modified makeDist.sh to make a flat .zip archive (UNTESTED).
+------------------------------------------------------------------------
+r94 | doug | 2008-05-22 17:36:06 +0100 (Thu, 22 May 2008) | 1 line
+
+Added basic error handling to mesh export module. Now skips meshes that could not be parsed.
+------------------------------------------------------------------------
+r93 | doug | 2008-05-22 16:39:31 +0100 (Thu, 22 May 2008) | 1 line
+
+Added usevariance to metropolis sampler.
+------------------------------------------------------------------------
+r92 | doug | 2008-05-22 11:08:27 +0100 (Thu, 22 May 2008) | 1 line
+
+Fixed error in linux install script.
+------------------------------------------------------------------------
+r91 | doug | 2008-05-22 00:54:34 +0100 (Thu, 22 May 2008) | 3 lines
+
+Getting installer scripts working. Mostly good but linux installer doesn't update Maya.env properly.
+
+Also we have big GUI bugs under linux :(
+------------------------------------------------------------------------
+r90 | doug | 2008-05-21 23:25:21 +0100 (Wed, 21 May 2008) | 1 line
+
+Made render settings presets menu work.
+------------------------------------------------------------------------
+r89 | doug | 2008-05-21 21:50:22 +0100 (Wed, 21 May 2008) | 3 lines
+
+Added svn:ignore to dist/Setup-LuxMaya.exe.
+Changed GUI colours to be more in line with Lux/website
+Added texture node icons (same generic for now)
+------------------------------------------------------------------------
+r88 | doug | 2008-05-21 21:32:48 +0100 (Wed, 21 May 2008) | 1 line
+
+Added lux_settings AE presets
+------------------------------------------------------------------------
+r87 | doug | 2008-05-21 20:47:31 +0100 (Wed, 21 May 2008) | 1 line
+
+Fixed unterminated string.
+------------------------------------------------------------------------
+r86 | doug | 2008-05-21 19:24:48 +0100 (Wed, 21 May 2008) | 1 line
+
+Changes windowsInstaller.nsi
+------------------------------------------------------------------------
+r85 | doug | 2008-05-21 17:44:43 +0100 (Wed, 21 May 2008) | 1 line
+
+Improved icon, and added SVG source.
+------------------------------------------------------------------------
+r84 | doug | 2008-05-21 17:32:10 +0100 (Wed, 21 May 2008) | 1 line
+
+Moved main menu creation into lux_gui
+------------------------------------------------------------------------
+r83 | doug | 2008-05-21 15:57:58 +0100 (Wed, 21 May 2008) | 1 line
+
+Many changes to windowsInstaller.nsi
+------------------------------------------------------------------------
+r82 | doug | 2008-05-21 15:54:49 +0100 (Wed, 21 May 2008) | 1 line
+
+Many changes to windowsInstaller.nsi
+------------------------------------------------------------------------
+r81 | doug | 2008-05-21 15:39:38 +0100 (Wed, 21 May 2008) | 2 lines
+
+added dummy file to attrPresets folder so that windowsInstaller script completes successfully
+
+------------------------------------------------------------------------
+r80 | doug | 2008-05-21 15:37:09 +0100 (Wed, 21 May 2008) | 2 lines
+
+added base lux icon in xpm format
+
+------------------------------------------------------------------------
+r79 | doug | 2008-05-21 15:36:19 +0100 (Wed, 21 May 2008) | 1 line
+
+changes to windows installer script, and added base lux icon in png format
+------------------------------------------------------------------------
+r78 | doug | 2008-05-21 15:07:11 +0100 (Wed, 21 May 2008) | 1 line
+
+changed windowsInstaller.nsi script for lux. Untested.
+------------------------------------------------------------------------
+r77 | doug | 2008-05-21 13:11:27 +0100 (Wed, 21 May 2008) | 2 lines
+
+Added installer scripts and info txt files for distribution.
+TODO: installer scripts need changing form indigo->lux and tweaking where necessary.
+------------------------------------------------------------------------
+r76 | doug | 2008-05-21 12:07:12 +0100 (Wed, 21 May 2008) | 1 line
+
+Added folders for other files.
+------------------------------------------------------------------------
+r75 | doug | 2008-05-21 12:05:13 +0100 (Wed, 21 May 2008) | 1 line
+
+Moving files around to allow keeping files of other types in the repository (files to go in user dir, install scripts etc)
+------------------------------------------------------------------------
+r74 | doug | 2008-05-21 00:13:29 +0100 (Wed, 21 May 2008) | 1 line
+
+Removed all traces of mltpath integrator. untested.
+------------------------------------------------------------------------
+r73 | doug | 2008-05-20 23:19:23 +0100 (Tue, 20 May 2008) | 2 lines
+
+Added local translation/scaling to luxObjectLocator to allow normalizing of external PLY data.
+Also changed appearance of locator in the viewport so that it doesn't completely obstruct the scene.
+------------------------------------------------------------------------
+r72 | doug | 2008-05-20 22:57:44 +0100 (Tue, 20 May 2008) | 2 lines
+
+Changd order of materials export to be first in world after lights.
+Working on luxObjectLocator to make it work better.
+------------------------------------------------------------------------
+r71 | doug | 2008-05-20 21:36:07 +0100 (Tue, 20 May 2008) | 1 line
+
+Update Id keyword on new files.
+------------------------------------------------------------------------
+r70 | doug | 2008-05-20 21:35:28 +0100 (Tue, 20 May 2008) | 2 lines
+
+Changes and upgrades to Lux menus.
+AETemplates for all nodes, including fancy file stuff for luxObjectLocator.
+------------------------------------------------------------------------
+r69 | doug | 2008-05-20 17:44:36 +0100 (Tue, 20 May 2008) | 1 line
+
+Added Id keyword to all files.
+------------------------------------------------------------------------
+r68 | doug | 2008-05-20 17:06:50 +0100 (Tue, 20 May 2008) | 1 line
+
+Linked up all Render settings to GUI.
+------------------------------------------------------------------------
+r67 | doug | 2008-05-20 15:15:06 +0100 (Tue, 20 May 2008) | 1 line
+
+Connected GUI to Film export module.
+------------------------------------------------------------------------
+r66 | doug | 2008-05-20 14:51:10 +0100 (Tue, 20 May 2008) | 2 lines
+
+Aborted attempt to make AETemplate in python. It's never going to work.
+Implemented node registering as loop over dict object. D.R.Y !
+------------------------------------------------------------------------
+r65 | doug | 2008-05-20 00:05:25 +0100 (Tue, 20 May 2008) | 1 line
+
+last GUI changes for today.
+------------------------------------------------------------------------
+r64 | doug | 2008-05-19 23:49:46 +0100 (Mon, 19 May 2008) | 8 lines
+
+Completed python GUI first cut. May change to a 2-column layout with :
+---------------------
+file     | renderer
+process  |
+film     |
+---------------------
+
+Removed old GUI mel script.
+------------------------------------------------------------------------
+r63 | doug | 2008-05-19 21:15:11 +0100 (Mon, 19 May 2008) | 2 lines
+
+Removed MEL scriptnode. :)
+More work on GUI. About half translated from MEL.
+------------------------------------------------------------------------
+r62 | doug | 2008-05-19 18:48:24 +0100 (Mon, 19 May 2008) | 1 line
+
+Implemented scriptnode in python.
+------------------------------------------------------------------------
+r61 | doug | 2008-05-19 17:22:16 +0100 (Mon, 19 May 2008) | 2 lines
+
+Added Lux menu to Rendering menu set.
+Change luxPlugin to not register any MPxCommands, everything is called directly via the GUI or Menu.
+------------------------------------------------------------------------
+r60 | doug | 2008-05-19 15:20:26 +0100 (Mon, 19 May 2008) | 1 line
+
+Removed old folder.
+------------------------------------------------------------------------
+r59 | doug | 2008-05-19 15:14:37 +0100 (Mon, 19 May 2008) | 1 line
+
+More GUI work, disabled registering of luxexport and luxlaunch commands.
+------------------------------------------------------------------------
+r58 | doug | 2008-05-19 13:28:47 +0100 (Mon, 19 May 2008) | 1 line
+
+More python GUI work. (it works!)
+------------------------------------------------------------------------
+r57 | doug | 2008-05-19 12:27:46 +0100 (Mon, 19 May 2008) | 1 line
+
+Started translative all MEL into python :)
+------------------------------------------------------------------------
+r56 | doug | 2008-05-19 01:02:36 +0100 (Mon, 19 May 2008) | 1 line
+
+Implemented ProgressWindow feedback in luxexport
+------------------------------------------------------------------------
+r55 | doug | 2008-05-19 00:30:49 +0100 (Mon, 19 May 2008) | 2 lines
+
+Refactored a little more.
+TODO: translate all non AE* MEL into new python commands.
+------------------------------------------------------------------------
+r54 | doug | 2008-05-19 00:14:46 +0100 (Mon, 19 May 2008) | 1 line
+
+Added further options to luxlaunch
+------------------------------------------------------------------------
+r53 | doug | 2008-05-18 23:43:58 +0100 (Sun, 18 May 2008) | 3 lines
+
+GUI mostly complete, and basic export process is working.
+Next: Everything in lux_settings scriptnode needs to be read in luxexport process.
+Next: Extend luxlaunch to support other options.
+------------------------------------------------------------------------
+r52 | doug | 2008-05-18 00:18:46 +0100 (Sun, 18 May 2008) | 1 line
+
+Made a start on the settings scriptnode, but once again Maya is making it harder than it ought to be.
+------------------------------------------------------------------------
+r51 | doug | 2008-05-17 22:45:02 +0100 (Sat, 17 May 2008) | 2 lines
+
+Made fbm render in Maya, although the placement node does nothing.
+Also added wrinkled texture, as it's nearly identical to fbm.
+------------------------------------------------------------------------
+r50 | doug | 2008-05-17 20:29:42 +0100 (Sat, 17 May 2008) | 1 line
+
+More refactoring, and implementation of lux's fbm texture. The node exports correct parameters, but doesn't render in Maya correctly. It also needs an AETemplate.
+------------------------------------------------------------------------
+r49 | doug | 2008-05-17 16:21:32 +0100 (Sat, 17 May 2008) | 1 line
+
+Refactored Node modules.
+------------------------------------------------------------------------
+r48 | doug | 2008-05-17 15:31:08 +0100 (Sat, 17 May 2008) | 2 lines
+
+Refactored and make luxObjectLocator work.
+Started on framework for texture nodes.
+------------------------------------------------------------------------
+r47 | doug | 2008-05-16 00:29:17 +0100 (Fri, 16 May 2008) | 1 line
+
+Provisional luxObjectLocator node
+------------------------------------------------------------------------
+r46 | doug | 2008-05-15 22:51:59 +0100 (Thu, 15 May 2008) | 1 line
+
+fix for per-face material assignments.
+------------------------------------------------------------------------
+r45 | doug | 2008-05-15 22:34:55 +0100 (Thu, 15 May 2008) | 1 line
+
+Added lots of docstrings.
+------------------------------------------------------------------------
+r44 | doug | 2008-05-15 21:33:06 +0100 (Thu, 15 May 2008) | 2 lines
+
+Changed Mesh, Nurbs and Lights modules to write directly to self.fileHandle.
+ExportModules that don't get passed a file handle accumulate and return strings still.
+------------------------------------------------------------------------
+r43 | doug | 2008-05-15 17:59:44 +0100 (Thu, 15 May 2008) | 1 line
+
+Added a couple of docstrings as an example.
+------------------------------------------------------------------------
+r42 | doug | 2008-05-15 15:22:28 +0100 (Thu, 15 May 2008) | 14 lines
+
+Made some changes to make python2.4/Maya 8.5 compatible
+
+TODO: fix
+# Traceback (most recent call last):
+#   File "D:/dev/malupy/trunk\Lux\luxexport.py", line 208, in doIt
+#     self.exportType( OpenMaya.MFn.kNurbsSurface, LuxModuleNurbs.Nurbs, "NURBS", self.nurbsFileHandle )
+#   File "D:/dev/malupy/trunk\Lux\luxexport.py", line 239, in exportType
+#     expOut = expModule.loadModule()
+#   File "D:/dev/malupy/trunk\Lux\LuxExportModules\ExportModule.py", line 43, in loadModule
+#     self.getOutput()
+#   File "D:/dev/malupy/trunk\Lux\LuxExportModules\Nurbs.py", line 60, in getOutput
+#     self.addToOutput( '\t"integer uorder" [%i]' % self.fShape.degreeU()+1 )
+# TypeError: cannot concatenate 'str' and 'int' objects // 
+
+------------------------------------------------------------------------
+r41 | doug | 2008-05-14 01:02:20 +0100 (Wed, 14 May 2008) | 1 line
+
+More GUI work.
+------------------------------------------------------------------------
+r40 | doug | 2008-05-13 00:57:31 +0100 (Tue, 13 May 2008) | 1 line
+
+Enabled user-controllable debug output.
+------------------------------------------------------------------------
+r39 | doug | 2008-05-13 00:51:57 +0100 (Tue, 13 May 2008) | 1 line
+
+removed commented unsafe axis change hack from luxexport
+------------------------------------------------------------------------
+r38 | doug | 2008-05-12 23:12:12 +0100 (Mon, 12 May 2008) | 1 line
+
+Added lots more pythonic string concats
+------------------------------------------------------------------------
+r37 | doug | 2008-05-12 22:44:43 +0100 (Mon, 12 May 2008) | 1 line
+
+Added Y to Z up conversion in ConcatTransforms and LookAt.
+------------------------------------------------------------------------
+r36 | doug | 2008-05-11 22:53:10 +0100 (Sun, 11 May 2008) | 2 lines
+
+Implemented bump maps in a fairly tidy manner.
+Although it would be good to use the bumpDepth parameter on the bump node rather than colorGain on the file node...
+------------------------------------------------------------------------
+r35 | doug | 2008-05-11 21:01:06 +0100 (Sun, 11 May 2008) | 2 lines
+
+Implemented AreaLightSource in ExportModule.
+added findShader() to NURBS module.
+------------------------------------------------------------------------
+r34 | doug | 2008-05-11 19:49:49 +0100 (Sun, 11 May 2008) | 2 lines
+
+Refactoring ShaderAttribute/ColorAttribute/FloatAttribute a little to make more generic.
+(pull methods into ShaderAttribute)
+------------------------------------------------------------------------
+r33 | doug | 2008-05-11 18:22:46 +0100 (Sun, 11 May 2008) | 2 lines
+
+Pulled node value input detection up into superclass for FloatAttribute and ColorAttribute.
+Any float or color value is now imagemappable !
+------------------------------------------------------------------------
+r32 | doug | 2008-05-11 18:02:21 +0100 (Sun, 11 May 2008) | 1 line
+
+Implemented texture mapping.
+------------------------------------------------------------------------
+r31 | doug | 2008-05-11 16:47:25 +0100 (Sun, 11 May 2008) | 3 lines
+
+Calibrated perspective and orgographic cameras.
+perspective also supports shift.
+thanks to luxblend [screenwindow].
+------------------------------------------------------------------------
+r30 | doug | 2008-05-11 00:53:12 +0100 (Sun, 11 May 2008) | 2 lines
+
+Trying to sort out camera.
+up axis and scene scale disabled.
+------------------------------------------------------------------------
+r29 | doug | 2008-05-10 23:30:57 +0100 (Sat, 10 May 2008) | 1 line
+
+Added Up axis correction and scene unit correction to export process.
+------------------------------------------------------------------------
+r28 | doug | 2008-05-10 18:03:54 +0100 (Sat, 10 May 2008) | 1 line
+
+Corrected many mistakes. all material exports now work.
+------------------------------------------------------------------------
+r27 | doug | 2008-05-10 17:53:25 +0100 (Sat, 10 May 2008) | 2 lines
+
+implemented all luxshaders.
+Modified transparency chaging for luxshader in AETemplate
+------------------------------------------------------------------------
+r26 | doug | 2008-05-10 14:20:46 +0100 (Sat, 10 May 2008) | 2 lines
+
+Created lambert->matte and phong->plastic translation via ShaderModule routines.
+Need to implement same for all luxshader types.
+------------------------------------------------------------------------
+r25 | doug | 2008-05-10 00:36:38 +0100 (Sat, 10 May 2008) | 2 lines
+
+Made lambert -> matte material export work.
+Uses named materials.
+------------------------------------------------------------------------
+r24 | doug | 2008-05-09 20:28:25 +0100 (Fri, 09 May 2008) | 1 line
+
+Added correct mesh UVs export. Seems to have fixed normal smoothing too :?
+------------------------------------------------------------------------
+r23 | doug | 2008-05-09 00:15:30 +0100 (Fri, 09 May 2008) | 2 lines
+
+Implemented export of proper triangulation in Lux.LuxExportModules.Mesh.
+Proper UVs to follow in the same manner.
+------------------------------------------------------------------------
+r22 | doug | 2008-05-08 22:43:35 +0100 (Thu, 08 May 2008) | 1 line
+
+corrected whitespace (aesthetic) in glassShader.py and removed old malupy.prj file
+------------------------------------------------------------------------
+r21 | doug | 2008-05-08 22:39:34 +0100 (Thu, 08 May 2008) | 1 line
+
+Completed first working version of AE Template for luxshader
+------------------------------------------------------------------------
+r20 | doug | 2008-05-07 23:23:43 +0100 (Wed, 07 May 2008) | 1 line
+
+Added arealightShader ShaderModule (for real this time) and started AE Template for luxshader.
+------------------------------------------------------------------------
+r19 | doug | 2008-05-07 22:51:34 +0100 (Wed, 07 May 2008) | 2 lines
+
+Added new arealight ShaderModule
+
+------------------------------------------------------------------------
+r18 | doug | 2008-05-07 00:06:41 +0100 (Wed, 07 May 2008) | 2 lines
+
+Made limited mesh exporting work. Bypassing explicit triangulation and outputting quads and all sorts.
+UV Coords are not exported properly. Need material support first to check what coords to export.
+------------------------------------------------------------------------
+r17 | doug | 2008-05-06 22:57:50 +0100 (Tue, 06 May 2008) | 1 line
+
+Minor changes for output formatting and code consistancy.
+------------------------------------------------------------------------
+r16 | doug | 2008-05-06 21:57:58 +0100 (Tue, 06 May 2008) | 2 lines
+
+Corrected NURBS output. Still a few minor problems with primitives. Trimmed surfaces not working at all.
+Re-enabled mesh export to investigate API problems.
+------------------------------------------------------------------------
+r15 | doug | 2008-05-05 22:20:27 +0100 (Mon, 05 May 2008) | 1 line
+
+Started on GUI (RenderSettings).
+------------------------------------------------------------------------
+r14 | doug | 2008-05-05 18:57:47 +0100 (Mon, 05 May 2008) | 1 line
+
+fixed a few small errors relating to file writing.
+------------------------------------------------------------------------
+r13 | doug | 2008-05-05 18:33:45 +0100 (Mon, 05 May 2008) | 1 line
+
+removed all references to sys
+------------------------------------------------------------------------
+r12 | doug | 2008-05-05 18:24:08 +0100 (Mon, 05 May 2008) | 2 lines
+
+Sketched out Material export module.
+Inserted many comments, things TODO and the like.
+------------------------------------------------------------------------
+r11 | doug | 2008-05-05 16:50:51 +0100 (Mon, 05 May 2008) | 4 lines
+
+More work on mesh - stumped by API errors.
+Added NURBS - export process works, but knots or points are wrong. (object renders incorrectly).
+
+refactored iterators in luxexport, now very tidy :)
+------------------------------------------------------------------------
+r10 | doug | 2008-05-05 00:49:29 +0100 (Mon, 05 May 2008) | 1 line
+
+Working on Mesh module. Getting some good output, but not really sure yet.
+------------------------------------------------------------------------
+r9 | doug | 2008-05-04 00:42:23 +0100 (Sun, 04 May 2008) | 2 lines
+
+changed import syntax in luxPlugin.py
+(consider renaming luxview to luxviewer so that all names have 9 chars ;) )
+------------------------------------------------------------------------
+r8 | doug | 2008-05-03 23:42:41 +0100 (Sat, 03 May 2008) | 2 lines
+
+Added some TODO comments, and remaining available scenefile options to implement in
+camera, film, light and rendersettings.
+------------------------------------------------------------------------
+r7 | doug | 2008-05-03 23:03:17 +0100 (Sat, 03 May 2008) | 2 lines
+
+Split luxshader into modules.
+changed custom module "import x.y" statements to "from x.y import y" to keep code easier to read.
+------------------------------------------------------------------------
+r6 | doug | 2008-05-03 22:07:47 +0100 (Sat, 03 May 2008) | 1 line
+
+removed .pyc files from repository
+------------------------------------------------------------------------
+r5 | doug | 2008-05-03 22:05:42 +0100 (Sat, 03 May 2008) | 8 lines
+
+Modularised Export Modules and constructed ExportModule base class for Export Modules.
+Checked and enabled Rendersettings, Film, Camera and Light export modules.
+
+TODO:
+Mesh ExportModule is still incomplete.
+Rendersettings and Film are fixed; need a way to control these - custom Maya node with all settings?
+AttributeEditor template for luxshader.
+Materials ExportModule.
+------------------------------------------------------------------------
+r4 | doug | 2008-05-03 00:28:39 +0100 (Sat, 03 May 2008) | 5 lines
+
+Tested and re-enabled luxview and luxlaunch.
+(pushed command names into commandName() method)
+luxexport still incomplete and broken.
+Added a  few comments.
+Added eclipse (pydev) project to repository.
+------------------------------------------------------------------------
+r3 | doug | 2008-05-02 23:29:59 +0100 (Fri, 02 May 2008) | 1 line
+
+tidied up whitespace / tabs, spaces etc
+------------------------------------------------------------------------
+r2 | doug | 2008-05-02 23:23:19 +0100 (Fri, 02 May 2008) | 2 lines
+
+Created luxshader.py, works in Maya but needs an AETemplate.
+Everything else is broken and incomplete.
+------------------------------------------------------------------------
+r1 | doug | 2008-04-27 14:19:10 +0100 (Sun, 27 Apr 2008) | 1 line
+
+initial trunk import
+------------------------------------------------------------------------
+.

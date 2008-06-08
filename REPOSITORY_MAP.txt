@@ -1,0 +1,126 @@
+What's in this respository ?
+----------------------------
+
+
+trunk/installer/																Installer scripts
+
+	linuxInstallerSrc.sh														Linux installer bootstrap script
+	linuxInstallScript.sh														Linux installer payload script
+	makeDist.sh																	Distribution package maker
+	windowsInstaller.nsi														Windows installer NSIS script
+
+trunk/src/																		MEL Scripts, Icons and other package files.
+
+	*.txt																		Info included in distribution packages
+	Mel/*																		LuxMaya MEL scripts
+	Icons/*.xpm																	LuxMaya Icons
+	Icons/png/*																	LuxMaya Icons in PNG format
+	Icons/src/*																	LuxMaya icon srouce files. SVG + PSD.
+	attrPresets/script/*														LuxMaya Render settings presets
+
+trunk/matlib/																	Material library/Lux online integration
+
+	safeeval.py																	Safe Eval() class
+	webfetch.py																	Class to fetch preset data fom the web
+
+trunk/luxPlugin/																Lux Plugin sources
+
+	luxPlugin.py																Plugin loader
+
+	Lux.LuxCommands																Commands executed by the plugin
+
+	Lux.LuxCommands.lux_gui.lux_gui												Lux Exporter GUI class
+	Lux.LuxCommands.lux_gui.mMenu												GUI helper to construct menus
+	Lux.LuxCommands.lux_gui.mOptionMenu											GUI helper to construct option menus
+	Lux.LuxCommands.lux_settings.lux_settings									lux_settings script node maker
+	Lux.LuxCommands.luxbatch.luxbatch											Lux batch render file maker
+	Lux.LuxCommands.luxexport.luxexport											Lux export process controller
+
+	Lux.LuxExportModules														Parsers for various object types
+	Lux.LuxExportModules.ExportModule.ExportModule								Export modules base class
+
+	Lux.LuxExportModules.Camera.Camera											Camera exporter
+	Lux.LuxExportModules.Film.Film												Film exporter
+	Lux.LuxExportModules.Light.Light											Light exporter (factory)
+	Lux.LuxExportModules.Light.SpotLight										Spot light exporter
+	Lux.LuxExportModules.Light.PointLight										Point light exporter
+	Lux.LuxExportModules.Material.MaterialBase									Material exporter base class
+	Lux.LuxExportModules.Material.Material										Material exporter (factory)
+	Lux.LuxExportModules.Material.MaterialLux									Lux material exporter (factory)
+	Lux.LuxExportModules.Material.MaterialLambert								Maya lambert exporter
+	Lux.LuxExportModules.Material.MaterialPhong									Maya phong exporter
+	Lux.LuxExportModules.Material.mixShaderHandler								Lux Mix material exporter
+	Lux.LuxExportModules.Mesh_opt												Optimised polygon mesh exporter
+	Lux.LuxExportModules.Mesh.Mesh												Unoptimised polygon mesh exporter
+	Lux.LuxExportModules.Mesh.PolygonSet										Polygon mesh parser
+	Lux.LuxExportModules.MiscNodes.MiscNodes									Miscellaneous nodes exporter (factory)
+	Lux.LuxExportModules.MiscNodes.luxSunskyLoader								Lux sunsky exporter
+	Lux.LuxExportModules.MiscNodes.luxEnvironmentLightLoader					Lux infinite light exporter
+	Lux.LuxExportModules.MiscNodes.luxObjectLocatorLoader						Lux PLY shape exporter
+	Lux.LuxExportModules.Nurbs.Nurbs											NURBS exporter
+	Lux.LuxExportModules.Rendersettings.Rendersettings							Various renderer settings exporter
+	Lux.LuxExportModules.Subdiv													Subdivision object exporter
+	Lux.LuxExportModules.Volume.Volume											Fluid volume exporter
+
+	Lux.LuxMiscModules															Miscellaneous modules
+	Lux.LuxMiscModules.fn_attr.fn_attr											Attribute presets finder/loader
+	Lux.LuxMiscModules.geoSunData.updateSunNode									Geographic sun position calculator
+	Lux.LuxMiscModules.glRoutines.glRoutines									OpenGL drawing routines
+
+	Lux.LuxNodes																Custom Lux nodes (and parts thereof)
+	Lux.LuxNodes.LuxNode.LuxNode												Custom Lux node base class
+	Lux.LuxNodes.LuxNode.FileCollector											Image file collector
+	Lux.LuxNodes.LuxNode.NodeAttribute											Custom node attribute base class
+	Lux.LuxNodes.LuxNode.ShaderColorAttribute									Color attribute for custom shaders
+	Lux.LuxNodes.LuxNode.ShaderFloatAttribute									Float attribute for custom shaders
+	Lux.LuxNodes.LuxNode.ShaderEnumAttribute									Enum attribute for custom shaders
+	Lux.LuxNodes.LuxNode.ShaderStringAttribute									String atttribute for custom shaders
+	Lux.LuxNodes.LuxNode.TextureFloatAttribute									Float attribute for custom textures
+	Lux.LuxNodes.LuxNode.TextureColorAttribute									Color attribute for custom textures
+	Lux.LuxNodes.LuxNode.TextureVectorAttribute									Vector attribute for custom textures
+	Lux.LuxNodes.LuxNode.TextureEnumAttribute									Enum attribute for custom textures
+	Lux.LuxNodes.LuxNode.TextureIntegerAttribute								Integer attribute for custom textures
+	Lux.LuxNodes.LuxNode.TextureStringAttribute									String attribute for custom textures
+	Lux.LuxNodes.ShaderNode.ShaderNode											Custom shader node base class
+	Lux.LuxNodes.TextureNode.TextureNode										Custom texture node base class
+	Lux.LuxNodes.luxEnvironmentLight.luxEnvironmentLight						Lux Env (infinite) light
+	Lux.LuxNodes.luxObjectLocator.luxObjectLocator								Lux PLY mesh locator
+	Lux.LuxNodes.luxshader.luxshader											Lux shader node
+	Lux.LuxNodes.luxSunsky.luxSunsky											Lux sunsky light
+
+	Lux.LuxNodes.ShaderNodes													Custom shader node parts
+	Lux.LuxNodes.ShaderNodes.areaLightShader.areaLightShader					Attributes maker/parser for Area Light
+	Lux.LuxNodes.ShaderNodes.carPaintShader.carPaintShader						Attributes maker/parser for Car Paint
+	Lux.LuxNodes.ShaderNodes.glassShader.glassShader							Attributes maker/parser for Glass
+	Lux.LuxNodes.ShaderNodes.matteShader.matteShader							Attributes maker/parser for Matte
+	Lux.LuxNodes.ShaderNodes.mattetranslucentShader.mattetranslucentShader		Attributes maker/parser for Matte Translucent
+	Lux.LuxNodes.ShaderNodes.metalShader.metalShader							Attributes maker/parser for Metal
+	Lux.LuxNodes.ShaderNodes.mirrorShader.mirrorShader							Attributes maker/parser for Mirror
+	Lux.LuxNodes.ShaderNodes.mixShader.mixShader								Attributes maker/parser for Mix
+	Lux.LuxNodes.ShaderNodes.nullShader.nullShader								Attributes maker/parser for Null
+	Lux.LuxNodes.ShaderNodes.plasticShader.plasticShader						Attributes maker/parser for Plastic
+	Lux.LuxNodes.ShaderNodes.roughglassShader.roughglassShader					Attributes maker/parser for Rough Glass
+	Lux.LuxNodes.ShaderNodes.shinymetalShader.shinymetalShader					Attributes maker/parser for Shiny Metal
+	Lux.LuxNodes.ShaderNodes.substrateShader.substrateShader					Attributes maker/parser for Substrate
+
+	Lux.LuxNodes.TextureNodes													Custom texture nodes
+	Lux.LuxNodes.TextureNodes.skeleton_texture									Custom texture node template
+	Lux.LuxNodes.TextureNodes.bilerpTexture.bilerpTexture						Bilerp texture node maker and parser
+	Lux.LuxNodes.TextureNodes.blenderCloudsTexture.blenderCloudsTexture			Blender Clouds texture node maker and parser
+	Lux.LuxNodes.TextureNodes.blenderMarbleTexture.blenderMarbleTexture			Blender Marble texture node maker and parser
+	Lux.LuxNodes.TextureNodes.blenderMusgraveTexture.blenderMusgraveTexture		Blender Musgrave texture node maker and parser
+	Lux.LuxNodes.TextureNodes.blenderWoodTexture.blenderWoodTexture				Blender Wood texture node maker and parser
+	Lux.LuxNodes.TextureNodes.bumpmapTexture.bumpmapTexture						Bump map node parser
+	Lux.LuxNodes.TextureNodes.checkerboard2dTexture.checkerboard2dTexture		Checkerboard 2D texture node maker and parser
+	Lux.LuxNodes.TextureNodes.checkerboard3dTexture.checkerboard3dTexture		Checkerboard 3D texture node maker and parser
+	Lux.LuxNodes.TextureNodes.dotsTexture.dotsTexture							Dots texture node maker and parser
+	Lux.LuxNodes.TextureNodes.fbmTexture.fbmTexture								FBM texture node maker and parser
+	Lux.LuxNodes.TextureNodes.fileTexture.fileTexture							File texture node parser
+	Lux.LuxNodes.TextureNodes.marbleTexture.marbleTexture						Marble texture node maker and parser
+	Lux.LuxNodes.TextureNodes.mixTexture.mixTexture								Mix texture node maker and parser
+	Lux.LuxNodes.TextureNodes.windyTexture.windyTexture							Windy texture node maker and parser
+	Lux.LuxNodes.TextureNodes.wrinkledTexture.wrinkledTexture					Wrinkled texture node maker and parser
+
+	Lux.MayaShaderModules														Maya shader parsers
+	Lux.MayaShaderModules.lambertShader.lambertShader							Lambert shader parser
+	Lux.MayaShaderModules.phongShader.phongShader								Phong shader parser

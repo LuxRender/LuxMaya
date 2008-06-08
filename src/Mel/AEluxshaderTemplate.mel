@@ -1,0 +1,376 @@
+/**
+ * ------------------------------------------------------------------------------
+ * Lux exporter python script plugin for Maya
+ *
+ * by Doug Hammond 02/2008
+ *
+ * This file is licensed under the GPL
+ * http://www.gnu.org/licenses/gpl-3.0.txt
+ *
+ * $Id$
+ *
+ * ------------------------------------------------------------------------------
+ *
+ * This is the Attribute Editor template for luxshader
+ *
+ * ------------------------------------------------------------------------------
+ */
+ 
+ global proc AEluxshaderTemplate( string $nodeName )
+{
+	AEswatchDisplay $nodeName;
+	
+	//Material Type
+	editorTemplate -addControl "material" "luxshader_changeType";
+	
+	editorTemplate -beginScrollLayout;
+
+		// Carpaint
+		editorTemplate -beginLayout "Carpaint Attributes" -collapse 1;
+			editorTemplate -l "Preset" -addControl "carpaintName" "luxshader_carpaint_changePreset";
+			editorTemplate -l "Diffuse" -addControl "carpaintKd";
+			editorTemplate -l "Specular1" -addControl "carpaintKs1";
+			editorTemplate -l "Specular2" -addControl "carpaintKs2";
+			editorTemplate -l "Specular3" -addControl "carpaintKs3";
+			editorTemplate -l "Fresnel1" -addControl "carpaintR1";
+			editorTemplate -l "Fresnel2" -addControl "carpaintR2";
+			editorTemplate -l "Fresnel3" -addControl "carpaintR3";
+			editorTemplate -l "MicroRoughness1" -addControl "carpaintM1";
+			editorTemplate -l "MicroRoughness2" -addControl "carpaintM2";
+			editorTemplate -l "MicroRoughness3" -addControl "carpaintM3";
+		editorTemplate -endLayout;
+		
+		// Glass
+		editorTemplate -beginLayout "Glass Attributes" -collapse 1;
+			editorTemplate -l "Reflection" -addControl "glassKr";
+			editorTemplate -l "Transmission" -addControl "glassKt";
+			editorTemplate -l "Index" -addControl "glassIndex";
+			editorTemplate -l "Cauchy B" -addControl "glassCauchyB";
+		editorTemplate -endLayout;
+		
+		// RoughGlass
+		editorTemplate -beginLayout "Rough Glass Attributes" -collapse 1;
+			editorTemplate -l "Reflection" -addControl "roughglassKr";
+			editorTemplate -l "Transmission" -addControl "roughglassKt";
+			editorTemplate -l "U Roughness" -addControl "roughglassURoughness";
+			editorTemplate -l "V Roughness" -addControl "roughglassVRoughness";
+			editorTemplate -l "Index" -addControl "roughglassIndex";
+			editorTemplate -l "Cauchy B" -addControl "roughglassCauchyB";
+		editorTemplate -endLayout;
+		
+		// Matte
+		editorTemplate -beginLayout "Matte Attributes" -collapse 1;
+			editorTemplate -l "Diffuse" -addControl "matteKd";
+			editorTemplate -l "Sigma" -addControl "matteSigma";
+		editorTemplate -endLayout;
+		
+		// MatteTranslucent
+		editorTemplate -beginLayout "Matte Translucent Attributes" -collapse 1;
+			editorTemplate -l "Reflection" -addControl "mattetranslucentKr";
+			editorTemplate -l "Transmission" -addControl "mattetranslucentKt";
+			editorTemplate -l "Sigma" -addControl "mattetranslucentSigma";
+		editorTemplate -endLayout;
+		
+		// Metal
+		editorTemplate -beginLayout "Metal Attributes" -collapse 1;
+			editorTemplate -l "Preset" -addControl "metalName" "luxshader_metal_changePreset";
+			editorTemplate -l "N" -addControl "metalN";
+			editorTemplate -l "K" -addControl "metalK";
+			editorTemplate -callCustom "AEnkFileNew" "AEnkFileReplace" "metalNkFile";
+			editorTemplate -l "Roughness" -addControl "metalRoughness";
+		editorTemplate -endLayout;
+		
+		// ShinyMetal
+		editorTemplate -beginLayout "Shiny Metal Attributes" -collapse 1;
+			editorTemplate -l "Reflection" -addControl "shinymetalKr";
+			editorTemplate -l "Specular" -addControl "shinymetalKs";
+			editorTemplate -l "Roughness" -addControl "shinymetalRoughness";
+		editorTemplate -endLayout;
+		
+		// Mirror
+		editorTemplate -beginLayout "Mirror Attributes" -collapse 1;
+			editorTemplate -l "Reflection" -addControl "mirrorKr";
+		editorTemplate -endLayout;
+		
+		// Mix
+		editorTemplate -beginLayout "Mix Attributes" -collapse 1;
+			editorTemplate -l "Mix shader 1" -addControl "mixNamed1";
+			editorTemplate -l "Mix shader 2" -addControl "mixNamed2";
+			editorTemplate -l "Mix amount" -addControl "mixAmount";
+		editorTemplate -endLayout;
+		
+		// Plastic
+		editorTemplate -beginLayout "Plastic Attributes" -collapse 1;
+			editorTemplate -l "Diffuse" -addControl "plasticKd";
+			editorTemplate -l "Specular" -addControl "plasticKs";
+			editorTemplate -l "Roughness" -addControl "plasticRoughness";
+		editorTemplate -endLayout;
+		
+		// Substrate
+		editorTemplate -beginLayout "Substrate Attributes" -collapse 1;
+			editorTemplate -l "Diffuse" -addControl "substrateKd";
+			editorTemplate -l "Specular" -addControl "substrateKs";
+			editorTemplate -l "U Roughness" -addControl "substrateURoughness";
+			editorTemplate -l "V Roughness" -addControl "substrateVRoughness";
+		editorTemplate -endLayout;
+		
+		// AreaLight
+		editorTemplate -beginLayout "Area Light Attributes" -collapse 1;
+			editorTemplate -l "Colour L" -addControl "arealightL";
+		editorTemplate -endLayout;
+		
+		
+		// include/call base class/node attributes
+		AEdependNodeTemplate $nodeName;
+		
+		editorTemplate -addExtraControls;
+	editorTemplate -endScrollLayout;
+}
+
+global proc luxshader_changeType( string $nodeName )
+{
+	string $type = `getAttr ($nodeName+".material")`;
+	if ($type==0) // == carpaint
+	{
+		editorTemplate -dc $nodeName "carpaintName" false;
+		luxshader_carpaint_changePreset( $nodeName );
+	}
+	else
+	{
+		editorTemplate -dc $nodeName "carpaintName" true;
+		editorTemplate -dc $nodeName "carpaintKd" true;
+		editorTemplate -dc $nodeName "carpaintKs1" true;
+		editorTemplate -dc $nodeName "carpaintKs2" true;
+		editorTemplate -dc $nodeName "carpaintKs3" true;
+		editorTemplate -dc $nodeName "carpaintR1" true;
+		editorTemplate -dc $nodeName "carpaintR2" true;
+		editorTemplate -dc $nodeName "carpaintR3" true;
+		editorTemplate -dc $nodeName "carpaintM1" true;
+		editorTemplate -dc $nodeName "carpaintM2" true;
+		editorTemplate -dc $nodeName "carpaintM3" true;
+	}
+	
+	if ($type==1) // == Glass
+	{
+		editorTemplate -dc $nodeName "glassKr" false;
+		editorTemplate -dc $nodeName "glassKt" false;
+		editorTemplate -dc $nodeName "glassIndex" false;
+		editorTemplate -dc $nodeName "glassCauchyB" false;
+	}
+	else
+	{
+		editorTemplate -dc $nodeName "glassKr" true;
+		editorTemplate -dc $nodeName "glassKt" true;
+		editorTemplate -dc $nodeName "glassIndex" true;
+		editorTemplate -dc $nodeName "glassCauchyB" true;
+	}
+	
+	if ($type==2) // == Rough Glass
+	{
+		editorTemplate -dc $nodeName "roughglassKr" false;
+		editorTemplate -dc $nodeName "roughglassKt" false;
+		editorTemplate -dc $nodeName "roughglassURoughness" false;
+		editorTemplate -dc $nodeName "roughglassVRoughness" false;
+		editorTemplate -dc $nodeName "roughglassIndex" false;
+		editorTemplate -dc $nodeName "roughglassCauchyB" false;
+	}
+	else
+	{
+		editorTemplate -dc $nodeName "roughglassKr" true;
+		editorTemplate -dc $nodeName "roughglassKt" true;
+		editorTemplate -dc $nodeName "roughglassURoughness" true;
+		editorTemplate -dc $nodeName "roughglassVRoughness" true;
+		editorTemplate -dc $nodeName "roughglassIndex" true;
+		editorTemplate -dc $nodeName "roughglassCauchyB" true;
+	}
+	
+	if ($type==3) // == Matte
+	{
+		editorTemplate -dc $nodeName "matteKd" false;
+		editorTemplate -dc $nodeName "matteSigma" false;
+	}
+	else
+	{
+		editorTemplate -dc $nodeName "matteKd" true;
+		editorTemplate -dc $nodeName "matteSigma" true;
+	}
+	
+	if ($type==4) // == Matte Translucent
+	{
+		editorTemplate -dc $nodeName "mattetranslucentKr" false;
+		editorTemplate -dc $nodeName "mattetranslucentKt" false;
+		editorTemplate -dc $nodeName "mattetranslucentSigma" false;
+	}
+	else
+	{
+		editorTemplate -dc $nodeName "mattetranslucentKr" true;
+		editorTemplate -dc $nodeName "mattetranslucentKt" true;
+		editorTemplate -dc $nodeName "mattetranslucentSigma" true;
+	}
+	
+	if ($type==5) // == Metal
+	{
+		editorTemplate -dc $nodeName "metalName" false;
+		luxshader_metal_changePreset( $nodeName );
+	}
+	else
+	{
+		editorTemplate -dc $nodeName "metalName" true;
+		editorTemplate -dc $nodeName "metalN" true;
+		editorTemplate -dc $nodeName "metalK" true;
+		editorTemplate -dc $nodeName "metalRoughness" true;
+		editorTemplate -dc $nodeName "metalNkFile" true;
+	}
+	
+	if ($type==6) // == Shiny Metal
+	{
+		editorTemplate -dc $nodeName "shinymetalKr" false;
+		editorTemplate -dc $nodeName "shinymetalKs" false;
+		editorTemplate -dc $nodeName "shinymetalRoughness" false;
+	}
+	else
+	{
+		editorTemplate -dc $nodeName "shinymetalKr" true;
+		editorTemplate -dc $nodeName "shinymetalKs" true;
+		editorTemplate -dc $nodeName "shinymetalRoughness" true;
+	}
+	
+	if ($type==7) // == Mirror
+	{
+		editorTemplate -dc $nodeName "mirrorKr" false;
+	}
+	else
+	{
+		editorTemplate -dc $nodeName "mirrorKr" true;
+	}
+	
+	if ($type==8) // == Plastic
+	{
+		editorTemplate -dc $nodeName "plasticKd" false;
+		editorTemplate -dc $nodeName "plasticKs" false;
+		editorTemplate -dc $nodeName "plasticRoughness" false;
+	}
+	else
+	{
+		editorTemplate -dc $nodeName "plasticKd" true;
+		editorTemplate -dc $nodeName "plasticKs" true;
+		editorTemplate -dc $nodeName "plasticRoughness" true;
+	}
+	
+	if ($type==9) // == Substrate
+	{
+		editorTemplate -dc $nodeName "substrateKd" false;
+		editorTemplate -dc $nodeName "substrateKs" false;
+		editorTemplate -dc $nodeName "substrateURoughness" false;
+		editorTemplate -dc $nodeName "substrateVRoughness" false;
+	}
+	else
+	{
+		editorTemplate -dc $nodeName "substrateKd" true;
+		editorTemplate -dc $nodeName "substrateKs" true;
+		editorTemplate -dc $nodeName "substrateURoughness" true;
+		editorTemplate -dc $nodeName "substrateVRoughness" true;
+	}
+	
+	if ($type==10) // == Area Light
+	{
+		editorTemplate -dc $nodeName "arealightL" false;
+		setAttr ($nodeName+".transparency") 0.5 0.5 0.5;
+	}
+	else
+	{
+		editorTemplate -dc $nodeName "arealightL" true;
+		setAttr ($nodeName+".transparency") 0 0 0;
+	}
+	
+	if ($type==11)
+	{
+		editorTemplate -dc $nodeName "mixNamed1" false;
+		editorTemplate -dc $nodeName "mixNamed2" false;
+		editorTemplate -dc $nodeName "mixAmount" false;
+	}
+	else
+	{
+		editorTemplate -dc $nodeName "mixNamed1" true;
+		editorTemplate -dc $nodeName "mixNamed2" true;
+		editorTemplate -dc $nodeName "mixAmount" true;
+	}	 
+}
+
+global proc luxshader_carpaint_changePreset( string $nodeName )
+{
+	string $preset = `getAttr ($nodeName+".carpaintName")`;
+	if ($preset == 0)
+	{
+		editorTemplate -dc $nodeName "carpaintKd" false;
+		editorTemplate -dc $nodeName "carpaintKs1" false;
+		editorTemplate -dc $nodeName "carpaintKs2" false;
+		editorTemplate -dc $nodeName "carpaintKs3" false;
+		editorTemplate -dc $nodeName "carpaintR1" false;
+		editorTemplate -dc $nodeName "carpaintR2" false;
+		editorTemplate -dc $nodeName "carpaintR3" false;
+		editorTemplate -dc $nodeName "carpaintM1" false;
+		editorTemplate -dc $nodeName "carpaintM2" false;
+		editorTemplate -dc $nodeName "carpaintM3" false;
+	}
+	else
+	{
+		editorTemplate -dc $nodeName "carpaintKd" true;
+		editorTemplate -dc $nodeName "carpaintKs1" true;
+		editorTemplate -dc $nodeName "carpaintKs2" true;
+		editorTemplate -dc $nodeName "carpaintKs3" true;
+		editorTemplate -dc $nodeName "carpaintR1" true;
+		editorTemplate -dc $nodeName "carpaintR2" true;
+		editorTemplate -dc $nodeName "carpaintR3" true;
+		editorTemplate -dc $nodeName "carpaintM1" true;
+		editorTemplate -dc $nodeName "carpaintM2" true;
+		editorTemplate -dc $nodeName "carpaintM3" true;
+	}
+}
+
+global proc luxshader_metal_changePreset( string $nodeName )
+{
+	string $preset = `getAttr ($nodeName+".metalName")`;
+	if ($preset == 0)
+	{
+		editorTemplate -dc $nodeName "metalN" false;
+		editorTemplate -dc $nodeName "metalK" false;
+		editorTemplate -dc $nodeName "metalRoughness" false;
+		editorTemplate -dc $nodeName "metalNkFile" false;
+	}
+	else
+	{
+		editorTemplate -dc $nodeName "metalN" true;
+		editorTemplate -dc $nodeName "metalK" true;
+		editorTemplate -dc $nodeName "metalRoughness" true;
+		editorTemplate -dc $nodeName "metalNkFile" true;
+	}
+}
+
+
+
+global proc AEnkFileNew( string $fileAttribute )
+{
+	setUITemplate -pst attributeEditorTemplate;
+	rowLayout -nc 3 nkFileNameLayout;
+		text -label "NK Data File";
+		textField nkFileNameField;
+		symbolButton -image "navButtonBrowse.xpm" nkFileBrowse;
+	setParent ..;
+	
+	setUITemplate -ppt;
+	
+	AEnkFileReplace( $fileAttribute );
+}
+
+global proc AEnkFileReplace( string $fileAttribute )
+{
+	connectControl -fileName nkFileNameField $fileAttribute;
+	button -e -c ("AEfilenkBrowser \""+$fileAttribute+"\"" ) nkFileBrowse;
+}
+
+global proc AEfilenkBrowser( string $fileAttribute )
+{
+	string $nkFile = `fileDialog -m 0 -dm "*.nk"`;
+	setAttr $fileAttribute -type "string" $nkFile;
+}

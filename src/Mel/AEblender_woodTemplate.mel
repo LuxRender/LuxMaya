@@ -1,0 +1,52 @@
+/**
+ * ------------------------------------------------------------------------------
+ * Lux exporter python script plugin for Maya
+ *
+ * by Doug Hammond 02/2008
+ *
+ * This file is licensed under the GPL
+ * http://www.gnu.org/licenses/gpl-3.0.txt
+ *
+ * $Id$
+ *
+ * ------------------------------------------------------------------------------
+ *
+ * This is the Attribute Editor template for blender_wood
+ *
+ * ------------------------------------------------------------------------------
+ */
+ 
+ global proc AEblender_woodTemplate( string $nodeName )
+{
+	//AEswatchDisplay $nodeName;
+	
+	editorTemplate -beginScrollLayout;
+	
+		editorTemplate -beginLayout "Blender Wood Attributes" -collapse 0;
+			editorTemplate -addControl "type";
+			editorTemplate -addControl "noisetype";
+			
+			editorTemplate -addControl "noisebasis";
+			editorTemplate -addControl "noisebasis2";
+			
+			editorTemplate -addControl "noisesize";
+			editorTemplate -addControl "turbulance";
+			
+			editorTemplate -addControl "bright";
+			editorTemplate -addControl "contrast";
+			editorTemplate -addControl "tex1";
+			editorTemplate -addControl "tex2";
+		editorTemplate -endLayout;
+		
+		editorTemplate -beginLayout "3D Texture Attributes" -collapse 1;
+			editorTemplate -addControl "placementMatrix";
+			editorTemplate -addControl "translate";
+			editorTemplate -addControl "rotate";
+			editorTemplate -addControl "scale";
+		editorTemplate -endLayout;
+		
+		// include/call base class/node attributes
+		AEdependNodeTemplate $nodeName;
+		
+	editorTemplate -endScrollLayout;
+}

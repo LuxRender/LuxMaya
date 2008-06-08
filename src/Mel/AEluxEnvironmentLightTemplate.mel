@@ -1,0 +1,68 @@
+/**
+ * ------------------------------------------------------------------------------
+ * Lux exporter python script plugin for Maya
+ *
+ * by Doug Hammond 02/2008
+ *
+ * This file is licensed under the GPL
+ * http://www.gnu.org/licenses/gpl-3.0.txt
+ *
+ * $Id$
+ *
+ * ------------------------------------------------------------------------------
+ *
+ * This is the Attribute Editor template for luxEnvironmentLight
+ *
+ * ------------------------------------------------------------------------------
+ */
+ 
+ global proc AEluxEnvironmentLightTemplate( string $nodeName )
+{
+	AEswatchDisplay $nodeName;
+	
+	editorTemplate -beginScrollLayout;
+	
+		editorTemplate -beginLayout "Lux Environment Light Attributes" -collapse 0;
+			editorTemplate -callCustom "AEhdrFileNew" "AEhdrFileReplace" "hdrFile";
+			editorTemplate -addControl "outColorL";
+			editorTemplate -addControl "numSamples";
+		editorTemplate -endLayout;
+		
+		
+		editorTemplate -beginLayout "Other Attributes" -collapse 0;
+			AElocatorCommon $nodeName;
+		editorTemplate -endLayout;
+
+		AElocatorInclude $nodeName;
+
+		//	This will add the standard UI controls for the node
+		editorTemplate -addExtraControls;
+
+	editorTemplate -endScrollLayout;
+}
+
+global proc AEhdrFileNew( string $fileAttribute )
+{
+	setUITemplate -pst attributeEditorTemplate;
+	rowLayout -nc 3 hdrFileNameLayout;
+		text -label "HDRI File";
+		textField hdrFileNameField;
+		symbolButton -image "navButtonBrowse.xpm" hdrFileBrowse;
+	setParent ..;
+	
+	setUITemplate -ppt;
+	
+	AEhdrFileReplace( $fileAttribute );
+}
+
+global proc AEhdrFileReplace( string $fileAttribute )
+{
+	connectControl -fileName hdrFileNameField $fileAttribute;
+	button -e -c ("AEfilehdrBrowser \""+$fileAttribute+"\"" ) hdrFileBrowse;
+}
+
+global proc AEfilehdrBrowser( string $fileAttribute )
+{
+	string $exrFile = `fileDialog -m 0 -dm "*.exr"`;
+	setAttr $fileAttribute -type "string" $exrFile;
+}

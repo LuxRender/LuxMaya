@@ -1,0 +1,67 @@
+/**
+ * ------------------------------------------------------------------------------
+ * Lux exporter python script plugin for Maya
+ *
+ * by Doug Hammond 02/2008
+ *
+ * This file is licensed under the GPL
+ * http://www.gnu.org/licenses/gpl-3.0.txt
+ *
+ * $Id$
+ *
+ * ------------------------------------------------------------------------------
+ *
+ * This is the Attribute Editor template for luxObjectLocator
+ *
+ * ------------------------------------------------------------------------------
+ */
+ 
+ global proc AEluxObjectLocatorTemplate( string $nodeName )
+{
+	AEswatchDisplay $nodeName;
+	
+	editorTemplate -beginScrollLayout;
+	
+		editorTemplate -beginLayout "Lux Object Locator Attributes" -collapse 0;
+			editorTemplate -callCustom "AEmeshFileNew" "AEmeshFileReplace" "meshFile";
+			editorTemplate -addControl "meshSmoothing";
+		editorTemplate -endLayout;
+		
+		
+		editorTemplate -beginLayout "Locator Attributes" -collapse 0;
+			AElocatorCommon $nodeName;
+		editorTemplate -endLayout;
+
+		AElocatorInclude $nodeName;
+
+		//	This will add the standard UI controls for the node
+		editorTemplate -addExtraControls;
+
+	editorTemplate -endScrollLayout;
+}
+
+global proc AEmeshFileNew( string $fileAttribute )
+{
+	setUITemplate -pst attributeEditorTemplate;
+	rowLayout -nc 3 meshFileNameLayout;
+		text -label "PLY Mesh File";
+		textField meshFileNameField;
+		symbolButton -image "navButtonBrowse.xpm" meshFileBrowse;
+	setParent ..;
+	
+	setUITemplate -ppt;
+	
+	AEmeshFileReplace( $fileAttribute );
+}
+
+global proc AEmeshFileReplace( string $fileAttribute )
+{
+	connectControl -fileName meshFileNameField $fileAttribute;
+	button -e -c ("AEfileMeshBrowser \""+$fileAttribute+"\"" ) meshFileBrowse;
+}
+
+global proc AEfileMeshBrowser( string $fileAttribute )
+{
+	string $plyFile = `fileDialog -m 0 -dm "*.ply"`;
+	setAttr $fileAttribute -type "string" $plyFile;
+}

@@ -1,0 +1,43 @@
+/**
+ * ------------------------------------------------------------------------------
+ * Lux exporter python script plugin for Maya
+ *
+ * by Doug Hammond 02/2008
+ *
+ * This file is licensed under the GPL
+ * http://www.gnu.org/licenses/gpl-3.0.txt
+ *
+ * $Id$
+ *
+ * ------------------------------------------------------------------------------
+ *
+ * This is the Attribute Editor template for lux_dots
+ *
+ * ------------------------------------------------------------------------------
+ */
+ 
+ global proc AElux_dotsTemplate( string $nodeName )
+{
+	//AEswatchDisplay $nodeName;
+	
+	editorTemplate -beginScrollLayout;
+	
+		editorTemplate -beginLayout "Dots Texture Attributes" -collapse 0;
+			editorTemplate -addControl "mapping";
+			editorTemplate -label "Planar mapping vector 1" -addControl "v1";
+			editorTemplate -label "Planar mapping vector 2" -addControl "v2";
+
+			editorTemplate -addControl "uscale";
+			editorTemplate -addControl "vscale";
+			editorTemplate -addControl "udelta";
+			editorTemplate -addControl "vdelta";
+
+			editorTemplate -label "Inside colour" -addControl "inside";
+			editorTemplate -label "Outside colour" -addControl "outside";
+		editorTemplate -endLayout;
+		
+		// include/call base class/node attributes
+		AEdependNodeTemplate $nodeName;
+		
+	editorTemplate -endScrollLayout;
+}

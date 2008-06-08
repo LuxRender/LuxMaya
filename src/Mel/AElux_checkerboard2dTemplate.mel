@@ -1,0 +1,44 @@
+/**
+ * ------------------------------------------------------------------------------
+ * Lux exporter python script plugin for Maya
+ *
+ * by Doug Hammond 02/2008
+ *
+ * This file is licensed under the GPL
+ * http://www.gnu.org/licenses/gpl-3.0.txt
+ *
+ * $Id$
+ *
+ * ------------------------------------------------------------------------------
+ *
+ * This is the Attribute Editor template for lux_checkerboard2d
+ *
+ * ------------------------------------------------------------------------------
+ */
+ 
+ global proc AElux_checkerboard2dTemplate( string $nodeName )
+{
+	//AEswatchDisplay $nodeName;
+	
+	editorTemplate -beginScrollLayout;
+	
+		editorTemplate -beginLayout "CheckerBoard 2D Texture Attributes" -collapse 0;
+			editorTemplate -addControl "mapping";
+			editorTemplate -label "Planar mapping vector 1" -addControl "v1";
+			editorTemplate -label "Planar mapping vector 2" -addControl "v2";
+
+			editorTemplate -addControl "uscale";
+			editorTemplate -addControl "vscale";
+			editorTemplate -addControl "udelta";
+			editorTemplate -addControl "vdelta";
+			
+			editorTemplate -label "Anti-Aliasing mode" -addControl "aamode";
+			editorTemplate -label "Texture 1" -addControl "tex1";
+			editorTemplate -label "Texture 2" -addControl "tex2";
+		editorTemplate -endLayout;
+				
+		// include/call base class/node attributes
+		AEdependNodeTemplate $nodeName;
+		
+	editorTemplate -endScrollLayout;
+}

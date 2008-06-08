@@ -1,0 +1,40 @@
+/**
+ *
+ * LuxMaya Python Plugin and scripts for Maya
+ *
+ * By Dougal2 (D Hammond)
+ * 
+ * These scripts are licensed under the GPL
+ * http://www.gnu.org/licenses/gpl-3.0.txt
+ *
+ */
+ 
+MANUAL INSTALLATION
+-------------------
+
+
+1: Place the contents of the "src/Mel" folder in:
+~\Documents and Settings\*username*\My Documents\maya(\version)\scripts\
+
+2. Copy "src/icons/*" to:
+~\Documents and Settings\*username*\My Documents\maya\*version*\prefs\icons\
+
+3. Copy the contents of "src/attrPresets" to:
+~\Documents and Settings\*username*\My Documents\maya\*version*\presets\attrPresets\
+
+4. copy the contents of "luxPlugin" to:
+~\*maya_install_dir*\bin\plug-ins\
+
+
+Replace text between "*" to match your local folders.
+
+
+5: Now that all the files are setup, start Maya and use the Plugin Manager to load the plugin.
+- Window > Settings/Preferences > Plug-In Manager
+click on the "loaded" check box next to the "luxPlugin.py".
+This places three new elements in Maya's Visor/Hypershade:
+
+- a surface shader (luxshader)
+- two 3d textures (Lux_fbm and Lux_wrinkled)
+
+And also adds a top level menu "Lux" in the Rendering menu set.
