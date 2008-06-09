@@ -129,7 +129,8 @@ class ExportModule:
         for ftIndex in range(0, inputPlugs.length()):
             inputNode = inputPlugs[ftIndex].node()
             iNFn = OpenMaya.MFnDependencyNode( inputNode )
-            if inputNode.apiType() == OpenMaya.MFn.kBump:
+            if inputNode.apiType() == OpenMaya.MFn.kBump \
+            or inputNode.apiType() == OpenMaya.MFn.kBump3d:
                 textureNode = bumpmapTexture()
                 break
             if inputNode.apiType() == OpenMaya.MFn.kFileTexture:
