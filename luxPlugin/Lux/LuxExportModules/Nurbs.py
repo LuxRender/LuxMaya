@@ -54,7 +54,8 @@ class Nurbs(ExportModule):
         
         if not self.portalsMode:
             # detect Material or AreaLight
-            self.addToOutput( self.findShader() )
+            self.shadingGroup = self.findShadingGroup()
+            self.addToOutput( self.findSurfaceShader( shadingGroup = self.shadingGroup ) )
             self.addToOutput( 'Shape "nurbs"' )
         else:
             self.addToOutput( 'PortalShape "nurbs"' )

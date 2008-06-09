@@ -86,8 +86,10 @@ class Mesh(ExportModule):
 			
 			# detect Material or AreaLight
 			if not self.portalsMode:
-				self.addToOutput( self.findShader(self.instanceNum, i) )
+				self.shadingGroup = self.findShadingGroup(self.instanceNum, i)
+				self.addToOutput( self.findSurfaceShader( shadingGroup = self.shadingGroup ) )
 				self.addToOutput( 'Shape "trianglemesh"' )
+				self.addToOutput( self.findDisplacementShader( self.shadingGroup ) )
 			else:
 				self.addToOutput( 'PortalShape "trianglemesh"' )
 				
