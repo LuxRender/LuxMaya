@@ -372,7 +372,7 @@ class TextureFloatAttribute(NodeAttribute):
 #		self.prependToOutput = prependTo
 #		self.plugName = mayaAttrName
 		
-	def getOutput(self, textureNode, textureName, luxName):
+	def getOutput(self, luxParamName, textureNode, textureName, luxName):
 		cPlug = self.plugName
 		self.shaderNode = textureNode
 		
@@ -381,11 +381,11 @@ class TextureFloatAttribute(NodeAttribute):
 		if self.inputFound:
 			self.prependToOutput(inputStr)
 			nTextName = '%s.%s' % (texName, cPlug)
-			self.addToOutput( '\t\t"texture %s" ["%s"]' % (cPlug, nTextName ))
+			self.addToOutput( '\t\t"texture %s" ["%s"]' % (luxParamName, nTextName ))
 		else:
 			myPlug = textureNode.findPlug( cPlug  )
 			value = myPlug.asFloat()
-			self.addToOutput( '\t\t"float %s" [%f]' % (cPlug, value) )
+			self.addToOutput( '\t\t"float %s" [%f]' % (luxParamName, value) )
 		
 		return self.outputString
 	
@@ -399,7 +399,7 @@ class TextureColorAttribute(NodeAttribute):
 #		self.prependToOutput = prependTo
 #		self.plugName = mayaAttrName
 		
-	def getOutput(self, textureNode, textureName, luxName):
+	def getOutput(self, luxParamName, textureNode, textureName, luxName):
 		cPlug = self.plugName
 		self.shaderNode = textureNode
 		
@@ -431,7 +431,7 @@ class TextureVectorAttribute(NodeAttribute):
 #		self.prependToOutput = prependTo
 #		self.plugName = mayaAttrName
 		
-	def getOutput(self, textureNode, textureName, luxName):
+	def getOutput(self, luxParamName, textureNode, textureName, luxName):
 		cPlug = self.plugName
 		self.shaderNode = textureNode
 		
@@ -458,7 +458,7 @@ class TextureEnumAttribute(NodeAttribute):
 		self.asString = asString
 		self.nameValues = nameValues
 		
-	def getOutput(self, textureNode, textureName, luxName):
+	def getOutput(self, luxParamName, textureNode, textureName, luxName):
 		myPlug = textureNode.findPlug( self.plugName )
 		value = myPlug.asInt()
 		if self.asString:
@@ -477,7 +477,7 @@ class TextureIntegerAttribute(NodeAttribute):
 #		self.prependToOutput = prependTo
 #		self.plugName = mayaAttrName
 		
-	def getOutput(self, textureNode, textureName, luxName):
+	def getOutput(self, luxParamName, textureNode, textureName, luxName):
 		myPlug = textureNode.findPlug( self.plugName )
 		value = myPlug.asInt()
 		return '\t\t"integer %s" [%i]' % (self.plugName, value)
@@ -492,7 +492,7 @@ class TextureStringAttribute(NodeAttribute):
 #		self.prependToOutput = prependTo
 #		self.plugName = mayaAttrName
 
-	def getOutput(self, textureNode, textureName, luxName):
+	def getOutput(self, luxParamName, textureNode, textureName, luxName):
 		myPlug = textureNode.findPlug( self.plugName )
 		value = myPlug.asString()
 		return '\t\t"string %s" ["%s"]' % (self.plugName, value)

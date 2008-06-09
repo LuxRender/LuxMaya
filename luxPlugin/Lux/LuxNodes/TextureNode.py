@@ -31,7 +31,7 @@ class TextureNode(LuxNode):
         self.addToOutput( '\t"%s" "%s"' % ( attrType, self.luxName() ) )
         
         for attr in self.attributes:
-            self.addToOutput( self.attributes[attr].getOutput(textureNode, textureName, self.luxName() ) )
+            self.addToOutput( self.attributes[attr].getOutput(attr, textureNode, textureName, self.luxName() ) )
 
         return self.outputString
     
