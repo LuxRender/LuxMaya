@@ -55,7 +55,7 @@ from Lux.LuxCommands.lux_gui   import lux_gui
 
 # Global list of commands that we want to register with Maya.
 luxCommands= [
-			  updateSunNode
+			  # updateSunNode
 			 ]
 
 # We need to know the node types when registering, so provide a dict

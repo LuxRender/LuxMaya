@@ -26,7 +26,7 @@ from maya import cmds
 from maya import OpenMaya
 from maya import OpenMayaMPx
 
-class updateSunNode(OpenMayaMPx.MPxCommand):
+class updateSunNode: #(OpenMayaMPx.MPxCommand):
     """
     Command to calculate the SunSky rotations from the geographic
     location/time input, via azimuth/elevation values.
@@ -44,16 +44,19 @@ class updateSunNode(OpenMayaMPx.MPxCommand):
         OpenMayaMPx.MPxCommand.__init__(self)
     #end def __init__
     
-    def doIt(self, args):
+    @staticmethod
+    #def doIt(args):
+    def doIt(msg, plug, otherPlug, srcNode):
         """
         Command entry point. Start the calculation on the given node.
         """
         
-        if (args.length() < 1):
-            OpenMaya.MGlobal.displayError("You need to specify the node to update")
-            return
-        
-        nodeName = args.asString(0)
+#        if (args.length() < 1):
+#            OpenMaya.MGlobal.displayError("You need to specify the node to update")
+#            return
+#        
+#        nodeName = args.asString(0)    
+        nodeName = srcNode.name()
         
         # TODO validate that we're reading data from the correct type of node (ie, luxSunsky)
         

@@ -1443,14 +1443,14 @@ class lux_gui:
 		Create a new luxObjectLocator
 		"""
 		
-		cmds.createNode( 'luxObjectLocator' )
+		lol = OpenMaya.MFnDependencyNode().create( 'luxObjectLocator' )
 	
 	def mnuEnvLight(self, *args):
 		"""
 		Create a new luxEnvironmentLight
 		"""
 		
-		cmds.createNode( 'luxEnvironmentLight' )
+		lel = OpenMaya.MFnDependencyNode().create( 'luxEnvironmentLight' )
 		
 	def mnuSunsky(self, *args):
 		"""
@@ -1458,10 +1458,11 @@ class lux_gui:
 		only need one.
 		"""
 		
-		nName = cmds.createNode( 'luxSunsky' )
+		lss = OpenMaya.MFnDependencyNode().create( 'luxSunsky' )
 		
-		# TODO this expression needs to be replaced with some other mechanism. doesn't work 100%
-		cmds.expression( string  = 'updateSunNode("%s");' % nName, name = nName, alwaysEvaluate = True )
+		# this is broken - causes C++ runtime error
+		#from Lux.LuxMiscModules.geoSunData import updateSunNode
+		#OpenMaya.MNodeMessage.addAttributeChangedCallback(lss, updateSunNode.doIt, lss )
 	
 	def mnuPrefs(self, *args):
 		"""

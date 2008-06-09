@@ -82,6 +82,7 @@ class luxSunsky(OpenMayaMPx.MPxLocatorNode, glRoutines, LuxNode):
 
 		glRenderer = OpenMayaRender.MHardwareRenderer.theRenderer()
 		self.glFT = glRenderer.glFunctionTable()
+		
 
 	@staticmethod
 	def nodeInitializer():
@@ -180,6 +181,16 @@ class luxSunsky(OpenMayaMPx.MPxLocatorNode, glRoutines, LuxNode):
 	
 	def postConstructor(self):
 		self._setMPSafe(True)
+		
+		
+	@staticmethod
+	def sunskyCallback( msg, plug, otherPlug, srcNode ):
+		OpenMaya.MGlobal.displayInfo('Got sunsky callback')
+#		from Lux.LuxMiscModules.geoSunData import updateSunNode
+#		usn = updateSunNode()
+#		args = OpenMaya.MArgList()
+#		args.addArg( OpenMaya.MFnDependencyNode( srcNode ).name() )
+#		usn.doIt(args)
 	
 	@staticmethod	
 	def isBounded():
