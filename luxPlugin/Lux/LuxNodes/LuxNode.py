@@ -94,68 +94,16 @@ class LuxNode:
 		# nAttr.setDefault( default )
 		return attrOut
 
-class FileCollector:
-	"""
-	Texture file collector for export process.
-	Probably this should be in it's own	file.
-	"""
-	
-	@staticmethod
-	def collectTexture( texFile ):
-		collectEnabled = cmds.getAttr( 'lux_settings.scene_collect_texture' )
-		if collectEnabled:
-			return FileCollector.doCollect( fileName = texFile, targetPath = 'textures' )
-		else:
-			return texFile
-		
-	@staticmethod
-	def collectBumpmap( texFile ):
-		collectEnabled = cmds.getAttr( 'lux_settings.scene_collect_bump' )
-		if collectEnabled:
-			return FileCollector.doCollect( fileName = texFile, targetPath = 'bumpmaps' )
-		else:
-			return texFile
-		
-	@staticmethod
-	def collectHDRI( texFile ):
-		collectEnabled = cmds.getAttr( 'lux_settings.scene_collect_hdri' )
-		if collectEnabled:
-			return FileCollector.doCollect( fileName = texFile, targetPath = 'environments' )
-		else:
-			return texFile
-		
-	@staticmethod
-	def doCollect( fileName, targetPath ):
-		
-		if not os.path.exists( fileName ):
-			OpenMaya.MGlobal.displayWarning( "File %s doesn't exist" % fileName )
-		else:
-			scenePath = cmds.getAttr( 'lux_settings.scene_path' )
-			newFilePath = scenePath + os.altsep + targetPath + os.altsep
-			if not os.path.exists( newFilePath ):
-				os.mkdir( newFilePath )
-			fileBaseName = os.path.basename( fileName )
-			newFileName = newFilePath + fileBaseName
-			if not os.path.exists( newFileName ):
-				shutil.copyfile( fileName, newFileName )
-			fileName = '..' + os.altsep + targetPath + os.altsep + fileBaseName
-		
-		return fileName
+
 			
 class NodeAttribute(ExportModule):
 	"""
 	Custom Lux node attribute base class
 	"""
 	
-	plugName = str()
-	
 	luxName = str()
 	shaderNode = OpenMaya.MFnDependencyNode()
 	shaderName = str()
-	
-	inputFound = False
-	
-	outputString = str()
 	
 	exportName = str()
 	
@@ -163,100 +111,8 @@ class NodeAttribute(ExportModule):
 		self.addToOutput = addTo
 		self.prependToOutput = prependTo
 		self.plugName = mayaAttrName
+
 	
-	def addToOutput(self, string):
-		if not string == '': 
-			self.outputString += ( string + os.linesep )
-
-	def prependToOutput(self, string):
-		if not string == '':
-			self.outputString = string + os.linesep + self.outputString 
-
-	# THIS IS A TEXTURE FACTORY
-	def detectInput(self, attrType):
-		self.inputFound = False
-		
-		from TextureNodes.bilerpTexture import bilerpTexture
-		from TextureNodes.blenderCloudsTexture import blenderCloudsTexture
-		from TextureNodes.blenderMarbleTexture import blenderMarbleTexture
-		from TextureNodes.blenderMusgraveTexture import blenderMusgraveTexture
-		from TextureNodes.blenderWoodTexture import blenderWoodTexture
-		from TextureNodes.bumpmapTexture import bumpmapTexture
-		from TextureNodes.checkerboard2dTexture import checkerboard2dTexture
-		from TextureNodes.checkerboard3dTexture import checkerboard3dTexture
-		from TextureNodes.dotsTexture import dotsTexture
-		from TextureNodes.fbmTexture import fbmTexture
-		from TextureNodes.marbleTexture import marbleTexture
-		from TextureNodes.mixTexture import mixTexture
-		from TextureNodes.windyTexture import windyTexture
-		from TextureNodes.wrinkledTexture import wrinkledTexture
-		
-		from TextureNodes.fileTexture import fileTexture
-		
-		onPlug = self.shaderNode.findPlug(self.plugName)
-		inputPlugs = OpenMaya.MPlugArray()
-		onPlug.connectedTo(inputPlugs, True, True)
-		
-		textureNode = False
-		
-		for ftIndex in range(0, inputPlugs.length()):
-			inputNode = inputPlugs[ftIndex].node()
-			iNFn = OpenMaya.MFnDependencyNode( inputNode )
-			if inputNode.apiType() == OpenMaya.MFn.kBump:
-				textureNode = bumpmapTexture()
-				break
-			if inputNode.apiType() == OpenMaya.MFn.kFileTexture:
-				textureNode = fileTexture()
-				break
-			if iNFn.typeName() == bilerpTexture.nodeName():
-				textureNode = bilerpTexture()
-				break
-			if iNFn.typeName() == blenderCloudsTexture.nodeName():
-				textureNode = blenderCloudsTexture()
-				break
-			if iNFn.typeName() == blenderMarbleTexture.nodeName():
-				textureNode = blenderMarbleTexture()
-				break
-			if iNFn.typeName() == blenderMusgraveTexture.nodeName():
-				textureNode = blenderMusgraveTexture()
-				break
-			if iNFn.typeName() == blenderWoodTexture.nodeName():
-				textureNode = blenderWoodTexture()
-				break
-			if iNFn.typeName() == checkerboard2dTexture.nodeName():
-				textureNode = checkerboard2dTexture()
-				break
-			if iNFn.typeName() == checkerboard3dTexture.nodeName():
-				textureNode = checkerboard3dTexture()
-				break
-			if iNFn.typeName() == dotsTexture.nodeName():
-				textureNode = dotsTexture()
-				break
-			if iNFn.typeName() == fbmTexture.nodeName():
-				textureNode = fbmTexture()
-				break
-			if iNFn.typeName() == marbleTexture.nodeName():
-				textureNode = marbleTexture()
-				break
-			if iNFn.typeName() == mixTexture.nodeName():
-				textureNode = mixTexture()
-				break
-			if iNFn.typeName() == windyTexture.nodeName():
-				textureNode = windyTexture()
-				break
-			if iNFn.typeName() == fbmTexture.nodeName():
-				textureNode = fbmTexture()
-				break
-			if iNFn.typeName() == wrinkledTexture.nodeName():
-				textureNode = wrinkledTexture()
-				break
-			
-		if not textureNode == False:
-			self.inputFound = True
-			#self.addToOutput(
-			return iNFn.name(), textureNode.getTexture( self.plugName, iNFn, iNFn.name(), attrType )
-		else:
-			return '', ''
 		
 class ShaderColorAttribute(NodeAttribute):
 	"""

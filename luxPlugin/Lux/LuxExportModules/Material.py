@@ -184,7 +184,7 @@ class mixShaderHandler(ExportModule, MaterialBase):
             em2 = Material.MaterialFactory( OpenMaya.MFnDependencyNode( nmnode2 ) )
             self.prependToOutput( em2.loadModule() )
             
-        return self.outString
+        return self.outputString
 
 
 class MaterialLambert(ExportModule, MaterialBase):

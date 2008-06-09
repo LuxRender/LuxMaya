@@ -29,7 +29,7 @@ class ExportModule:
     convert Y-Up transforms to Z-Up etc
     """
     
-    outString = str()
+    outputString = str()
     moduleLoaded = False
     
     dagPath = OpenMaya.MDagPath()
@@ -37,6 +37,9 @@ class ExportModule:
     dpNode = OpenMaya.MFnDependencyNode()
     
     fShape = OpenMaya.MObject()
+    
+    plugName = str()
+    inputFound = False
     
 #    def __init__(self, dagPath):
 #        pass
@@ -60,40 +63,128 @@ class ExportModule:
     
     def writeTo(self, fout):
         """
-        Write the accumulated outString to the given file handle.
+        Write the accumulated outputString to the given file handle.
         """
         
         if not self.moduleLoaded:
             fout.write( self.loadModule() )
         else:
-            fout.write( self.outString )
+            fout.write( self.outputString )
     #end def write
     
     def addToOutput(self, string):
         """
-        Accumulate the given string either to outString, or direct to
+        Accumulate the given string either to outputString, or direct to
         fileHandle if it exists.
         """
         
         if not 'fileHandle' in vars(self):
-            self.outString += (string + os.linesep)
+            self.outputString += (string + os.linesep)
         else:
             self.fileHandle.write( string + os.linesep )
             
     def prependToOutput(self, string):
         if not string == "":
-            self.outString = string + os.linesep + self.outString
+            self.outputString = string + os.linesep + self.outputString
     
     def loadModule(self):
         """
-        "Load" this module, ie. start it's main process. Returns the outString
+        "Load" this module, ie. start it's main process. Returns the outputString
         if not writing direct to file.
         """
         
         self.getOutput()
         self.moduleLoaded = True
-        return self.outString
+        return self.outputString
     #end def loadModule
+    
+    # THIS IS A TEXTURE FACTORY
+    def detectInput(self, attrType):
+        self.inputFound = False
+        
+        from Lux.LuxNodes.TextureNodes.bilerpTexture import bilerpTexture
+        from Lux.LuxNodes.TextureNodes.blenderCloudsTexture import blenderCloudsTexture
+        from Lux.LuxNodes.TextureNodes.blenderMarbleTexture import blenderMarbleTexture
+        from Lux.LuxNodes.TextureNodes.blenderMusgraveTexture import blenderMusgraveTexture
+        from Lux.LuxNodes.TextureNodes.blenderWoodTexture import blenderWoodTexture
+        from Lux.LuxNodes.TextureNodes.checkerboard2dTexture import checkerboard2dTexture
+        from Lux.LuxNodes.TextureNodes.checkerboard3dTexture import checkerboard3dTexture
+        from Lux.LuxNodes.TextureNodes.dotsTexture import dotsTexture
+        from Lux.LuxNodes.TextureNodes.fbmTexture import fbmTexture
+        from Lux.LuxNodes.TextureNodes.marbleTexture import marbleTexture
+        from Lux.LuxNodes.TextureNodes.mixTexture import mixTexture
+        from Lux.LuxNodes.TextureNodes.windyTexture import windyTexture
+        from Lux.LuxNodes.TextureNodes.wrinkledTexture import wrinkledTexture
+        
+        # psuedo-texture nodes
+        from Lux.LuxNodes.TextureNodes.bumpmapTexture import bumpmapTexture
+        from Lux.LuxNodes.TextureNodes.fileTexture import fileTexture
+        
+        onPlug = self.shaderNode.findPlug(self.plugName)
+        inputPlugs = OpenMaya.MPlugArray()
+        onPlug.connectedTo(inputPlugs, True, True)
+        
+        textureNode = False
+        
+        for ftIndex in range(0, inputPlugs.length()):
+            inputNode = inputPlugs[ftIndex].node()
+            iNFn = OpenMaya.MFnDependencyNode( inputNode )
+            if inputNode.apiType() == OpenMaya.MFn.kBump:
+                textureNode = bumpmapTexture()
+                break
+            if inputNode.apiType() == OpenMaya.MFn.kFileTexture:
+                textureNode = fileTexture()
+                break
+            if iNFn.typeName() == bilerpTexture.nodeName():
+                textureNode = bilerpTexture()
+                break
+            if iNFn.typeName() == blenderCloudsTexture.nodeName():
+                textureNode = blenderCloudsTexture()
+                break
+            if iNFn.typeName() == blenderMarbleTexture.nodeName():
+                textureNode = blenderMarbleTexture()
+                break
+            if iNFn.typeName() == blenderMusgraveTexture.nodeName():
+                textureNode = blenderMusgraveTexture()
+                break
+            if iNFn.typeName() == blenderWoodTexture.nodeName():
+                textureNode = blenderWoodTexture()
+                break
+            if iNFn.typeName() == checkerboard2dTexture.nodeName():
+                textureNode = checkerboard2dTexture()
+                break
+            if iNFn.typeName() == checkerboard3dTexture.nodeName():
+                textureNode = checkerboard3dTexture()
+                break
+            if iNFn.typeName() == dotsTexture.nodeName():
+                textureNode = dotsTexture()
+                break
+            if iNFn.typeName() == fbmTexture.nodeName():
+                textureNode = fbmTexture()
+                break
+            if iNFn.typeName() == marbleTexture.nodeName():
+                textureNode = marbleTexture()
+                break
+            if iNFn.typeName() == mixTexture.nodeName():
+                textureNode = mixTexture()
+                break
+            if iNFn.typeName() == windyTexture.nodeName():
+                textureNode = windyTexture()
+                break
+            if iNFn.typeName() == fbmTexture.nodeName():
+                textureNode = fbmTexture()
+                break
+            if iNFn.typeName() == wrinkledTexture.nodeName():
+                textureNode = wrinkledTexture()
+                break
+            
+        if not textureNode == False:
+            self.inputFound = True
+            #self.addToOutput(
+            return iNFn.name(), textureNode.getTexture( self.plugName, iNFn, iNFn.name(), attrType )
+        else:
+            return '', ''
+    
     
     def findShadingGroup(self, instanceNum = 0, setNumber = 0):
         if self.fShape.type() == OpenMaya.MFn.kMesh:

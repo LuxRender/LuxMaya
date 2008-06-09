@@ -66,10 +66,10 @@ What's in this respository ?
 	Lux.LuxMiscModules.fn_attr.fn_attr											Attribute presets finder/loader
 	Lux.LuxMiscModules.geoSunData.updateSunNode									Geographic sun position calculator
 	Lux.LuxMiscModules.glRoutines.glRoutines									OpenGL drawing routines
+	Lux.LuxMiscModules.FileCollector.FileCollector								Image file collector
 
 	Lux.LuxNodes																Custom Lux nodes (and parts thereof)
-	Lux.LuxNodes.LuxNode.LuxNode												Custom Lux node base class
-	Lux.LuxNodes.LuxNode.FileCollector											Image file collector
+	Lux.LuxNodes.LuxNode.LuxNode												Custom Lux node base classs
 	Lux.LuxNodes.LuxNode.NodeAttribute											Custom node attribute base class
 	Lux.LuxNodes.LuxNode.ShaderColorAttribute									Color attribute for custom shaders
 	Lux.LuxNodes.LuxNode.ShaderFloatAttribute									Float attribute for custom shaders

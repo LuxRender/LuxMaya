@@ -21,7 +21,7 @@ from LuxNode import LuxNode
 from LuxNode import ShaderColorAttribute
 from LuxNode import ShaderFloatAttribute
 from LuxNode import ShaderEnumAttribute
-from LuxNode import FileCollector
+#from Lux.LuxMiscModules.FileCollector import FileCollector
 
 # ShaderModules serve dual purpose: Set up the custom shader in Maya
 # AND provide attribute->parameter translation during export

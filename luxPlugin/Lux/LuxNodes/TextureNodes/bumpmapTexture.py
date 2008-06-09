@@ -22,7 +22,7 @@ from Lux.LuxNodes.TextureNode import TextureNode
 from Lux.LuxNodes.LuxNode import TextureStringAttribute
 from Lux.LuxNodes.LuxNode import TextureFloatAttribute
 
-from Lux.LuxNodes.LuxNode import FileCollector
+# from Lux.LuxMiscModules.FileCollector import FileCollector
 
 # dummy Texture
 class bumpmapTexture(TextureNode):

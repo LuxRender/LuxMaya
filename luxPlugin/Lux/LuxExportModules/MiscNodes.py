@@ -20,7 +20,7 @@ from ExportModule import ExportModule
 from Lux.LuxNodes.luxObjectLocator import luxObjectLocator
 from Lux.LuxNodes.luxEnvironmentLight import luxEnvironmentLight
 from Lux.LuxNodes.luxSunsky import luxSunsky
-from Lux.LuxNodes.LuxNode import FileCollector
+from Lux.LuxMiscModules.FileCollector import FileCollector
 
 class MiscNodes(ExportModule):
     """
