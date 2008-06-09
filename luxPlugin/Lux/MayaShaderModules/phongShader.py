@@ -40,5 +40,6 @@ class phongShader(OpenMayaMPx.MPxNode, ShaderNode):
         self.luxType = "plastic"
         self.attributes['Kd']        = ShaderColorAttribute('color')
         self.attributes['Ks']        = ShaderColorAttribute('specularColor')
-        self.attributes['roughness'] = ShaderFloatAttribute('cosinePower', 0.01, True, 0.1)
+        self.attributes['uroughness'] = ShaderFloatAttribute('cosinePower', 0.01, True, 0.1)
+        self.attributes['vroughness'] = ShaderFloatAttribute('cosinePower', 0.01, True, 0.1)
          

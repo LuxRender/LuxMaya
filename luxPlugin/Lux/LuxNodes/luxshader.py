@@ -18,21 +18,21 @@
 from maya import OpenMaya
 from maya import OpenMayaMPx
 
-from ShaderNode                         import ShaderNode
+from ShaderNode						 import ShaderNode
 
-from ShaderNodes.carpaintShader         import carpaintShader
-from ShaderNodes.glassShader            import glassShader
-from ShaderNodes.matteShader            import matteShader
+from ShaderNodes.carpaintShader		 import carpaintShader
+from ShaderNodes.glassShader			import glassShader
+from ShaderNodes.matteShader			import matteShader
 from ShaderNodes.mattetranslucentShader import mattetranslucentShader
-from ShaderNodes.metalShader            import metalShader
-from ShaderNodes.mixShader              import mixShader
-from ShaderNodes.mirrorShader           import mirrorShader
-from ShaderNodes.plasticShader          import plasticShader
-from ShaderNodes.roughglassShader       import roughglassShader
-from ShaderNodes.shinymetalShader       import shinymetalShader
-from ShaderNodes.substrateShader        import substrateShader
+from ShaderNodes.metalShader			import metalShader
+from ShaderNodes.mixShader			  import mixShader
+from ShaderNodes.mirrorShader		   import mirrorShader
+from ShaderNodes.plasticShader		  import plasticShader
+from ShaderNodes.roughglassShader	   import roughglassShader
+from ShaderNodes.shinymetalShader	   import shinymetalShader
+from ShaderNodes.substrateShader		import substrateShader
 
-from ShaderNodes.arealightShader        import arealightShader
+from ShaderNodes.arealightShader		import arealightShader
 
 class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
 	"""
@@ -151,7 +151,7 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
 		luxshader.matte 			= matteShader()
 		luxshader.mattetranslucent	= mattetranslucentShader()
 		luxshader.metal 			= metalShader()
-		luxshader.mix     			= mixShader()
+		luxshader.mix	 			= mixShader()
 		luxshader.shinymetal		= shinymetalShader()
 		luxshader.mirror			= mirrorShader()
 		luxshader.plastic			= plasticShader()
@@ -171,8 +171,8 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
 			enumAttr.addField( "Matte Translucent", 						4)
 			enumAttr.addField( "Metal", 									5)
 			# hmm out of sequence Enum values have no effect
-			enumAttr.addField( "Mix",								        11)
-			enumAttr.addField( "Null",                                      12)
+			enumAttr.addField( "Mix",										11)
+			enumAttr.addField( "Null",									  12)
 			enumAttr.addField( "Shiny Metal",								6)
 			enumAttr.addField( "Mirror",									7)
 			enumAttr.addField( "Plastic",									8)
@@ -192,7 +192,7 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
 			nAttr.setReadable(1)
 			nAttr.setWritable(0)
 			
-            # this is set by luxshader itself, not the user, according to the material type.
+			# this is set by luxshader itself, not the user, according to the material type.
 			# the actual setting of this parameter is done in the AETemplate.
 			# (I'm using this to make AreaLight objects 50% transparent in the viewport)
 			luxshader.transparency = nAttr.createColor("transparency", "t")
@@ -269,13 +269,15 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
 			luxshader.addAttribute(luxshader.metal.name)
 			luxshader.addAttribute(luxshader.metal.n)
 			luxshader.addAttribute(luxshader.metal.k)
-			luxshader.addAttribute(luxshader.metal.roughness)
+			luxshader.addAttribute(luxshader.metal.uroughness)
+			luxshader.addAttribute(luxshader.metal.vroughness)
 			luxshader.addAttribute(luxshader.metal.nkFile)
 
 			# shinymetal
 			luxshader.addAttribute(luxshader.shinymetal.kr)
 			luxshader.addAttribute(luxshader.shinymetal.ks)
-			luxshader.addAttribute(luxshader.shinymetal.roughness)
+			luxshader.addAttribute(luxshader.shinymetal.uroughness)
+			luxshader.addAttribute(luxshader.shinymetal.vroughness)
 
 			# mirror
 			luxshader.addAttribute(luxshader.mirror.kr)
@@ -288,7 +290,8 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
 			# plastic
 			luxshader.addAttribute(luxshader.plastic.kd)
 			luxshader.addAttribute(luxshader.plastic.ks)
-			luxshader.addAttribute(luxshader.plastic.roughness)
+			luxshader.addAttribute(luxshader.plastic.uroughness)
+			luxshader.addAttribute(luxshader.plastic.vroughness)
 
 			# substrate
 			luxshader.addAttribute(luxshader.substrate.kd)

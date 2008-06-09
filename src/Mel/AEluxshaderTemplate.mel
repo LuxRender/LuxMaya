@@ -77,14 +77,16 @@
 			editorTemplate -l "N" -addControl "metalN";
 			editorTemplate -l "K" -addControl "metalK";
 			editorTemplate -callCustom "AEnkFileNew" "AEnkFileReplace" "metalNkFile";
-			editorTemplate -l "Roughness" -addControl "metalRoughness";
+			editorTemplate -l "U Roughness" -addControl "metalURoughness";
+			editorTemplate -l "V Roughness" -addControl "metalVRoughness";
 		editorTemplate -endLayout;
 		
 		// ShinyMetal
 		editorTemplate -beginLayout "Shiny Metal Attributes" -collapse 1;
 			editorTemplate -l "Reflection" -addControl "shinymetalKr";
 			editorTemplate -l "Specular" -addControl "shinymetalKs";
-			editorTemplate -l "Roughness" -addControl "shinymetalRoughness";
+			editorTemplate -l "U Roughness" -addControl "shinymetalURoughness";
+			editorTemplate -l "V Roughness" -addControl "shinymetalVRoughness";
 		editorTemplate -endLayout;
 		
 		// Mirror
@@ -103,7 +105,8 @@
 		editorTemplate -beginLayout "Plastic Attributes" -collapse 1;
 			editorTemplate -l "Diffuse" -addControl "plasticKd";
 			editorTemplate -l "Specular" -addControl "plasticKs";
-			editorTemplate -l "Roughness" -addControl "plasticRoughness";
+			editorTemplate -l "U Roughness" -addControl "plasticURoughness";
+			editorTemplate -l "V Roughness" -addControl "plasticVRoughness";
 		editorTemplate -endLayout;
 		
 		// Substrate
@@ -218,7 +221,8 @@ global proc luxshader_changeType( string $nodeName )
 		editorTemplate -dc $nodeName "metalName" true;
 		editorTemplate -dc $nodeName "metalN" true;
 		editorTemplate -dc $nodeName "metalK" true;
-		editorTemplate -dc $nodeName "metalRoughness" true;
+		editorTemplate -dc $nodeName "metalURoughness" true;
+		editorTemplate -dc $nodeName "metalVRoughness" true;
 		editorTemplate -dc $nodeName "metalNkFile" true;
 	}
 	
@@ -226,13 +230,15 @@ global proc luxshader_changeType( string $nodeName )
 	{
 		editorTemplate -dc $nodeName "shinymetalKr" false;
 		editorTemplate -dc $nodeName "shinymetalKs" false;
-		editorTemplate -dc $nodeName "shinymetalRoughness" false;
+		editorTemplate -dc $nodeName "shinymetalURoughness" false;
+		editorTemplate -dc $nodeName "shinymetalVRoughness" false;
 	}
 	else
 	{
 		editorTemplate -dc $nodeName "shinymetalKr" true;
 		editorTemplate -dc $nodeName "shinymetalKs" true;
-		editorTemplate -dc $nodeName "shinymetalRoughness" true;
+		editorTemplate -dc $nodeName "shinymetalURoughness" true;
+		editorTemplate -dc $nodeName "shinymetalVRoughness" true;
 	}
 	
 	if ($type==7) // == Mirror
@@ -248,13 +254,15 @@ global proc luxshader_changeType( string $nodeName )
 	{
 		editorTemplate -dc $nodeName "plasticKd" false;
 		editorTemplate -dc $nodeName "plasticKs" false;
-		editorTemplate -dc $nodeName "plasticRoughness" false;
+		editorTemplate -dc $nodeName "plasticURoughness" false;
+		editorTemplate -dc $nodeName "plasticVRoughness" false;
 	}
 	else
 	{
 		editorTemplate -dc $nodeName "plasticKd" true;
 		editorTemplate -dc $nodeName "plasticKs" true;
-		editorTemplate -dc $nodeName "plasticRoughness" true;
+		editorTemplate -dc $nodeName "plasticURoughness" true;
+		editorTemplate -dc $nodeName "plasticVRoughness" true;
 	}
 	
 	if ($type==9) // == Substrate
@@ -335,14 +343,16 @@ global proc luxshader_metal_changePreset( string $nodeName )
 	{
 		editorTemplate -dc $nodeName "metalN" false;
 		editorTemplate -dc $nodeName "metalK" false;
-		editorTemplate -dc $nodeName "metalRoughness" false;
+		editorTemplate -dc $nodeName "metalURoughness" false;
+		editorTemplate -dc $nodeName "metalVRoughness" false;
 		editorTemplate -dc $nodeName "metalNkFile" false;
 	}
 	else
 	{
 		editorTemplate -dc $nodeName "metalN" true;
 		editorTemplate -dc $nodeName "metalK" true;
-		editorTemplate -dc $nodeName "metalRoughness" true;
+		editorTemplate -dc $nodeName "metalURoughness" true;
+		editorTemplate -dc $nodeName "metalVRoughness" true;
 		editorTemplate -dc $nodeName "metalNkFile" true;
 	}
 }
