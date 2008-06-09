@@ -131,8 +131,8 @@ class blenderMusgraveTexture(OpenMayaMPx.MPxNode, TextureNode):
         self.attributes['bright']     = TextureFloatAttribute('bright',  self.addToOutput, self.prependToOutput)
         self.attributes['contrast']   = TextureFloatAttribute('contrast',  self.addToOutput, self.prependToOutput)
         
-        self.attributes['tex1']   = TextureColorAttribute('tex1', self.addToOutput, self.prependToOutput)
-        self.attributes['tex2']   = TextureColorAttribute('tex2', self.addToOutput, self.prependToOutput)
+        self.attributes['tex1']   = TextureFloatAttribute('tex1', self.addToOutput, self.prependToOutput)
+        self.attributes['tex2']   = TextureFloatAttribute('tex2', self.addToOutput, self.prependToOutput)
         
         self.attributes['translate'] = TextureVectorAttribute('translate', self.addToOutput, self.prependToOutput)
         self.attributes['rotate'] = TextureVectorAttribute('rotate', self.addToOutput, self.prependToOutput)
@@ -246,8 +246,8 @@ class blenderMusgraveTexture(OpenMayaMPx.MPxNode, TextureNode):
             blenderMusgraveTexture.bright = blenderMusgraveTexture.makeFloat("bright", "br", 1.0)
             blenderMusgraveTexture.contrast = blenderMusgraveTexture.makeFloat("contrast", "co", 1.0)
             
-            blenderMusgraveTexture.tex1 = blenderMusgraveTexture.makeColor("tex1", "te1", defaultR = 0.0, defaultG = 0.0, defaultB = 0.0)
-            blenderMusgraveTexture.tex2 = blenderMusgraveTexture.makeColor("tex2", "te2")
+            blenderMusgraveTexture.tex1 = blenderMusgraveTexture.makeFloat("tex1", "te1", 0.0)
+            blenderMusgraveTexture.tex2 = blenderMusgraveTexture.makeFloat("tex2", "te2", 1.0)
 
 
         except:
