@@ -215,19 +215,23 @@ class ExportModule:
         surfaceShader = shadingGroup.findPlug("surfaceShader")
         materials = OpenMaya.MPlugArray()
         surfaceShader.connectedTo(materials, True, True)
-        matNode = materials[0].node()
-        theMaterial = OpenMaya.MFnDependencyNode( matNode )
         
-        if theMaterial.typeName() == "luxshader":
-            materialTypePlug = theMaterial.findPlug( "material" )
-            materialType = materialTypePlug.asInt()
+        if materials.length() > 0:
+            matNode = materials[0].node()
+            theMaterial = OpenMaya.MFnDependencyNode( matNode )
+            
+            if theMaterial.typeName() == "luxshader":
+                materialTypePlug = theMaterial.findPlug( "material" )
+                materialType = materialTypePlug.asInt()
+            else:
+                materialType = False
+            
+            if materialType == 10:
+                return self.getAreaLight(theMaterial)
+            else:
+                return self.getNamedMaterial(theMaterial)
         else:
-            materialType = False
-        
-        if materialType == 10:
-            return self.getAreaLight(theMaterial)
-        else:
-            return self.getNamedMaterial(theMaterial)
+            return ''
         
     def findDisplacementShader(self, shadingGroup):
         """
@@ -237,15 +241,18 @@ class ExportModule:
         displacementShader = shadingGroup.findPlug('displacementShader')
         dispNodes = OpenMaya.MPlugArray()
         displacementShader.connectedTo(dispNodes, True, True)
-        dispNode = dispNodes[0].node()
-        theDisplacementShader = OpenMaya.MFnDependencyNode( dispNode )
         
-        # hmm in the graph we have placementXd -> texture -> displacementShader -> shadingGroup
-        # not sure what to do here yet.
-        OpenMaya.MGlobal.displayInfo( 'Found displacement shader, but displacement not yet implemented: %s' % theDisplacementShader.name() )
-        
-        # return '\t"string displacementmap" ["%s"]' % displacementMapName
-        return ''
+        if dispNodes.length() > 0:
+            dispNode = dispNodes[0].node()
+            theDisplacementShader = OpenMaya.MFnDependencyNode( dispNode )
+            
+            # hmm in the graph we have placementXd -> texture -> displacementShader -> shadingGroup
+            # not sure what to do here yet.
+            OpenMaya.MGlobal.displayInfo( 'Found displacement shader, but displacement not yet implemented: %s' % theDisplacementShader.name() )
+            
+            # return '\t"string displacementmap" ["%s"]' % displacementMapName
+        else:
+            return ''
         
     
     def getNamedMaterial(self, shaderNode):
