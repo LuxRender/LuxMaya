@@ -14,10 +14,17 @@
 #
 # ------------------------------------------------------------------------------
 
+import os
+os.altsep = '/'
+
+from maya import cmds
+from maya import OpenMaya
+
 class FileCollector:
     """
     Texture file collector for export process.
-    Probably this should be in it's own    file.
+    TODO: bump maps will be filed under textures because of the generic
+    routines. Find a way to make it wok again.
     """
     
     @staticmethod
