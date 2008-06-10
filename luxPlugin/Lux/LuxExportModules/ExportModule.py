@@ -247,11 +247,9 @@ class ExportModule:
             dispNode = dispNodes[0].node()
             theDisplacementShader = OpenMaya.MFnDependencyNode( dispNode )
             
-            # hmm in the graph we have placementXd -> texture -> displacementShader -> shadingGroup
-            # not sure what to do here yet.
-            OpenMaya.MGlobal.displayInfo( 'Found displacement shader, but displacement not yet implemented: %s' % theDisplacementShader.name() )
+            displacementMapName = theDisplacementShader.name() + ".displacement"
             
-            # return '\t"string displacementmap" ["%s"]' % displacementMapName
+            return '\t"string displacementmap" ["%s"]' % displacementMapName
         else:
             return ''
         

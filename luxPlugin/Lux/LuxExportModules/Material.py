@@ -34,8 +34,9 @@ from Lux.LuxNodes.ShaderNodes.shinymetalShader        import shinymetalShader
 from Lux.LuxNodes.ShaderNodes.substrateShader         import substrateShader
 
 # ...and the types that we can translate
-from Lux.MayaShaderModules.lambertShader                import lambertShader
-from Lux.MayaShaderModules.phongShader                  import phongShader
+from Lux.MayaShaderModules.displacementShader         import displacementShader
+from Lux.MayaShaderModules.lambertShader              import lambertShader
+from Lux.MayaShaderModules.phongShader                import phongShader
 
 class MaterialBase:
     """
@@ -72,12 +73,18 @@ class Material(ExportModule):
         # TODO this doesn't work
         materialNotExported = not ExportedMaterials.__contains__(nodeName)
         
-        if (dpNode.classification( nodeType ) == "shader/surface") and materialNotExported:
+        if (   (dpNode.classification( nodeType ) == "shader/surface") \
+            or (dpNode.classification( nodeType ) == "shader/displacement") \
+           ) \
+        and materialNotExported:
             ExportedMaterials.append( nodeName )
             
             if nodeType == "luxshader":
                 # export lux material directly
                 return MaterialLux( dpNode )
+            elif nodeType == "displacementShader":
+                # parse displacement shader
+                return MaterialDisplacement( dpNode )
             elif nodeType == "lambert":
                 # translate lambert -> matte
                 return MaterialLambert( dpNode )
@@ -186,6 +193,23 @@ class mixShaderHandler(ExportModule, MaterialBase):
             
         return self.outputString
 
+
+class MaterialDisplacement(ExportModule, MaterialBase):
+    """
+    A translatable Maya shader: displacement
+    """
+    
+    def __init__(self, shaderNode):
+        MaterialBase.__init__(self, shaderNode)
+        self.shaderSyntaxModule = displacementShader()
+        
+    def getOutput(self):
+        """
+        Get the syntax from the displacementShader module
+        """
+        
+        self.addToOutput( '# Translated Displacement Shader ' + self.shaderName )
+        self.addToOutput( self.shaderSyntaxModule.getMaterial( self.dpNode, self.shaderName ) )
 
 class MaterialLambert(ExportModule, MaterialBase):
     """

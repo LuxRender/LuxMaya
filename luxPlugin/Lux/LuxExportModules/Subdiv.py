@@ -13,9 +13,9 @@ fSD = OpenMaya.MFnSubd(tdp)
 THEHIGHESTLEVEL = fSD.levelMaxCurrent()
 
 i=0
+j=0
 vertArray = {}
 localIndex = {}
-j=0
 indArray = {}
 
 #for THELEVEL in range(fSD.levelMaxCurrent(), 0, -1):
