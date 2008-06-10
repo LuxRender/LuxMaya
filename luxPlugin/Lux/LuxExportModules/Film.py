@@ -52,6 +52,7 @@ class Film(ExportModule):
         utm_exr         = self.intToBoolString( cmds.getAttr( 'lux_settings.film_write_untonemapped_exr' ) )
         utm_igi         = self.intToBoolString( cmds.getAttr( 'lux_settings.film_write_untonemapped_igi' ) )
         resume          = self.intToBoolString( cmds.getAttr( 'lux_settings.film_write_resume_film' ) )
+        restart        = self.intToBoolString( cmds.getAttr( 'lux_settings.film_restart_resume_film' ) )
         
         r_prescale      = cmds.getAttr( 'lux_settings.film_reinhard_prescale' )
         r_postscale     = cmds.getAttr( 'lux_settings.film_reinhard_postscale' )
@@ -80,8 +81,9 @@ class Film(ExportModule):
         self.addToOutput( '\t"bool write_untonemapped_exr" ["%s"]' % utm_exr )
         self.addToOutput( '\t"bool write_untonemapped_igi" ["%s"]' % utm_igi )
         
-        # TODO insert correct syntax + option for restart
-        #self.addToOutput( '\t"bool write_resume_film" ["%s"]' % resume )
+        
+        self.addToOutput( '\t"bool write_resume_flm" ["%s"]' % resume )
+        self.addToOutput( '\t"bool restart_resume_flm" ["%s"]' % restart )
         
         self.addToOutput( '\t"float reinhard_prescale" [%f]'  % r_prescale )
         self.addToOutput( '\t"float reinhard_postscale" [%f]' % r_postscale )

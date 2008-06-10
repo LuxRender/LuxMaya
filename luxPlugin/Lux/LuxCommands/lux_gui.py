@@ -718,13 +718,23 @@ class lux_gui:
 		#------
 		self.endRow()
 		#-----
-		lux_film_write_row6 = self.newRow( parent = lux_film_write_controls, numberOfColumns = 1 )
+		lux_film_write_row6A = self.newRow( parent = lux_film_write_controls, numberOfColumns = 1 )
 		#------
-		lux_film_fleximage_write_resume = self.addCheckBox( parent = lux_film_write_row6, label = 'Resume Film' )
+		lux_film_fleximage_write_resume = self.addCheckBox( parent = lux_film_write_row6A, label = 'Resume Film' )
 		cmds.connectControl( lux_film_fleximage_write_resume, 'lux_settings.film_write_resume_film' )
 		#------
 		self.endRow()
 		#-----
+		self.endRow()
+		#-----
+		lux_film_write_row6B = self.newRow( parent = lux_film_write_controls, numberOfColumns = 1 )
+		#------
+		lux_film_fleximage_restart_resume = self.addCheckBox( parent = lux_film_write_row6B, label = 'Restart Resume Film' )
+		cmds.connectControl( lux_film_fleximage_restart_resume, 'lux_settings.film_restart_resume_film' )
+		#------
+		self.endRow()
+		#-----
+		
 		self.endLevel()
 		#----
 		self.endRow()
@@ -778,7 +788,7 @@ class lux_gui:
 		lux_render_row1 = self.newRow(parent = SA_FRAME)
 		#---
 		self.newText(label = "Sampler", parent = lux_render_row1)
-		lux_render_sampler = mOptionMenu(parent = lux_render_row1) #, changeCommand = self.doIt )
+		lux_render_sampler = mOptionMenu(parent = lux_render_row1)
 		lux_render_sampler.addItem(label = "Random")
 		lux_render_sampler.addItem(label = "Low discrepancy")
 		lux_render_sampler.addItem(label = "Halton")
@@ -804,7 +814,7 @@ class lux_gui:
 		lux_render_row2 = self.newRow(parent = FI_FRAME)
 		#---
 		self.newText(label = "Pixel Filter", parent = lux_render_row2)
-		lux_render_filter = mOptionMenu(parent = lux_render_row2) #, changeCommand = self.doIt )
+		lux_render_filter = mOptionMenu(parent = lux_render_row2)
 		lux_render_filter.addItem(label = "Mitchell")
 		lux_render_filter.addItem(label = "Gaussian")
 		lux_render_filter.addItem(label = "Sinc")

@@ -23,7 +23,7 @@ class lux_settings:
     """
 
     # IMPORTANT!! Be sure to update this constant if you make changes to this file
-    CURRENT_SC_VERSION = 13
+    CURRENT_SC_VERSION = 14
 
     def addString(self, ln):
         """
@@ -221,6 +221,7 @@ class lux_settings:
         self.addBool ( ln = 'film_write_untonemapped_exr' )
         self.addBool ( ln = 'film_write_untonemapped_igi' )
         self.addBool ( ln = 'film_write_resume_film' )
+        self.addBool ( ln = 'film_restart_resume_film' )
         self.addShort( ln = 'film_writeinterval', dv = 60 )
         self.addShort( ln = 'film_displayinterval', dv = 12 )
         self.addShort( ln = 'film_reject_warmup', dv = 12 )
