@@ -55,7 +55,7 @@ class Mesh(ExportModule):
 		
 		self.instanceNum = 0
 		if dagPath.isInstanced():
-			instanceNum = dagPath.instanceNumber()
+			self.instanceNum = dagPath.instanceNumber()
 		
 		self.fShape.getConnectedSetsAndMembers(self.instanceNum, self.fPolygonSets, self.fPolygonComponents, True)
 		

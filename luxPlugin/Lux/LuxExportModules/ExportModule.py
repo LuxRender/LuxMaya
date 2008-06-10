@@ -193,6 +193,8 @@ class ExportModule:
             faceIndices = OpenMaya.MIntArray()
             self.fShape.getConnectedShaders(instanceNum, shadingGroups, faceIndices)
             # we return the material connected to the given setNumber
+            # TODO: investigate why we sometimes overrun the buffer ?
+            if setNumber >= shadingGroups.length(): setNumber = shadingGroups.length()-1
             theShadingGroup = OpenMaya.MFnDependencyNode( shadingGroups[setNumber] )
         
         elif self.fShape.type() == OpenMaya.MFn.kNurbsSurface:

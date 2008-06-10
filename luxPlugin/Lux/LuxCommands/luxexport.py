@@ -18,6 +18,7 @@ import Lux.LuxExportModules.Rendersettings  as LuxModuleRendersettings
 import Lux.LuxExportModules.Camera		    as LuxModuleCamera
 import Lux.LuxExportModules.Light		    as LuxModuleLight
 import Lux.LuxExportModules.Mesh			as LuxModuleMesh
+import Lux.LuxExportModules.MeshOpt			as LuxModuleMeshOpt
 import Lux.LuxExportModules.Nurbs		    as LuxModuleNurbs
 import Lux.LuxExportModules.Volume		    as LuxModuleVolume
 import Lux.LuxExportModules.Material		as LuxModuleMaterial
@@ -113,7 +114,7 @@ class luxexport:
 					OpenMaya.MGlobal.displayError( "Failed to open files for writing\n" )
 					raise		
 			# loop through meshes
-			self.exportType( OpenMaya.MFn.kMesh, LuxModuleMesh.Mesh, "Mesh", (self.meshFileHandle, self.portalsFileHandle) )
+			self.exportType( OpenMaya.MFn.kMesh, LuxModuleMeshOpt.MeshOpt, "Mesh", (self.meshFileHandle, self.portalsFileHandle) )
 			if not self.debug:
 				self.meshFileHandle.close()
 				self.portalsFileHandle.close()
