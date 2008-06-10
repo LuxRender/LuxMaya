@@ -247,9 +247,16 @@ class ExportModule:
             dispNode = dispNodes[0].node()
             theDisplacementShader = OpenMaya.MFnDependencyNode( dispNode )
             
-            displacementMapName = theDisplacementShader.name() + ".displacement"
+            texPlug = theDisplacementShader.findPlug('displacement')
+            dispInputPlugs = OpenMaya.MPlugArray()
+            texPlug.connectedTo(dispInputPlugs, True, True)
             
-            return '\t"string displacementmap" ["%s"]' % displacementMapName
+            if dispInputPlugs.length() > 0:
+                texNodeName = OpenMaya.MFnDependencyNode( dispInputPlugs[0].node() ).name()
+                displacementMapName = texNodeName + ".displacement"
+                return '\t"string displacementmap" ["%s"]' % displacementMapName
+            else:
+                return ''
         else:
             return ''
         
