@@ -218,7 +218,12 @@ class luxbatch:
         # launch process doesn't work on linux
         if cmds.getAttr( 'lux_settings.render_launch' ) == 1:
             try:
-                os.spawnv(os.P_NOWAIT, batchFileName, [batchFileName] )
+                if os.name == 'nt':
+                    # windows
+                    os.spawnv(os.P_NOWAIT, batchFileName, [batchFileName] )
+                else:
+                    # assuming linux, this probably won't work on OSX
+                    os.system('(xterm -T "Lux Render" -e %s)&' % batchFileName)
             except:
                 OpenMaya.MGlobal.displayError( "Failed to launch process\n" )
                 raise

@@ -20,11 +20,11 @@ it.getPath(tdp)
 fSD = OpenMaya.MFnMesh(tdp)
 
 i=0
+j=0
 vertArray = {}
 normArray = {}
 uvArray = {}
 localIndex = {}
-j=0
 indArray = {}
 
 
