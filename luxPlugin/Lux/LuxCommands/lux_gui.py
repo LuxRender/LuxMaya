@@ -753,6 +753,14 @@ class lux_gui:
 		#----
 		self.endRow()
 		#---
+		film_fleximage_row10 = self.newRow( parent = fleximage_controls )
+		#----
+		self.newText(label = 'Halt SPP', parent = film_fleximage_row10)
+		lux_film_fleximage_haltspp = cmds.intField( parent = film_fleximage_row10, min = 0, value = 0)
+		cmds.connectControl( lux_film_fleximage_haltspp, 'lux_settings.film_haltspp' )
+		#----
+		self.endRow()
+		#---
 		
 		return flexImageFrameContainer
 

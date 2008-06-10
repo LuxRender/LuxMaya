@@ -61,6 +61,8 @@ class Film(ExportModule):
         displayinterval = cmds.getAttr( 'lux_settings.film_displayinterval' )
         reject_warmup   = cmds.getAttr( 'lux_settings.film_reject_warmup' )
         
+        haltspp         = cmds.getAttr( 'lux_settings.film_haltspp' )
+        
         
         # send to Film output
         self.addToOutput( 'Film "fleximage"' )
@@ -88,6 +90,8 @@ class Film(ExportModule):
         self.addToOutput( '\t"integer writeinterval" [%i]' % writeinterval )
         self.addToOutput( '\t"integer displayinterval" [%i]' % displayinterval )
         self.addToOutput( '\t"integer reject_warmup" [%i]' % reject_warmup )
+        
+        self.addToOutput( '\t"integer haltspp" [%i]' % haltspp )
         
         self.addToOutput( '' )
     #end def getOutput

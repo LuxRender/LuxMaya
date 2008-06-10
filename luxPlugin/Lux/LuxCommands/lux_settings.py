@@ -23,7 +23,7 @@ class lux_settings:
     """
 
     # IMPORTANT!! Be sure to update this constant if you make changes to this file
-    CURRENT_SC_VERSION = 12
+    CURRENT_SC_VERSION = 13
 
     def addString(self, ln):
         """
@@ -227,6 +227,7 @@ class lux_settings:
         self.addFloat( ln = 'film_reinhard_prescale', dv = 1.0 )
         self.addFloat( ln = 'film_reinhard_postscale', dv = 1.0 )
         self.addFloat( ln = 'film_reinhard_burn', dv = 6.0 )
+        self.addLong ( ln = 'film_haltspp', dv = 0 )
         
         # Process settings
         self.addBool ( ln = 'render_launch' )
