@@ -50,8 +50,8 @@ What's in this respository ?
 	Lux.LuxExportModules.Material.MaterialLambert								Maya lambert exporter
 	Lux.LuxExportModules.Material.MaterialPhong									Maya phong exporter
 	Lux.LuxExportModules.Material.mixShaderHandler								Lux Mix material exporter
-	Lux.LuxExportModules.Mesh_opt												Optimised polygon mesh exporter
 	Lux.LuxExportModules.Mesh.Mesh												Unoptimised polygon mesh exporter
+	Lux.LuxExportModules.MeshOpt.MeshOpt										Optimised polygon mesh exporter
 	Lux.LuxExportModules.Mesh.PolygonSet										Polygon mesh parser
 	Lux.LuxExportModules.MiscNodes.MiscNodes									Miscellaneous nodes exporter (factory)
 	Lux.LuxExportModules.MiscNodes.luxSunskyLoader								Lux sunsky exporter
@@ -63,11 +63,11 @@ What's in this respository ?
 	Lux.LuxExportModules.Volume.Volume											Fluid volume exporter
 
 	Lux.LuxMiscModules															Miscellaneous modules
+	Lux.LuxMiscModules.FileCollector.FileCollector								Image file collector
 	Lux.LuxMiscModules.fn_attr.fn_attr											Attribute presets finder/loader
 	Lux.LuxMiscModules.geoSunData.updateSunNode									Geographic sun position calculator
 	Lux.LuxMiscModules.glRoutines.glRoutines									OpenGL drawing routines
-	Lux.LuxMiscModules.FileCollector.FileCollector								Image file collector
-
+	
 	Lux.LuxNodes																Custom Lux nodes (and parts thereof)
 	Lux.LuxNodes.LuxNode.LuxNode												Custom Lux node base classs
 	Lux.LuxNodes.LuxNode.NodeAttribute											Custom node attribute base class
@@ -122,5 +122,6 @@ What's in this respository ?
 	Lux.LuxNodes.TextureNodes.wrinkledTexture.wrinkledTexture					Wrinkled texture node maker and parser
 
 	Lux.MayaShaderModules														Maya shader parsers
+	Lux.MayaShaderModules.displacementShader.displacementShader					Displacement shader parser
 	Lux.MayaShaderModules.lambertShader.lambertShader							Lambert shader parser
 	Lux.MayaShaderModules.phongShader.phongShader								Phong shader parser

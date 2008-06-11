@@ -85,7 +85,8 @@ class luxexport:
 		meshFileName = sceneFileName.replace(".lxs", ".mesh.lxo")
 		nurbsFileName = sceneFileName.replace(".lxs", ".nurbs.lxo")
 		volumeFileName = sceneFileName.replace(".lxs", ".volume.lxo")
-		portalsFileName = sceneFileName.replace(".lxs", ".portals.lxo")
+		portalsMeshFileName = sceneFileName.replace(".lxs", ".mesh.portals.lxo")
+		portalsNurbsFileName = sceneFileName.replace(".lxs", ".nurbs.portals.lxo")
 		
 		sceneFilePath = os.altsep.join(sceneFilePathParts) + os.altsep
 				
@@ -109,7 +110,7 @@ class luxexport:
 			if not self.debug:
 				try:		
 					self.meshFileHandle = open(sceneFilePath + meshFileName, "wb")
-					self.portalsFileHandle = open(sceneFilePath + portalsFileName, "wb")
+					self.portalsMeshFileHandle = open(sceneFilePath + portalsMeshFileName, "wb")
 				except:
 					OpenMaya.MGlobal.displayError( "Failed to open files for writing\n" )
 					raise		
@@ -117,7 +118,7 @@ class luxexport:
 			self.exportType( OpenMaya.MFn.kMesh, LuxModuleMeshOpt.MeshOpt, "Mesh", (self.meshFileHandle, self.portalsFileHandle) )
 			if not self.debug:
 				self.meshFileHandle.close()
-				self.portalsFileHandle.close()
+				self.portalsMeshFileHandle.close()
 		
 		# NURBS SURFACES
 		
@@ -125,12 +126,7 @@ class luxexport:
 			if not self.debug:
 				try:		
 					self.nurbsFileHandle = open(sceneFilePath + nurbsFileName, "wb")
-					if not os.path.exists(sceneFilePath + portalsFileName) \
-					or cmds.getAttr( 'lux_settings.scene_export_meshes' ) == 0:
-						pMode = "wb"
-					else:
-						pMode = "ab"
-					self.portalsFileHandle = open(sceneFilePath + portalsFileName, pMode)
+					self.portalsNurbsFileHandle = open(sceneFilePath + portalsNurbsFileName, "wb")
 				except:
 					OpenMaya.MGlobal.displayError( "Failed to open files for writing\n" )
 					raise		
@@ -138,7 +134,7 @@ class luxexport:
 			self.exportType( OpenMaya.MFn.kNurbsSurface, LuxModuleNurbs.Nurbs, "NURBS", (self.nurbsFileHandle, self.portalsFileHandle) )
 			if not self.debug:
 				self.nurbsFileHandle.close()
-				self.portalsFileHandle.close()
+				self.portalsNurbsFileHandle.close()
 
 				
 		# FLUID VOLUMES

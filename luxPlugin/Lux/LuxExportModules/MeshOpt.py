@@ -163,6 +163,9 @@ class MeshOpt(ExportModule):
                 self.addToOutput( '%f %f %f' % (self.vertArray[vP].x, self.vertArray[vP].y, self.vertArray[vP].z) )
             self.addToOutput( '\t]' )
             
+            # trianglemesh needs UV and Normals
+            # loopsubdiv needs UV
+            # portalshape needs Normals
             
 #            self.addToOutput( '\t"normal N" [' )
 #            self.addToOutput( '\t\t' + self.polygonSet.getNormals() )
