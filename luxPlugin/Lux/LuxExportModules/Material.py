@@ -159,8 +159,6 @@ class mixShaderHandler(ExportModule, MaterialBase):
     def getMaterial(self, dpNode, shaderName):
         self.shaderSyntaxModule = mixShader()
         
-        # TODO Fix Maya crash if either mixNamed1 or mixNamed2 are not connected 
-        
         # OK, lets find the input connexions
         nm1Plug = dpNode.findPlug( 'mixNamed1' )
         inputPlugs1 = OpenMaya.MPlugArray()
