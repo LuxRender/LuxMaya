@@ -115,7 +115,7 @@ class luxexport:
 					OpenMaya.MGlobal.displayError( "Failed to open files for writing\n" )
 					raise		
 			# loop through meshes
-			self.exportType( OpenMaya.MFn.kMesh, LuxModuleMeshOpt.MeshOpt, "Mesh", (self.meshFileHandle, self.portalsFileHandle) )
+			self.exportType( OpenMaya.MFn.kMesh, LuxModuleMeshOpt.MeshOpt, "Mesh", (self.meshFileHandle, self.portalsMeshFileHandle) )
 			if not self.debug:
 				self.meshFileHandle.close()
 				self.portalsMeshFileHandle.close()
@@ -131,7 +131,7 @@ class luxexport:
 					OpenMaya.MGlobal.displayError( "Failed to open files for writing\n" )
 					raise		
 			# loop through NURBS surfaces
-			self.exportType( OpenMaya.MFn.kNurbsSurface, LuxModuleNurbs.Nurbs, "NURBS", (self.nurbsFileHandle, self.portalsFileHandle) )
+			self.exportType( OpenMaya.MFn.kNurbsSurface, LuxModuleNurbs.Nurbs, "NURBS", (self.nurbsFileHandle, self.portalsNurbsFileHandle) )
 			if not self.debug:
 				self.nurbsFileHandle.close()
 				self.portalsNurbsFileHandle.close()
@@ -267,7 +267,7 @@ class luxexport:
 		while not itDn.isDone():
 			# theNode = OpenMaya.MFnDependencyNode( itDn.thisNode() )
 			itDn.getPath(self.tempDagPath)
-			expModule = LuxModuleMiscNodes.MiscNodes.MiscNodeFactory( self.tempDagPath, sceneFilePath + portalsFileName )
+			expModule = LuxModuleMiscNodes.MiscNodes.MiscNodeFactory( self.tempDagPath, [sceneFilePath + portalsMeshFileName,sceneFilePath + portalsNurbsFileName] )
 			if expModule != False:
 				expOut = expModule.loadModule()
 				self.dprint( "Found External Mesh: " )

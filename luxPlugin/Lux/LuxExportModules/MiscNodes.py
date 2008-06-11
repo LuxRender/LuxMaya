@@ -28,7 +28,7 @@ class MiscNodes(ExportModule):
     """
     
     @staticmethod
-    def MiscNodeFactory( dagPath, portalsFileName = "" ):
+    def MiscNodeFactory( dagPath, portalsFilesNames = [] ):
         """
         Determine the type of object and return it's Loader()
         """
@@ -39,9 +39,9 @@ class MiscNodes(ExportModule):
         if   nodeType == luxObjectLocator.nodeName():
             return luxObjectLocatorLoader( dagPath, dpNode )
         elif nodeType == luxEnvironmentLight.nodeName():
-            return luxEnvironmentLightLoader( dagPath, dpNode, portalsFileName )
+            return luxEnvironmentLightLoader( dagPath, dpNode, portalsFilesNames )
         elif nodeType == luxSunsky.nodeName():
-            return luxSunskyLoader( dagPath, dpNode, portalsFileName )
+            return luxSunskyLoader( dagPath, dpNode, portalsFilesNames )
         else:
             return False
 
@@ -50,14 +50,14 @@ class luxSunskyLoader(ExportModule):
     Constructs Lux sunsky syntax given a luxSunsky object
     """
     
-    def __init__(self, dagPath, dpNode, portalsFileName):
+    def __init__(self, dagPath, dpNode, portalsFilesNames):
         """
         Set up the objects we're dealing with
         """
         
         self.dagPath = dagPath
         self.dpNode = dpNode
-        self.portalsFile = portalsFileName
+        self.portalsFiles = portalsFilesNames
         
     def getOutput(self):
         """
@@ -93,8 +93,9 @@ class luxSunskyLoader(ExportModule):
         self.addToOutput( '\t\t"float gain" [%f]' % gain )
         self.addToOutput( '\t\t"float turbidity" [%f]' % turbidity )
         self.addToOutput( '\t\t"float relsize" [%f]' % relsize )
-        if os.path.exists(self.portalsFile):
-            self.addToOutput( '\t\tInclude "%s"' % self.portalsFile )
+        for portalsFile in self.portalsFiles:
+            if os.path.exists(portalsFile):
+                self.addToOutput( '\t\tInclude "%s"' % portalsFile )
         self.addToOutput( 'TransformEnd' )
         self.addToOutput( '' )
         
@@ -103,14 +104,14 @@ class luxEnvironmentLightLoader(ExportModule):
     Constructs Lux infinite LightSource syntax given a luxEnvironmentLight
     """
     
-    def __init__(self, dagPath, dpNode, portalsFileName):
+    def __init__(self, dagPath, dpNode, portalsFilesNames):
         """
         Set up the objects we're dealing with
         """
         
         self.dagPath = dagPath
         self.dpNode = dpNode
-        self.portalsFile = portalsFileName
+        self.portalsFiles = portalsFilesNames
         
     def getOutput(self):
         """
@@ -148,8 +149,9 @@ class luxEnvironmentLightLoader(ExportModule):
             self.addToOutput( '\t\t"string mapname" ["%s"]' % FileCollector.collectHDRI( hdrFileName ) )
         self.addToOutput( '\t\t"color L" [%f %f %f]' % (lColorR, lColorG, lColorB) )
         self.addToOutput( '\t\t"integer nsamples" [%i]' % numSamples )
-        if os.path.exists(self.portalsFile):
-            self.addToOutput( '\t\tInclude "%s"' % self.portalsFile )
+        for portalsFile in self.portalsFiles:
+            if os.path.exists(portalsFile):
+                self.addToOutput( '\t\tInclude "%s"' % portalsFile )
         self.addToOutput( 'TransformEnd' )
         self.addToOutput( '' )
        
