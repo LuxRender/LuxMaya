@@ -25,7 +25,7 @@ class MeshOpt(ExportModule):
     normArray = {}
     uvArray = {}
     objectIndex = {}
-    indArray = {}
+    indArray = []
     
     fShape = OpenMaya.MFnMesh()
     fPolygonSets = OpenMaya.MObjectArray()
@@ -73,7 +73,32 @@ class MeshOpt(ExportModule):
             self.normArray = {}
             self.uvArray = {}
             self.objectIndex = {}
-            self.indArray = {}
+            self.indArray = []
+            
+            
+            self.addToOutput( '# Polygon Shape %s (set %i)' % (self.dagPath.fullPathName(), iSet) )
+            self.addToOutput( 'AttributeBegin' )
+            self.addToOutput( self.translationMatrix(self.dagPath) )
+            
+            # detect Material or AreaLight
+            if not self.portalsMode:
+                self.shadingGroup = self.findShadingGroup(self.instanceNum, iSet)
+                self.addToOutput( self.findSurfaceShader( shadingGroup = self.shadingGroup ) )
+                
+                subPlug1 = self.fShape.findPlug('useMaxSubdivisions')
+                useLoopSubdiv = subPlug1.asBool()
+                if useLoopSubdiv:
+                    subPlug2 = self.fShape.findPlug('maxSubd')
+                    nlevels = subPlug2.asInt()
+                    self.addToOutput( 'Shape "loopsubdiv"' )
+                    self.addToOutput( '\t"integer nlevels" [%i]' % nlevels )
+                    self.addToOutput( self.findDisplacementShader( self.shadingGroup ) )
+                else:                
+                    self.addToOutput( 'Shape "trianglemesh"' )
+            else:
+                useLoopSubdiv = False
+                self.addToOutput( 'PortalShape "trianglemesh"' )
+            
             
             #---- start mesh iteration
             
@@ -101,14 +126,13 @@ class MeshOpt(ExportModule):
                 self.objectIndex[cInd] = i
                 i+=1
                 itMeshVerts.next()
-            
-            itMeshPolys = OpenMaya.MItMeshPolygon(self.dagPath, self.fPolygonComponents[iSet])
-            
+
+
             numTrianglesPx = OpenMaya.MScriptUtil()
             numTrianglesPx.createFromInt(0)
             numTrianglesPtr = numTrianglesPx.asIntPtr()
             
-            j=0
+            itMeshPolys = OpenMaya.MItMeshPolygon(self.dagPath, self.fPolygonComponents[iSet])
             while not itMeshPolys.isDone():
                 
                 itMeshPolys.numTriangles(numTrianglesPtr)
@@ -121,41 +145,15 @@ class MeshOpt(ExportModule):
                     
                     itMeshPolys.getTriangle( numTriangles, nonTweaked, pVerts, OpenMaya.MSpace.kObject )
                     
-                    indCol = []
                     for pVert in pVerts:
-                        indCol.append(self.objectIndex[pVert])
-                    self.indArray[j] = indCol
-                    j+=1
+                        self.indArray.append(self.objectIndex[pVert])
                     
                 itMeshPolys.next()
             
             # ------ mesh iteration done, do output.
 
-            self.addToOutput( '# Polygon Shape %s (set %i)' % (self.dagPath.fullPathName(), iSet) )
-            self.addToOutput( 'AttributeBegin' )
-            self.addToOutput( self.translationMatrix(self.dagPath) )
-            
-            # detect Material or AreaLight
-            if not self.portalsMode:
-                self.shadingGroup = self.findShadingGroup(self.instanceNum, iSet)
-                self.addToOutput( self.findSurfaceShader( shadingGroup = self.shadingGroup ) )
-                
-                subPlug1 = self.fShape.findPlug('useMaxSubdivisions')
-                useLoopSubdiv = subPlug1.asBool()
-                if useLoopSubdiv:
-                    subPlug2 = self.fShape.findPlug('maxSubd')
-                    nlevels = subPlug2.asInt()
-                    self.addToOutput( 'Shape "loopsubdiv"' )
-                    self.addToOutput( '\t"integer nlevels" [%i]' % nlevels )
-                    self.addToOutput( self.findDisplacementShader( self.shadingGroup ) )
-                else:                
-                    self.addToOutput( 'Shape "trianglemesh"' )
-            else:
-                self.addToOutput( 'PortalShape "trianglemesh"' )
-                
             self.addToOutput( '\t"integer indices" [' )
-            for k in self.indArray:
-                self.addToOutput( '%i %i %i' % (self.indArray[k][0], self.indArray[k][1], self.indArray[k][2]) )
+            self.addToOutput( ' '.join(map(str,self.indArray)) )
             self.addToOutput( '\t]' )
             
             self.addToOutput( '\t"point P" [' )
