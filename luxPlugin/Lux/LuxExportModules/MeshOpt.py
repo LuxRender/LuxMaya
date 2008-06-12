@@ -95,43 +95,52 @@ class MeshOpt(ExportModule):
                     self.mode = 'loopsubdiv'
                     subPlug2 = self.fShape.findPlug('maxSubd')
                     nlevels = subPlug2.asInt()
-                    self.addToOutput( 'Shape "loopsubdiv"' )
-                    self.addToOutput( '\t"integer nlevels" [%i]' % nlevels )
+                    self.addToOutput( '\tShape "loopsubdiv"' )
+                    self.addToOutput( '\t\t"integer nlevels" [%i]' % nlevels )
                     self.addToOutput( self.findDisplacementShader( self.shadingGroup ) )
-                else:                
-                    self.addToOutput( 'Shape "trianglemesh"' )
+                else:
+                    self.mode = 'trianglemesh'                
+                    self.addToOutput( '\tShape "trianglemesh"' )
             else:
-                self.mode = 'trianglemesh'
-                self.addToOutput( 'PortalShape "trianglemesh"' )
+                self.addToOutput( '\tPortalShape "trianglemesh"' )
             
             
             #---- start mesh iteration
             
             itMeshVerts = OpenMaya.MItMeshVertex(self.dagPath, self.fPolygonComponents[iSet])
+            
+            meshNormals = OpenMaya.MFloatVectorArray()
+            self.fShape.getNormals( meshNormals )
 
-            i=0
+            objectVertCount = 0
             while not itMeshVerts.isDone():
                 cInd = itMeshVerts.index()
                 vP = itMeshVerts.position()    
-                self.vertArray[i] = vP
+                self.vertArray[objectVertCount] = vP
+                self.objectIndex[cInd] = objectVertCount
                 
-                self.objectIndex[cInd] = i
-                i+=1
+                nI = OpenMaya.MIntArray()
+                itMeshVerts.getNormalIndices(nI)
+                self.vNormals.append( meshNormals[ nI[0] ] )
+                
+                objectVertCount+=1
                 itMeshVerts.next()
 
-            self.uCoords = [0] * i
-            self.vCoords = [0] * i
-            self.vNormals = [0] * i
+            self.uCoords = [0] * objectVertCount
+            self.vCoords = [0] * objectVertCount
 
             numTrianglesPx = OpenMaya.MScriptUtil()
             numTrianglesPx.createFromInt(0)
             numTrianglesPtr = numTrianglesPx.asIntPtr()
             
             itMeshPolys = OpenMaya.MItMeshPolygon(self.dagPath, self.fPolygonComponents[iSet])
+            # each face
             while not itMeshPolys.isDone():
                 
                 itMeshPolys.numTriangles(numTrianglesPtr)
                 numTriangles = OpenMaya.MScriptUtil(numTrianglesPtr).asInt()
+                
+                # each triangle in each face
                 for currentTriangle in range(0, numTriangles):
                     
                     nonTweaked = OpenMaya.MPointArray()
@@ -143,16 +152,12 @@ class MeshOpt(ExportModule):
                     vArray = OpenMaya.MFloatArray()
                     itMeshPolys.getUVs(uArray, vArray, self.UVSets[0])
                     
-                    polyNormals = OpenMaya.MVectorArray()
-                    itMeshPolys.getNormals(polyNormals, OpenMaya.MSpace.kObject)
-                    
-                    j=0
-                    for pVert in pVerts:
-                        self.indArray.append(self.objectIndex[pVert])
-                        self.uCoords[self.objectIndex[pVert]] = uArray[j]
-                        self.vCoords[self.objectIndex[pVert]] = vArray[j]
-                        self.vNormals[self.objectIndex[pVert]] = polyNormals[j]
-                        j+=1
+                    for pVert, localVertIndex in zip( pVerts, range(0, uArray.length()) ):
+                        objVertIndex = self.objectIndex[pVert]
+                        
+                        self.indArray.append(objVertIndex)
+                        self.uCoords[objVertIndex] = uArray[localVertIndex]
+                        self.vCoords[objVertIndex] = vArray[localVertIndex]
                         
                 itMeshPolys.next()
             
@@ -175,11 +180,11 @@ class MeshOpt(ExportModule):
                 self.addToOutput( '\t]' )
             
             # Add normals to trianglemesh
-            if self.mode == 'trianglemesh':
-                self.addToOutput( '\t"normal N" [' )
-                for normal in self.vNormals:
-                    self.addToOutput( '\t\t%f %f %f' % (normal.x, normal.y, normal.z) )
-                self.addToOutput( '\t]' )
+#            if self.mode == 'trianglemesh':
+#                self.addToOutput( '\t"normal N" [' )
+#                for vN in self.vNormals:
+#                    self.addToOutput( '\t\t%f %f %f' % (vN.x, vN.y, vN.z) )
+#                self.addToOutput( '\t]' )
 
             self.addToOutput( 'AttributeEnd' )
             self.addToOutput( '' )
