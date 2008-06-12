@@ -22,8 +22,9 @@ class MeshOpt(ExportModule):
     """
 
     vertArray = {}
-    normArray = {}
-    uvArray = {}
+    uCoords = []
+    vCoords = []
+    vNormals = []
     objectIndex = {}
     indArray = []
     
@@ -33,7 +34,9 @@ class MeshOpt(ExportModule):
     
     UVSets = []
     
-    allNormals = OpenMaya.MFloatVectorArray()
+    # used to determine appropriate UV and Normals output
+    mode = 'trianglemesh' # or loopsubdiv
+    type = 'geom' # or portal
 
     def __init__(self, fileHandles, dagPath):
         self.dagPath = dagPath
@@ -42,10 +45,10 @@ class MeshOpt(ExportModule):
         
         if dagPath.fullPathName().lower().find('portal') != -1:
             self.fileHandle = self.portalsHandle
-            self.portalsMode = True
+            self.type = 'portal'
         else:
             self.fileHandle = self.meshHandle
-            self.portalsMode = False
+            self.type = 'geom'
         
         self.fShape = OpenMaya.MFnMesh( dagPath )
 
@@ -70,24 +73,26 @@ class MeshOpt(ExportModule):
         for iSet in range(0, 1): #self.setCount):
             # reset lists
             self.vertArray = {}
-            self.normArray = {}
-            self.uvArray = {}
+            self.uCoords = []
+            self.vCoords = []
+            self.vNormals = []
             self.objectIndex = {}
             self.indArray = []
-            
             
             self.addToOutput( '# Polygon Shape %s (set %i)' % (self.dagPath.fullPathName(), iSet) )
             self.addToOutput( 'AttributeBegin' )
             self.addToOutput( self.translationMatrix(self.dagPath) )
             
+            
             # detect Material or AreaLight
-            if not self.portalsMode:
+            if self.type == 'geom':
                 self.shadingGroup = self.findShadingGroup(self.instanceNum, iSet)
                 self.addToOutput( self.findSurfaceShader( shadingGroup = self.shadingGroup ) )
                 
                 subPlug1 = self.fShape.findPlug('useMaxSubdivisions')
                 useLoopSubdiv = subPlug1.asBool()
                 if useLoopSubdiv:
+                    self.mode = 'loopsubdiv'
                     subPlug2 = self.fShape.findPlug('maxSubd')
                     nlevels = subPlug2.asInt()
                     self.addToOutput( 'Shape "loopsubdiv"' )
@@ -96,37 +101,27 @@ class MeshOpt(ExportModule):
                 else:                
                     self.addToOutput( 'Shape "trianglemesh"' )
             else:
-                useLoopSubdiv = False
+                self.mode = 'trianglemesh'
                 self.addToOutput( 'PortalShape "trianglemesh"' )
             
             
             #---- start mesh iteration
             
             itMeshVerts = OpenMaya.MItMeshVertex(self.dagPath, self.fPolygonComponents[iSet])
-            
-            self.fShape.getNormals(self.allNormals)
-            
-            #uPt = OpenMaya.MScriptUtil().asFloatPtr()
-            #vPt = OpenMaya.MScriptUtil().asFloatPtr()
-            
+
             i=0
             while not itMeshVerts.isDone():
                 cInd = itMeshVerts.index()
                 vP = itMeshVerts.position()    
                 self.vertArray[i] = vP
                 
-            #    uv = [uPt, vPt] #OpenMaya.MFloatArray(2, 0)
-            #    itMeshVerts.getUV(uv, UVSets[0])
-            #    uvArray[i] = [OpenMaya.MScriptUtil(uPt).asFloat(), OpenMaya.MScriptUtil(vPt).asFloat()]
-                
-            #    vN = OpenMaya.MVector()
-            #    itMeshVerts.getNormal(vN)
-            #    normArray[i] = vN
-                
                 self.objectIndex[cInd] = i
                 i+=1
                 itMeshVerts.next()
 
+            self.uCoords = [0] * i
+            self.vCoords = [0] * i
+            self.vNormals = [0] * i
 
             numTrianglesPx = OpenMaya.MScriptUtil()
             numTrianglesPx.createFromInt(0)
@@ -137,57 +132,56 @@ class MeshOpt(ExportModule):
                 
                 itMeshPolys.numTriangles(numTrianglesPtr)
                 numTriangles = OpenMaya.MScriptUtil(numTrianglesPtr).asInt()
-                while numTriangles!=0:
-                    numTriangles -= 1
+                for currentTriangle in range(0, numTriangles):
                     
                     nonTweaked = OpenMaya.MPointArray()
                     pVerts = OpenMaya.MIntArray()
                     
-                    itMeshPolys.getTriangle( numTriangles, nonTweaked, pVerts, OpenMaya.MSpace.kObject )
+                    itMeshPolys.getTriangle( currentTriangle, nonTweaked, pVerts, OpenMaya.MSpace.kObject )
                     
+                    uArray = OpenMaya.MFloatArray()
+                    vArray = OpenMaya.MFloatArray()
+                    itMeshPolys.getUVs(uArray, vArray, self.UVSets[0])
+                    
+                    polyNormals = OpenMaya.MVectorArray()
+                    itMeshPolys.getNormals(polyNormals, OpenMaya.MSpace.kObject)
+                    
+                    j=0
                     for pVert in pVerts:
                         self.indArray.append(self.objectIndex[pVert])
-                    
+                        self.uCoords[self.objectIndex[pVert]] = uArray[j]
+                        self.vCoords[self.objectIndex[pVert]] = vArray[j]
+                        self.vNormals[self.objectIndex[pVert]] = polyNormals[j]
+                        j+=1
+                        
                 itMeshPolys.next()
             
             # ------ mesh iteration done, do output.
 
             self.addToOutput( '\t"integer indices" [' )
-            self.addToOutput( ' '.join(map(str,self.indArray)) )
+            self.addToOutput( '\t\t' + ' '.join(map(str,self.indArray)) )
             self.addToOutput( '\t]' )
             
             self.addToOutput( '\t"point P" [' )
             for vP in self.vertArray:
-                self.addToOutput( '%f %f %f' % (self.vertArray[vP].x, self.vertArray[vP].y, self.vertArray[vP].z) )
+                self.addToOutput( '\t\t%f %f %f' % (self.vertArray[vP].x, self.vertArray[vP].y, self.vertArray[vP].z) )
             self.addToOutput( '\t]' )
             
-            # trianglemesh needs UV and Normals
-            # loopsubdiv needs UV
-            # portalshape needs Normals
+            # add UVs for trianglemesh and loopsubdiv, but not for portals
+            if self.type == 'geom':
+                self.addToOutput( '\t"float uv" [' )
+                for uv in zip(self.uCoords, self.vCoords):
+                    self.addToOutput( '\t\t%f %f' % uv )
+                self.addToOutput( '\t]' )
             
-#            self.addToOutput( '\t"normal N" [' )
-#            self.addToOutput( '\t\t' + self.polygonSet.getNormals() )
-#            # \t\t normal vectors float[3] on one line
-#            self.addToOutput( '\t]' )
-#            
-#            if self.polygonSet.hasUVs and not self.portalsMode:
-#                self.addToOutput( '\t"float uv" [' )
-#                self.addToOutput( '\t\t' + self.polygonSet.getUVs() )
-#                # \t\t vertex uv coords float[2] on one line
-#                self.addToOutput( '\t]' )
-                
+            # Add normals to trianglemesh
+            if self.mode == 'trianglemesh':
+                self.addToOutput( '\t"normal N" [' )
+                for normal in self.vNormals:
+                    self.addToOutput( '\t\t%f %f %f' % (normal.x, normal.y, normal.z) )
+                self.addToOutput( '\t]' )
+
             self.addToOutput( 'AttributeEnd' )
             self.addToOutput( '' )
             
             self.fileHandle.flush()
-
-            #-------- debug output
-
-            #print "VERTEX UVS"
-            #for vUV in uvArray:
-            #    print '%f %f' % (uvArray[vUV][0], uvArray[vUV][1])
-            #
-            #print "VERTEX NORMALS"
-            #for vN in normArray:
-            #    print '%f %f %f' % (normArray[vN].x, normArray[vN].y, normArray[vN].z)
-            
