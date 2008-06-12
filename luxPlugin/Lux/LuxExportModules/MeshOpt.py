@@ -21,18 +21,11 @@ class MeshOpt(ExportModule):
     Polygon mesh ExportModule (Optimised)
     """
 
-    vertArray = []
-#    uCoords = []
-#    vCoords = []
-#    vNormals = []
-    objectIndex = {}
-    indArray = []
-    
     fShape = OpenMaya.MFnMesh()
     fPolygonSets = OpenMaya.MObjectArray()
     fPolygonComponents = OpenMaya.MObjectArray()
     
-#    UVSets = []
+    UVSets = []
     
     # used to determine appropriate UV and Normals output
     mode = 'trianglemesh' # or loopsubdiv
@@ -64,31 +57,52 @@ class MeshOpt(ExportModule):
         
         if self.setCount > 1:
             self.setCount -= 1
+            
+        if self.fShape.numUVSets() > 0:
+            # Get UV sets for this mesh
+            self.fShape.getUVSetNames( self.UVSets )
+        
+           
+    def resetLists(self):
+        # reset lists
+        self.vertNormUVList = []
+        self.vertIndexList = []
+        self.vertPointList = []
+        self.vertNormList = []
+        self.vertUVList = []
 
     def getOutput(self):
         
-        # Get UV sets for this mesh
-#        self.fShape.getUVSetNames( self.UVSets )
         
+        self.meshPoints = OpenMaya.MPointArray()
+        self.fShape.getPoints(self.meshPoints)
+        
+        self.meshNormals = OpenMaya.MFloatVectorArray()
+        self.fShape.getNormals(self.meshNormals)
+        
+        if self.fShape.numUVSets() > 0:
+            self.meshUArray = OpenMaya.MFloatArray()
+            self.meshVArray = OpenMaya.MFloatArray()
+            self.fShape.getUVs(self.meshUArray, self.meshVArray, self.UVSets[0])
+        
+        #TODO fix multi-set support
         for iSet in range(0, 1): #self.setCount):
-            # reset lists
-            self.vertArray = []
-#            self.uCoords = []
-#            self.vCoords = []
-#            self.vNormals = []
-            self.objectIndex = {}
-            self.indArray = []
             
+            # start afresh for this set
+            self.resetLists()
+            
+            # start shape syntax
             self.addToOutput( '# Polygon Shape %s (set %i)' % (self.dagPath.fullPathName(), iSet) )
             self.addToOutput( 'AttributeBegin' )
             self.addToOutput( self.translationMatrix(self.dagPath) )
             
-            
-            # detect Material or AreaLight
+            # set syntax for trianglemesh/loopsubdiv or portalshape
             if self.type == 'geom':
+                # detect Material or AreaLight
                 self.shadingGroup = self.findShadingGroup(self.instanceNum, iSet)
                 self.addToOutput( self.findSurfaceShader( shadingGroup = self.shadingGroup ) )
                 
+                # detect trianglemesh/loopsubdiv
                 subPlug1 = self.fShape.findPlug('useMaxSubdivisions')
                 useLoopSubdiv = subPlug1.asBool()
                 if useLoopSubdiv:
@@ -104,139 +118,94 @@ class MeshOpt(ExportModule):
             else:
                 self.addToOutput( '\tPortalShape "trianglemesh"' )
             
-            
-            #---- start mesh iteration
-            
-            itMeshVerts = OpenMaya.MItMeshVertex(self.dagPath, self.fPolygonComponents[iSet])
-            
-#            meshNormals = OpenMaya.MFloatVectorArray()
-#            self.fShape.getNormals( meshNormals )
 
-            objectVertCount = 0
-            while not itMeshVerts.isDone():
-                
-                self.vertArray.append( itMeshVerts.position() )
-                
-#                normalIndices = OpenMaya.MIntArray()
-#                itMeshVerts.getNormalIndices(normalIndices)
-                
-                cInd = itMeshVerts.index()
-                
-#                for normalIndex in normalIndices:
-#                self.vNormals.append( meshNormals[ normalIndex ] )
-                #self.objectIndex[cInd, normalIndex] = objectVertCount
-                self.objectIndex[cInd] = objectVertCount
-                objectVertCount+=1
-                    
-                itMeshVerts.next()
-
-            # this is a nice list
-            # (objVertID, normalID): luxVertID
-
-#            {
-#            
-#            (0, 0): 1,
-#            (0, 21): 0,
-#            (0, 15): 2,
-#            
-#            (1, 1): 4,
-#            (1, 16): 5,
-#            (1, 14): 3,
-#            
-#            (2, 3): 7,
-#            (2, 4): 6,
-#            (2, 22): 8,
-#            
-#            (3, 2): 10,
-#            (3, 5): 11,
-#            (3, 19): 9,
-#            
-#            (4, 23): 14,
-#            (4, 7): 13,
-#            (4, 8): 12,
-#            
-#            (5, 6): 16,
-#            (5, 9): 17,
-#            (5, 18): 15,
-#            
-#            (6, 11): 19,
-#            (6, 12): 18,
-#            (6, 20): 20,
-#            
-#            (7, 10): 22,
-#            (7, 13): 23,
-#            (7, 17): 21
-#            
-#            
-#            }
-
-
-#            self.uCoords = [0] * objectVertCount
-#            self.vCoords = [0] * objectVertCount
-
+            # set up some scripting junk
             numTrianglesPx = OpenMaya.MScriptUtil()
             numTrianglesPx.createFromInt(0)
             numTrianglesPtr = numTrianglesPx.asIntPtr()
             
+            uvIdxPx = OpenMaya.MScriptUtil()
+            uvIdxPx.createFromInt(0)
+            uvIdxPtr = uvIdxPx.asIntPtr()
+            
+            # start mesh face iteration            
             itMeshPolys = OpenMaya.MItMeshPolygon(self.dagPath, self.fPolygonComponents[iSet])
             # each face
             while not itMeshPolys.isDone():
                 
+                # get nuber of triangles in face
                 itMeshPolys.numTriangles(numTrianglesPtr)
                 numTriangles = OpenMaya.MScriptUtil(numTrianglesPtr).asInt()
                 
                 # each triangle in each face
                 for currentTriangle in range(0, numTriangles):
                     
-                    nonTweaked = OpenMaya.MPointArray()
-                    pVerts = OpenMaya.MIntArray()
+                    # the face vert points
+                    vertPoints = OpenMaya.MPointArray()
                     
-                    itMeshPolys.getTriangle( currentTriangle, nonTweaked, pVerts, OpenMaya.MSpace.kObject )
+                    # the face vert indices
+                    vertIndices = OpenMaya.MIntArray()
                     
-#                    uArray = OpenMaya.MFloatArray()
-#                    vArray = OpenMaya.MFloatArray()
-#                    itMeshPolys.getUVs(uArray, vArray, self.UVSets[0])
+                    # get the triangle points and indices
+                    itMeshPolys.getTriangle( currentTriangle, vertPoints, vertIndices, OpenMaya.MSpace.kObject )
                     
-#                    polyNormalIds = OpenMaya.MIntArray()
-#                    itMeshPolys.getFaceNormalIds(polyNormalIds)
-                    
-                    for pVert, localVertIndex in zip( pVerts, range(0, uArray.length()) ):
+                    # each vert in this triangle
+                    for vertIndex, localVertIndex in zip( vertIndices, range(0, vertPoints.length()) ):
                         
-#                        normalIndex = polyNormalIds(localVertIndex)
-#                        print '(%i, %i)' % (pVert, normalIndex)
+                        # get indices to points/normals/uvs
+                        #vertIndex = itMeshPolys.vertexIndex( localVertIndex )
+                        vertNormalIndex = itMeshPolys.normalIndex( localVertIndex )
                         
-                        objVertIndex = self.objectIndex[pVert] #, normalIndex]
+                        if itMeshPolys.hasUVs():
+                            itMeshPolys.getUVIndex( localVertIndex, uvIdxPtr, self.UVSets[0] )
+                            vertUVIndex = OpenMaya.MScriptUtil( uvIdxPtr ).asInt()
+                        else:
+                            vertUVIndex = 0
                         
-                        self.indArray.append(objVertIndex)
-#                        self.uCoords[objVertIndex] = uArray[localVertIndex]
-#                        self.vCoords[objVertIndex] = vArray[localVertIndex]
+                        # if we've not seen this combo yet,
+                        if not (vertIndex, vertNormalIndex, vertUVIndex) in self.vertNormUVList:
+                            # add it to the lists
+                            self.vertPointList.append( self.meshPoints[vertIndex] )
+                            self.vertNormList.append( self.meshNormals[vertIndex] )
+                            if itMeshPolys.hasUVs():
+                                self.vertUVList.append( ( self.meshUArray[vertIndex], self.meshVArray[vertIndex] ) )
+                            
+                            # and keep track of what we've seen
+                            self.vertNormUVList.append( (vertIndex, vertNormalIndex, vertUVIndex) )
+                            # and use the most recent idx value
+                            useVertIndex = len(self.vertNormUVList) - 1
+                        else:
+                            useVertIndex = self.vertNormUVList.index( (vertIndex, vertNormalIndex, vertUVIndex) )
+                        
+                        # use the appropriate vert index
+                        self.vertIndexList.append( useVertIndex )
                         
                 itMeshPolys.next()
             
-            # ------ mesh iteration done, do output.
+            # mesh iteration done, do output.
 
             self.addToOutput( '\t"integer indices" [' )
-            self.addToOutput( '\t\t' + ' '.join(map(str,self.indArray)) )
+            self.addToOutput( '\t\t' + ' '.join(map(str,self.vertIndexList)) )
             self.addToOutput( '\t]' )
             
             self.addToOutput( '\t"point P" [' )
-            for vP in self.vertArray:
+            for vP in self.vertPointList:
                 self.addToOutput( '\t\t%f %f %f' % (vP.x, vP.y, vP.z) )
             self.addToOutput( '\t]' )
             
-            # add UVs for trianglemesh and loopsubdiv, but not for portals
-#            if self.type == 'geom':
-#                self.addToOutput( '\t"float uv" [' )
-#                for uv in zip(self.uCoords, self.vCoords):
-#                    self.addToOutput( '\t\t%f %f' % uv )
-#                self.addToOutput( '\t]' )
+            # add UVs for trianglemesh and loopsubdiv, but not for portals and only if the shape has uvs
+            if self.type == 'geom' and len(self.vertUVList) > 0:
+                self.addToOutput( '\t"float uv" [' )
+                for uv in self.vertUVList:
+                    self.addToOutput( '\t\t%f %f' % uv )
+                self.addToOutput( '\t]' )
             
             # Add normals to trianglemesh
-#            if self.mode == 'trianglemesh':
-#                self.addToOutput( '\t"normal N" [' )
-#                for vN in self.vNormals:
-#                    self.addToOutput( '\t\t%f %f %f' % (vN.x, vN.y, vN.z) )
-#                self.addToOutput( '\t]' )
+            if self.mode == 'trianglemesh':
+                self.addToOutput( '\t"normal N" [' )
+                for vN in self.vertNormList:
+                    self.addToOutput( '\t\t%f %f %f' % (vN.x, vN.y, vN.z) )
+                self.addToOutput( '\t]' )
 
             self.addToOutput( 'AttributeEnd' )
             self.addToOutput( '' )
