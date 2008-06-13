@@ -141,6 +141,9 @@ class luxEnvironmentLightLoader(ExportModule):
         lPlug = self.dpNode.findPlug("outColorLB")
         lColorB = self.rgcAndClamp( lPlug.asFloat() )
         
+        gainPlug = self.dpNode.findPlug("gain")
+        gain = gainPlus.asFloat()
+        
         samplesPlug = self.dpNode.findPlug("numSamples")
         numSamples = samplesPlug.asInt()
         
@@ -148,6 +151,7 @@ class luxEnvironmentLightLoader(ExportModule):
         if not hdrFileName == "":
             self.addToOutput( '\t\t"string mapname" ["%s"]' % FileCollector.collectHDRI( hdrFileName ) )
         self.addToOutput( '\t\t"color L" [%f %f %f]' % (lColorR, lColorG, lColorB) )
+        self.addToOutput( '\t\t"float gain" [%f]' % gain )
         self.addToOutput( '\t\t"integer nsamples" [%i]' % numSamples )
         for portalsFile in self.portalsFiles:
             if os.path.exists(portalsFile):

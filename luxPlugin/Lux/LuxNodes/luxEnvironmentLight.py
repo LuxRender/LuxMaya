@@ -52,7 +52,8 @@ class luxEnvironmentLight(OpenMayaMPx.MPxLocatorNode, glRoutines, LuxNode):
 		
 		hdrFileName   = OpenMaya.MObject()
 		outColorL	  = OpenMaya.MObject()
-		numsamples	= OpenMaya.MObject()
+		gain          = OpenMaya.MObject()
+		numsamples	  = OpenMaya.MObject()
 		
 		glRenderer = OpenMayaRender.MHardwareRenderer.theRenderer()
 		self.glFT = glRenderer.glFunctionTable()
@@ -69,6 +70,7 @@ class luxEnvironmentLight(OpenMayaMPx.MPxLocatorNode, glRoutines, LuxNode):
 			tAttr.setWritable(1)
 			
 			luxEnvironmentLight.outColorL = luxEnvironmentLight.makeColor('outColorL', 'ocl')
+			luxEnvironmentLight.gain = luxEnvironmentLight.makeFloat('gain', 'ga', 1.0)
 			luxEnvironmentLight.numsamples = luxEnvironmentLight.makeInteger('numSamples', 'ns', 1)
 			
 		except:
@@ -79,6 +81,7 @@ class luxEnvironmentLight(OpenMayaMPx.MPxLocatorNode, glRoutines, LuxNode):
 			# base attributes
 			luxEnvironmentLight.addAttribute(luxEnvironmentLight.hdrFileName)
 			luxEnvironmentLight.addAttribute(luxEnvironmentLight.outColorL)
+			luxEnvironmentLight.addAttribute(luxEnvironmentLight.gain)
 			luxEnvironmentLight.addAttribute(luxEnvironmentLight.numsamples)
 			
 		except:

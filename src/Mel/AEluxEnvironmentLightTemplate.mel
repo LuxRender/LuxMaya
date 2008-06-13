@@ -24,12 +24,13 @@
 	
 		editorTemplate -beginLayout "Lux Environment Light Attributes" -collapse 0;
 			editorTemplate -callCustom "AEhdrFileNew" "AEhdrFileReplace" "hdrFile";
-			editorTemplate -addControl "outColorL";
-			editorTemplate -addControl "numSamples";
+			editorTemplate -label "Colour" -addControl "outColorL";
+			editorTemplate -label "Gain" -addControl "gain";
+			editorTemplate -label "NumSamples" -addControl "numSamples";
 		editorTemplate -endLayout;
 		
 		
-		editorTemplate -beginLayout "Other Attributes" -collapse 0;
+		editorTemplate -beginLayout "Other Attributes" -collapse 1;
 			AElocatorCommon $nodeName;
 		editorTemplate -endLayout;
 

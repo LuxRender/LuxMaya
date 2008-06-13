@@ -31,7 +31,7 @@ class luxbatch:
     def doIt(self):
         """
         Class entry point.
-        1. Detect is lux_settings exists
+        1. Detect if lux_settings exists
         2. Detecf if exporting an animation
         3. Determine start and end frame to export, and pass control to startBatch()
         """

@@ -193,8 +193,6 @@ class ExportModule:
             faceIndices = OpenMaya.MIntArray()
             self.fShape.getConnectedShaders(instanceNum, shadingGroups, faceIndices)
             # we return the material connected to the given setNumber
-            # TODO: investigate why we sometimes overrun the buffer ?
-            if setNumber >= shadingGroups.length(): setNumber = shadingGroups.length()-1
             theShadingGroup = OpenMaya.MFnDependencyNode( shadingGroups[setNumber] )
         
         elif self.fShape.type() == OpenMaya.MFn.kNurbsSurface:
@@ -268,7 +266,7 @@ class ExportModule:
         Return the NamedMaterial syntax with this class' shaderNode.name()
         """
         
-        return 'NamedMaterial "' + shaderNode.name() + '"' #theMaterial.name()
+        return '\tNamedMaterial "' + shaderNode.name() + '"' #theMaterial.name()
     
     def getAreaLight(self, shaderNode):
         """
@@ -284,9 +282,16 @@ class ExportModule:
         colorPlug = shaderNode.findPlug("arealightLB")
         colorB = self.rgcAndClamp( colorPlug.asFloat() )
         
-        outStr  = 'AreaLightSource "area"' + os.linesep
-        outStr += ( '\t"integer nsamples" [%i]' % 1 ) + os.linesep
-        outStr += ( '\t"color L" [%f %f %f]' % (colorR, colorG, colorB) ) + os.linesep
+        gainPlug = shaderNode.findPlug("arealightGain")
+        gain = gainPlug.asFloat()
+        
+        nsPlug = shaderNode.findPlug("arealightNumsamples")
+        numSamples = nsPlug.asInt()
+        
+        outStr  = '\tAreaLightSource "area"' + os.linesep
+        outStr += ( '\t\t"integer nsamples" [%i]' % numSamples ) + os.linesep
+        outStr += ( '\t\t"color L" [%f %f %f]' % (colorR, colorG, colorB) ) + os.linesep
+        outStr += ( '\t\t"float gain" [%f]' % gain ) + os.linesep
         
         return outStr
     

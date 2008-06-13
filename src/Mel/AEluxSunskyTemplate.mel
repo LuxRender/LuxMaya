@@ -23,13 +23,13 @@
 	editorTemplate -beginScrollLayout;
 	
 		editorTemplate -beginLayout "Lux Sun+Sky Attributes" -collapse 0;
-			editorTemplate -addControl "nsamples";
+			editorTemplate -label "NumSamples" -addControl "nsamples";
 			editorTemplate -addControl "gain";
 			editorTemplate -addControl "turbidity";
-			editorTemplate -addControl "relsize";
+			editorTemplate -label "Relative Size" -addControl "relsize";
 		editorTemplate -endLayout;
 		
-		editorTemplate -beginLayout "Geographic Sun Calculator" -collapse 0;
+		editorTemplate -beginLayout "Geographic Sun Calculator" -collapse 1;
 			editorTemplate -addDynamicControl "latitude";
 			editorTemplate -addDynamicControl "longitude";
 			editorTemplate -addDynamicControl "timeZone";
@@ -51,7 +51,7 @@
 //			editorTemplate -addControl "azimuth";
 		editorTemplate -endLayout;
 		
-		editorTemplate -beginLayout "Other Attributes" -collapse 0;
+		editorTemplate -beginLayout "Other Attributes" -collapse 1;
 			AElocatorCommon $nodeName;
 		editorTemplate -endLayout;
 

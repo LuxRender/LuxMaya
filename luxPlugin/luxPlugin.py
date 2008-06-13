@@ -25,7 +25,7 @@ from maya import cmds
 from maya import mel
 
 #Commands
-from Lux.LuxMiscModules.geoSunData import updateSunNode
+#from Lux.LuxMiscModules.geoSunData import updateSunNode
 
 #Nodes
 from Lux.LuxNodes.luxshader import luxshader

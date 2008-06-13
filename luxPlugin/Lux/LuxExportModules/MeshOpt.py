@@ -53,10 +53,14 @@ class MeshOpt(ExportModule):
         
         self.fShape.getConnectedSetsAndMembers(self.instanceNum, self.fPolygonSets, self.fPolygonComponents, True)
         
-        self.setCount = self.fPolygonSets.length()
+        shaderArray = OpenMaya.MObjectArray()
+        polyShaderIdx = OpenMaya.MIntArray()
+        self.fShape.getConnectedShaders(self.instanceNum, shaderArray, polyShaderIdx)
         
-        if self.setCount > 1:
-            self.setCount -= 1
+        self.setCount = shaderArray.length() #self.fPolygonSets.length()
+        
+        #if self.setCount > 1:
+        #    self.setCount -= 1
             
         if self.fShape.numUVSets() > 0:
             # Get UV sets for this mesh
@@ -73,7 +77,6 @@ class MeshOpt(ExportModule):
 
     def getOutput(self):
         
-        
         self.meshPoints = OpenMaya.MPointArray()
         self.fShape.getPoints(self.meshPoints)
         
@@ -85,8 +88,7 @@ class MeshOpt(ExportModule):
             self.meshVArray = OpenMaya.MFloatArray()
             self.fShape.getUVs(self.meshUArray, self.meshVArray, self.UVSets[0])
         
-        #TODO fix multi-set support
-        for iSet in range(0, 1): #self.setCount):
+        for iSet in range(0, self.setCount):
             
             # start afresh for this set
             self.resetLists()
@@ -162,6 +164,8 @@ class MeshOpt(ExportModule):
                         else:
                             vertUVIndex = 0
                         
+                        print 'testing for (%i %i %i)' % (vertIndex, vertNormalIndex, vertUVIndex)
+                        
                         # if we've not seen this combo yet,
                         if not (vertIndex, vertNormalIndex, vertUVIndex) in self.vertNormUVList:
                             # add it to the lists
@@ -174,8 +178,13 @@ class MeshOpt(ExportModule):
                             self.vertNormUVList.append( (vertIndex, vertNormalIndex, vertUVIndex) )
                             # and use the most recent idx value
                             useVertIndex = len(self.vertNormUVList) - 1
+                            
+                            print 'not found: %i' % useVertIndex
                         else:
                             useVertIndex = self.vertNormUVList.index( (vertIndex, vertNormalIndex, vertUVIndex) )
+                            print 'found: %i' % useVertIndex
+                        
+                        print self.vertNormUVList
                         
                         # use the appropriate vert index
                         self.vertIndexList.append( useVertIndex )

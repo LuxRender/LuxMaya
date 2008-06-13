@@ -163,7 +163,7 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
 			# set up the base attributes
 
 			# the different material types available herewithin
-			luxshader.iMaterialType = enumAttr.create("material", "mat",	0)
+			luxshader.iMaterialType = enumAttr.create("material", "mat",	3)
 			enumAttr.addField( "Carpaint",									0)
 			enumAttr.addField( "Glass", 									1)
 			enumAttr.addField( "Rough Glass",								2)
@@ -171,13 +171,13 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
 			enumAttr.addField( "Matte Translucent", 						4)
 			enumAttr.addField( "Metal", 									5)
 			# hmm out of sequence Enum values have no effect
-			enumAttr.addField( "Mix",										11)
-			enumAttr.addField( "Null",									  12)
+			enumAttr.addField( "Mix",									   11)
+			enumAttr.addField( "Null",									   12)
 			enumAttr.addField( "Shiny Metal",								6)
 			enumAttr.addField( "Mirror",									7)
 			enumAttr.addField( "Plastic",									8)
 			enumAttr.addField( "Substrate", 								9)
-			enumAttr.addField( "Area Light",								10)
+			enumAttr.addField( "Area Light",							   10)
 
 			# hidden attribute to allow attaching bump maps, relevant to every material type
 			luxshader.bumpMap = nAttr.createPoint("normalCamera","n")
@@ -301,6 +301,9 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
 
 			# arealight
 			luxshader.addAttribute(luxshader.arealight.L)
+			luxshader.addAttribute(luxshader.arealight.gain)
+			luxshader.addAttribute(luxshader.arealight.numsamples)
+			
 
 		except:
 			OpenMaya.MGlobal.displayError("Failed to add attributes\n")

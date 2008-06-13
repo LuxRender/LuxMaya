@@ -26,6 +26,8 @@ class arealightShader(OpenMayaMPx.MPxNode, ShaderNode):
 
     # arealight
     L            =    OpenMaya.MObject()    # color
+    gain         =    OpenMaya.MObject()
+    numsamples   =    OpenMaya.MObject()
 
     def __init__(self):
         OpenMayaMPx.MPxNode.__init__(self)
@@ -35,6 +37,8 @@ class arealightShader(OpenMayaMPx.MPxNode, ShaderNode):
         try:
             # color
             arealightShader.L = arealightShader.makeColor("arealightL", "all")
+            arealightShader.gain = arealightShader.makeFloat("arealightGain","aga", 1.0)
+            arealightShader.numsamples = arealightShader.makeInteger("arealightNumsamples", "ans", 1)
 
         except:
             OpenMaya.MGlobal.displayError("Failed to create arealight attributes\n")

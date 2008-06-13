@@ -120,6 +120,8 @@
 		// AreaLight
 		editorTemplate -beginLayout "Area Light Attributes" -collapse 1;
 			editorTemplate -l "Colour L" -addControl "arealightL";
+			editorTemplate -l "Gain" -addControl "arealightGain";
+			editorTemplate -l "NumSamples" -addControl "arealightNumsamples";
 		editorTemplate -endLayout;
 		
 		
@@ -283,15 +285,19 @@ global proc luxshader_changeType( string $nodeName )
 	if ($type==10) // == Area Light
 	{
 		editorTemplate -dc $nodeName "arealightL" false;
+		editorTemplate -dc $nodeName "arealightGain" false;
+		editorTemplate -dc $nodeName "arealightNumsamples" false;
 		setAttr ($nodeName+".transparency") 0.5 0.5 0.5;
 	}
 	else
 	{
 		editorTemplate -dc $nodeName "arealightL" true;
+		editorTemplate -dc $nodeName "arealightGain" true;
+		editorTemplate -dc $nodeName "arealightNumsamples" true;
 		setAttr ($nodeName+".transparency") 0 0 0;
 	}
 	
-	if ($type==11)
+	if ($type==11) // == Mix
 	{
 		editorTemplate -dc $nodeName "mixNamed1" false;
 		editorTemplate -dc $nodeName "mixNamed2" false;
