@@ -77,17 +77,31 @@ class MeshOpt(ExportModule):
 
     def getOutput(self):
         
-        self.meshPoints = OpenMaya.MPointArray()
-        self.fShape.getPoints(self.meshPoints)
+        # get all object verts
+        meshPoints = OpenMaya.MPointArray()
+        self.fShape.getPoints(meshPoints)
         
-        self.meshNormals = OpenMaya.MFloatVectorArray()
-        self.fShape.getNormals(self.meshNormals)
+        # get all object normals
+        meshNormals = OpenMaya.MFloatVectorArray()
+        self.fShape.getNormals(meshNormals)
         
+        # get all object UVs, if any
         if self.fShape.numUVSets() > 0:
-            self.meshUArray = OpenMaya.MFloatArray()
-            self.meshVArray = OpenMaya.MFloatArray()
-            self.fShape.getUVs(self.meshUArray, self.meshVArray, self.UVSets[0])
+            meshUArray = OpenMaya.MFloatArray()
+            meshVArray = OpenMaya.MFloatArray()
+            self.fShape.getUVs(meshUArray, meshVArray, self.UVSets[0])
         
+        # set up some scripting junk
+        numTrianglesPx = OpenMaya.MScriptUtil()
+        numTrianglesPx.createFromInt(0)
+        numTrianglesPtr = numTrianglesPx.asIntPtr()
+        uvIdxPx = OpenMaya.MScriptUtil()
+        uvIdxPx.createFromInt(0)
+        uvIdxPtr = uvIdxPx.asIntPtr()
+        
+
+        
+        # each set/shader on this object
         for iSet in range(0, self.setCount):
             
             # start afresh for this set
@@ -113,22 +127,13 @@ class MeshOpt(ExportModule):
                     nlevels = subPlug2.asInt()
                     self.addToOutput( '\tShape "loopsubdiv"' )
                     self.addToOutput( '\t\t"integer nlevels" [%i]' % nlevels )
+                    # find displacement, if any
                     self.addToOutput( self.findDisplacementShader( self.shadingGroup ) )
                 else:
                     self.mode = 'trianglemesh'                
                     self.addToOutput( '\tShape "trianglemesh"' )
             else:
                 self.addToOutput( '\tPortalShape "trianglemesh"' )
-            
-
-            # set up some scripting junk
-            numTrianglesPx = OpenMaya.MScriptUtil()
-            numTrianglesPx.createFromInt(0)
-            numTrianglesPtr = numTrianglesPx.asIntPtr()
-            
-            uvIdxPx = OpenMaya.MScriptUtil()
-            uvIdxPx.createFromInt(0)
-            uvIdxPtr = uvIdxPx.asIntPtr()
             
             # start mesh face iteration            
             itMeshPolys = OpenMaya.MItMeshPolygon(self.dagPath, self.fPolygonComponents[iSet])
@@ -138,53 +143,63 @@ class MeshOpt(ExportModule):
                 # get nuber of triangles in face
                 itMeshPolys.numTriangles(numTrianglesPtr)
                 numTriangles = OpenMaya.MScriptUtil(numTrianglesPtr).asInt()
-                
+
+                # storage for obj-relative vert indices in a face
+                polygonVertices = OpenMaya.MIntArray()
+
+                #get object relative indices for verts in this face
+                itMeshPolys.getVertices( polygonVertices )
+
                 # each triangle in each face
                 for currentTriangle in range(0, numTriangles):
                     
-                    # the face vert points
+                    # storage for the face vert points
                     vertPoints = OpenMaya.MPointArray()
-                    
-                    # the face vert indices
+                                
+                    # storage for the face vert indices
                     vertIndices = OpenMaya.MIntArray()
-                    
+
                     # get the triangle points and indices
                     itMeshPolys.getTriangle( currentTriangle, vertPoints, vertIndices, OpenMaya.MSpace.kObject )
                     
+                    # get a list of local indices
+                    localIndex = self.GetLocalIndex( polygonVertices, vertIndices )
+                    
                     # each vert in this triangle
-                    for vertIndex, localVertIndex in zip( vertIndices, range(0, vertPoints.length()) ):
+                    for vertIndex, i in zip( vertIndices, range(0, vertIndices.length()) ):
+                    #for i in range(0, vertIndices.length()):
                         
                         # get indices to points/normals/uvs
-                        #vertIndex = itMeshPolys.vertexIndex( localVertIndex )
-                        vertNormalIndex = itMeshPolys.normalIndex( localVertIndex )
+                        #vertIndex = vertIndices[i]
+                        vertNormalIndex = itMeshPolys.normalIndex( localIndex[i] )
                         
                         if itMeshPolys.hasUVs():
-                            itMeshPolys.getUVIndex( localVertIndex, uvIdxPtr, self.UVSets[0] )
+                            itMeshPolys.getUVIndex( localIndex[i], uvIdxPtr, self.UVSets[0] )
                             vertUVIndex = OpenMaya.MScriptUtil( uvIdxPtr ).asInt()
                         else:
                             vertUVIndex = 0
                         
-                        print 'testing for (%i %i %i)' % (vertIndex, vertNormalIndex, vertUVIndex)
+                        #print 'testing for (%i %i %i)' % (vertIndex, vertNormalIndex, vertUVIndex)
                         
                         # if we've not seen this combo yet,
                         if not (vertIndex, vertNormalIndex, vertUVIndex) in self.vertNormUVList:
                             # add it to the lists
-                            self.vertPointList.append( self.meshPoints[vertIndex] )
-                            self.vertNormList.append( self.meshNormals[vertIndex] )
+                            self.vertPointList.append( meshPoints[vertIndex] )
+                            self.vertNormList.append( meshNormals[vertNormalIndex] )
                             if itMeshPolys.hasUVs():
-                                self.vertUVList.append( ( self.meshUArray[vertIndex], self.meshVArray[vertIndex] ) )
+                                self.vertUVList.append( ( meshUArray[vertUVIndex], meshVArray[vertUVIndex] ) )
                             
                             # and keep track of what we've seen
                             self.vertNormUVList.append( (vertIndex, vertNormalIndex, vertUVIndex) )
                             # and use the most recent idx value
                             useVertIndex = len(self.vertNormUVList) - 1
                             
-                            print 'not found: %i' % useVertIndex
+                            #print 'not found: %i' % useVertIndex
                         else:
                             useVertIndex = self.vertNormUVList.index( (vertIndex, vertNormalIndex, vertUVIndex) )
-                            print 'found: %i' % useVertIndex
+                            #print 'found: %i' % useVertIndex
                         
-                        print self.vertNormUVList
+                        # print self.vertNormUVList
                         
                         # use the appropriate vert index
                         self.vertIndexList.append( useVertIndex )
@@ -220,3 +235,25 @@ class MeshOpt(ExportModule):
             self.addToOutput( '' )
             
             self.fileHandle.flush()
+            
+    def GetLocalIndex(self, getVertices, getTriangle):
+        """
+        To quote the C++ source:
+            // MItMeshPolygon::getTriangle() returns object-relative vertex
+            // indices; BUT MItMeshPolygon::normalIndex() and ::getNormal() need
+            // face-relative vertex indices! This converts vertex indices from
+            // object-relative to face-relative.
+        """
+        
+        localIndex = []
+        
+        for gt in range(0, getTriangle.length()):
+            for gv in range(0, getVertices.length()):
+                if getTriangle[gt] == getVertices[gv]:
+                    localIndex.append( gv )
+                    break
+                    
+            if len(localIndex) == gt:
+                localIndex.append( -1 )
+                
+        return localIndex

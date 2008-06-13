@@ -296,7 +296,7 @@ class PolygonSet(ExportModule):
 				triangleVertices = OpenMaya.MIntArray()
 				 
 				# face-relative vert indices for each tri
-				localIndex = OpenMaya.MIntArray
+				# localIndex = OpenMaya.MIntArray()
 				
 				itMeshPolygon.getTriangle( numTriangles, nonTweaked, triangleVertices, OpenMaya.MSpace.kObject )
 				

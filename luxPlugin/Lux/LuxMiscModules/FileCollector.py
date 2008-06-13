@@ -14,7 +14,7 @@
 #
 # ------------------------------------------------------------------------------
 
-import os
+import os, shutil
 os.altsep = '/'
 
 from maya import cmds
