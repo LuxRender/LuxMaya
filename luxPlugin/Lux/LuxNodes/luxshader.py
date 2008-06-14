@@ -18,18 +18,18 @@
 from maya import OpenMaya
 from maya import OpenMayaMPx
 
-from ShaderNode						 import ShaderNode
+from ShaderNode						    import ShaderNode
 
-from ShaderNodes.carpaintShader		 import carpaintShader
+from ShaderNodes.carpaintShader		    import carpaintShader
 from ShaderNodes.glassShader			import glassShader
 from ShaderNodes.matteShader			import matteShader
 from ShaderNodes.mattetranslucentShader import mattetranslucentShader
 from ShaderNodes.metalShader			import metalShader
-from ShaderNodes.mixShader			  import mixShader
-from ShaderNodes.mirrorShader		   import mirrorShader
-from ShaderNodes.plasticShader		  import plasticShader
-from ShaderNodes.roughglassShader	   import roughglassShader
-from ShaderNodes.shinymetalShader	   import shinymetalShader
+from ShaderNodes.mixShader			    import mixShader
+from ShaderNodes.mirrorShader		    import mirrorShader
+from ShaderNodes.plasticShader		    import plasticShader
+from ShaderNodes.roughglassShader	    import roughglassShader
+from ShaderNodes.shinymetalShader	    import shinymetalShader
 from ShaderNodes.substrateShader		import substrateShader
 
 from ShaderNodes.arealightShader		import arealightShader

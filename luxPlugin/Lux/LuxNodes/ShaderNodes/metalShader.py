@@ -69,8 +69,8 @@ class metalShader(OpenMayaMPx.MPxNode, ShaderNode):
         self.attributes['name']         = ShaderEnumAttribute('metalName', self.nameValues)
         self.attributes['n']            = ShaderColorAttribute('metalN')
         self.attributes['k']            = ShaderColorAttribute('metalK')
-        self.attributes['uroughness']   = ShaderFloatAttribute('metalURoughness')
-        self.attributes['vroughness']   = ShaderFloatAttribute('metalVRoughness')
+        self.attributes['uroughness']   = ShaderFloatAttribute('metalURoughness', reciprocal = True)
+        self.attributes['vroughness']   = ShaderFloatAttribute('metalVRoughness', reciprocal = True)
 
 
     # override
@@ -102,8 +102,8 @@ class metalShader(OpenMayaMPx.MPxNode, ShaderNode):
             metalShader.k = metalShader.makeColor("metalK", "mk")
 
             # surface roughness
-            metalShader.uroughness = metalShader.makeFloat("metalURoughness", "mur", 1.0)
-            metalShader.vroughness = metalShader.makeFloat("metalVRoughness", "mvr", 1.0)
+            metalShader.uroughness = metalShader.makeFloat("metalURoughness", "mur", 500.0)
+            metalShader.vroughness = metalShader.makeFloat("metalVRoughness", "mvr", 500.0)
             
             # external NK file
             metalShader.nkFile = tAttr.create("metalNkFile", "nk", OpenMaya.MFnData.kString)

@@ -42,8 +42,8 @@ class roughglassShader(OpenMayaMPx.MPxNode, ShaderNode):
         self.luxType = "roughglass"
         self.attributes['Kr']         = ShaderColorAttribute('roughglassKr')
         self.attributes['Kt']         = ShaderColorAttribute('roughglassKt')
-        self.attributes['uroughness'] = ShaderFloatAttribute('roughglassURoughness')
-        self.attributes['vroughness'] = ShaderFloatAttribute('roughglassVRoughness')
+        self.attributes['uroughness'] = ShaderFloatAttribute('roughglassURoughness', reciprocal = True)
+        self.attributes['vroughness'] = ShaderFloatAttribute('roughglassVRoughness', reciprocal = True)
         self.attributes['index']      = ShaderFloatAttribute('roughglassIndex')
         self.attributes['cauchyb']    = ShaderFloatAttribute('roughglassCauchyB')
 
@@ -57,10 +57,10 @@ class roughglassShader(OpenMayaMPx.MPxNode, ShaderNode):
             roughglassShader.kt = roughglassShader.makeColor("roughglassKt", "rgkt")
 
             # U roughness
-            roughglassShader.uroughness = roughglassShader.makeFloat("roughglassURoughness", "rgur", 0.001)
+            roughglassShader.uroughness = roughglassShader.makeFloat("roughglassURoughness", "rgur", 500.0)
 
             # V roughness
-            roughglassShader.vroughness = roughglassShader.makeFloat("roughglassVRoughness", "rgvr", 0.001)
+            roughglassShader.vroughness = roughglassShader.makeFloat("roughglassVRoughness", "rgvr", 500.0)
 
             # IOR
             roughglassShader.index = roughglassShader.makeFloat("roughglassIndex", "rgi", 1.5)

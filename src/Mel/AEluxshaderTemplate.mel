@@ -52,8 +52,8 @@
 		editorTemplate -beginLayout "Rough Glass Attributes" -collapse 1;
 			editorTemplate -l "Reflection" -addControl "roughglassKr";
 			editorTemplate -l "Transmission" -addControl "roughglassKt";
-			editorTemplate -l "U Roughness" -addControl "roughglassURoughness";
-			editorTemplate -l "V Roughness" -addControl "roughglassVRoughness";
+			editorTemplate -l "U Exponent" -addControl "roughglassURoughness";
+			editorTemplate -l "V Exponent" -addControl "roughglassVRoughness";
 			editorTemplate -l "Index" -addControl "roughglassIndex";
 			editorTemplate -l "Cauchy B" -addControl "roughglassCauchyB";
 		editorTemplate -endLayout;
@@ -77,16 +77,16 @@
 			editorTemplate -l "N" -addControl "metalN";
 			editorTemplate -l "K" -addControl "metalK";
 			editorTemplate -callCustom "AEnkFileNew" "AEnkFileReplace" "metalNkFile";
-			editorTemplate -l "U Roughness" -addControl "metalURoughness";
-			editorTemplate -l "V Roughness" -addControl "metalVRoughness";
+			editorTemplate -l "U Exponent" -addControl "metalURoughness";
+			editorTemplate -l "V Exponent" -addControl "metalVRoughness";
 		editorTemplate -endLayout;
 		
 		// ShinyMetal
 		editorTemplate -beginLayout "Shiny Metal Attributes" -collapse 1;
 			editorTemplate -l "Reflection" -addControl "shinymetalKr";
 			editorTemplate -l "Specular" -addControl "shinymetalKs";
-			editorTemplate -l "U Roughness" -addControl "shinymetalURoughness";
-			editorTemplate -l "V Roughness" -addControl "shinymetalVRoughness";
+			editorTemplate -l "U Exponent" -addControl "shinymetalURoughness";
+			editorTemplate -l "V Exponent" -addControl "shinymetalVRoughness";
 		editorTemplate -endLayout;
 		
 		// Mirror
@@ -105,16 +105,16 @@
 		editorTemplate -beginLayout "Plastic Attributes" -collapse 1;
 			editorTemplate -l "Diffuse" -addControl "plasticKd";
 			editorTemplate -l "Specular" -addControl "plasticKs";
-			editorTemplate -l "U Roughness" -addControl "plasticURoughness";
-			editorTemplate -l "V Roughness" -addControl "plasticVRoughness";
+			editorTemplate -l "U Exponent" -addControl "plasticURoughness";
+			editorTemplate -l "V Exponent" -addControl "plasticVRoughness";
 		editorTemplate -endLayout;
 		
 		// Substrate
 		editorTemplate -beginLayout "Substrate Attributes" -collapse 1;
 			editorTemplate -l "Diffuse" -addControl "substrateKd";
 			editorTemplate -l "Specular" -addControl "substrateKs";
-			editorTemplate -l "U Roughness" -addControl "substrateURoughness";
-			editorTemplate -l "V Roughness" -addControl "substrateVRoughness";
+			editorTemplate -l "U Exponent" -addControl "substrateURoughness";
+			editorTemplate -l "V Exponent" -addControl "substrateVRoughness";
 		editorTemplate -endLayout;
 		
 		// AreaLight

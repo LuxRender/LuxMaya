@@ -38,10 +38,10 @@ class plasticShader(OpenMayaMPx.MPxNode, ShaderNode):
         # Export attributes
         self.attributes = {}
         self.luxType = "plastic"
-        self.attributes['Kd']        = ShaderColorAttribute('plasticKd')
-        self.attributes['Ks']        = ShaderColorAttribute('plasticKs')
-        self.attributes['uroughness'] = ShaderFloatAttribute('plasticURoughness')
-        self.attributes['vroughness'] = ShaderFloatAttribute('plasticVRoughness')
+        self.attributes['Kd']         = ShaderColorAttribute('plasticKd')
+        self.attributes['Ks']         = ShaderColorAttribute('plasticKs')
+        self.attributes['uroughness'] = ShaderFloatAttribute('plasticURoughness', reciprocal = True)
+        self.attributes['vroughness'] = ShaderFloatAttribute('plasticVRoughness', reciprocal = True)
 
     @staticmethod
     def shaderInitializer():
@@ -53,8 +53,8 @@ class plasticShader(OpenMayaMPx.MPxNode, ShaderNode):
             plasticShader.ks = plasticShader.makeColor("plasticKs", "pks")
 
             # surface roughness
-            plasticShader.uroughness = plasticShader.makeFloat("plasticURoughness", "pur", 0.1)
-            plasticShader.vroughness = plasticShader.makeFloat("plasticVRoughness", "pvr", 0.1)
+            plasticShader.uroughness = plasticShader.makeFloat("plasticURoughness", "pur", 500.0)
+            plasticShader.vroughness = plasticShader.makeFloat("plasticVRoughness", "pvr", 500.0)
 
         except:
             OpenMaya.MGlobal.displayError("Failed to create plastic attributes\n")

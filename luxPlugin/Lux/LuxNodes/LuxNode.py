@@ -153,11 +153,12 @@ class ShaderFloatAttribute(NodeAttribute):
 	Float Attribute for Shader nodes
 	"""
 	
-	def __init__(self, mayaAttrName, preScale = 1, invert = False, postScale = 1):
+	def __init__(self, mayaAttrName, preScale = 1, invert = False, reciprocal = False, postScale = 1):
 		self.plugName = mayaAttrName
 		
 		self.aPreScale  = preScale
 		self.aInvert	= invert
+		self.aRecip     = reciprocal
 		self.aPostScale = postScale
 		
 	def getOutput(self, luxName, shaderNode, shaderName):
@@ -176,6 +177,9 @@ class ShaderFloatAttribute(NodeAttribute):
 			
 			if self.aInvert:
 				floatValue = 1 - floatValue
+				
+			if self.aRecip:
+				floatValue = 1.0/floatValue
 				
 			floatValue *= self.aPostScale
 	

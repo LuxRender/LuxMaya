@@ -40,8 +40,8 @@ class substrateShader(OpenMayaMPx.MPxNode, ShaderNode):
         self.luxType = "substrate"
         self.attributes['Kd']         = ShaderColorAttribute('substrateKd')
         self.attributes['Ks']         = ShaderColorAttribute('substrateKs')
-        self.attributes['uroughness'] = ShaderFloatAttribute('substrateURoughness')
-        self.attributes['vroughness'] = ShaderFloatAttribute('substrateVRoughness')
+        self.attributes['uroughness'] = ShaderFloatAttribute('substrateURoughness', reciprocal = True)
+        self.attributes['vroughness'] = ShaderFloatAttribute('substrateVRoughness', reciprocal = True)
 
     @staticmethod
     def shaderInitializer():
@@ -53,10 +53,10 @@ class substrateShader(OpenMayaMPx.MPxNode, ShaderNode):
             substrateShader.ks = substrateShader.makeColor("substrateKs", "sks", 0.5, 0.5, 0.5)
 
             # U roughness
-            substrateShader.uroughness = substrateShader.makeFloat("substrateURoughness", "sur", 0.1)
+            substrateShader.uroughness = substrateShader.makeFloat("substrateURoughness", "sur", 500.0)
 
             # V roughness
-            substrateShader.vroughness = substrateShader.makeFloat("substrateVRoughness", "svr", 0.1)
+            substrateShader.vroughness = substrateShader.makeFloat("substrateVRoughness", "svr", 500.0)
 
         except:
             OpenMaya.MGlobal.displayError("Failed to create substrate attributes\n")

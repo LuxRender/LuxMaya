@@ -38,8 +38,8 @@ class phongShader(OpenMayaMPx.MPxNode, ShaderNode):
         # translation table for shader
         self.attributes = {}
         self.luxType = "plastic"
-        self.attributes['Kd']        = ShaderColorAttribute('color')
-        self.attributes['Ks']        = ShaderColorAttribute('specularColor')
-        self.attributes['uroughness'] = ShaderFloatAttribute('cosinePower', 0.01, True, 0.1)
-        self.attributes['vroughness'] = ShaderFloatAttribute('cosinePower', 0.01, True, 0.1)
+        self.attributes['Kd']         = ShaderColorAttribute('color')
+        self.attributes['Ks']         = ShaderColorAttribute('specularColor')
+        self.attributes['uroughness'] = ShaderFloatAttribute('cosinePower', preScale = 0.01, invert=True, reciprocal = True, postScale = 0.1)
+        self.attributes['vroughness'] = ShaderFloatAttribute('cosinePower', preScale = 0.01, invert=True, reciprocal = True, postScale = 0.1)
          

@@ -40,8 +40,8 @@ class shinymetalShader(OpenMayaMPx.MPxNode, ShaderNode):
         self.luxType = "shinymetal"
         self.attributes['Kr']        = ShaderColorAttribute('shinymetalKr')
         self.attributes['Ks']        = ShaderColorAttribute('shinymetalKs')
-        self.attributes['uroughness'] = ShaderFloatAttribute('shinymetalURoughness')
-        self.attributes['vroughness'] = ShaderFloatAttribute('shinymetalVRoughness')
+        self.attributes['uroughness'] = ShaderFloatAttribute('shinymetalURoughness', reciprocal = True)
+        self.attributes['vroughness'] = ShaderFloatAttribute('shinymetalVRoughness', reciprocal = True)
 
     @staticmethod
     def shaderInitializer():
@@ -53,8 +53,8 @@ class shinymetalShader(OpenMayaMPx.MPxNode, ShaderNode):
             shinymetalShader.ks = shinymetalShader.makeColor("shinymetalKs", "smks")
 
             # surface roughness
-            shinymetalShader.uroughness = shinymetalShader.makeFloat("shinymetalURoughness", "smur", 0.1)
-            shinymetalShader.vroughness = shinymetalShader.makeFloat("shinymetalVRoughness", "smvr", 0.1)
+            shinymetalShader.uroughness = shinymetalShader.makeFloat("shinymetalURoughness", "smur", 500.0)
+            shinymetalShader.vroughness = shinymetalShader.makeFloat("shinymetalVRoughness", "smvr", 500.0)
 
         except:
             OpenMaya.MGlobal.displayError("Failed to create shinymetal attributes\n")
