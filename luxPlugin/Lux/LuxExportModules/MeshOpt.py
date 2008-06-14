@@ -22,7 +22,7 @@ class MeshOpt(ExportModule):
     Polygon mesh ExportModule (Optimised)
     """
 
-    doBenchmark = False
+    doBenchmark = True
 
     fShape = OpenMaya.MFnMesh()
     fPolygonSets = OpenMaya.MObjectArray()
@@ -32,6 +32,7 @@ class MeshOpt(ExportModule):
     currentUVSet = 0
     
     vertNormUVList = []
+    masterIdxList = []
     vertIndexList = []
     vertPointList = []
     vertNormList = []
@@ -83,6 +84,7 @@ class MeshOpt(ExportModule):
     def resetLists(self):
         # reset lists
         self.vertNormUVList = []
+        self.masterIdxList = []
         self.vertIndexList = []
         self.vertPointList = []
         self.vertNormList = []
@@ -160,10 +162,12 @@ class MeshOpt(ExportModule):
             
             startTime = time.clock()
             
+            vIndex = 0
+            
             # each face
             while not itMeshPolys.isDone():
                 
-                # get nuber of triangles in face
+                # get number of triangles in face
                 itMeshPolys.numTriangles(numTrianglesPtr)
                 numTriangles = OpenMaya.MScriptUtil(numTrianglesPtr).asInt()
 
@@ -180,23 +184,26 @@ class MeshOpt(ExportModule):
                     localIndex = self.GetLocalIndex( polygonVertices, vertIndices )
                     
                     # each vert in this triangle
-                    #for vertIndex, i in zip( vertIndices, range(0, vertIndices.length()) ):
                     for i in range(0, vertIndices.length()):
                         
                         # get indices to points/normals/uvs
                         vertIndex = vertIndices[i]
                         vertNormalIndex = itMeshPolys.normalIndex( localIndex[i] )
                         
-                        if itMeshPolys.hasUVs():
+                        try:
                             itMeshPolys.getUVIndex( localIndex[i], uvIdxPtr, self.UVSets[self.currentUVSet] )
                             vertUVIndex = OpenMaya.MScriptUtil( uvIdxPtr ).asInt()
-                        else:
+                        except:
                             vertUVIndex = 0
                         
+                        # make sure our list is big enough
+                        if len(self.vertNormUVList) < (vertIndex+1):
+                            for n in range(len(self.vertNormUVList), vertIndex+1):
+                                self.vertNormUVList.append([])
+                        
                         # if we've not seen this combo yet,
-                        #if not (vertIndex, vertNormalIndex, vertUVIndex) in self.vertNormUVList:
-                        testVal = (vertIndex, vertNormalIndex, vertUVIndex) 
-                        if not testVal in self.vertNormUVList:
+                        testVal = (vertNormalIndex, vertUVIndex)
+                        if not testVal in self.vertNormUVList[vertIndex]:
                             # add it to the lists
                             self.vertPointList.append( meshPoints[vertIndex] )
                             self.vertNormList.append( meshNormals[vertNormalIndex] )
@@ -204,11 +211,12 @@ class MeshOpt(ExportModule):
                                 self.vertUVList.append( ( meshUArray[vertUVIndex], meshVArray[vertUVIndex] ) )
                             
                             # and keep track of what we've seen
-                            self.vertNormUVList.append( testVal )
+                            self.vertNormUVList[vertIndex].append( testVal )
+                            self.masterIdxList.append( testVal )
                             # and use the most recent idx value
-                            useVertIndex = len(self.vertNormUVList) - 1
+                            useVertIndex = len(self.masterIdxList) - 1
                         else:
-                            useVertIndex = self.vertNormUVList.index( testVal )
+                            useVertIndex = self.masterIdxList.index( testVal )
                         
                         # use the appropriate vert index
                         self.vertIndexList.append( useVertIndex )
@@ -260,7 +268,7 @@ class MeshOpt(ExportModule):
             
             
             if self.doBenchmark:
-                vLen = len(self.vertNormUVList)
+                vLen = len(self.masterIdxList)
                 pSpeed = vLen/procDuration
                 wSpeed = vLen/writeDuration
                 print "%i verts processed in %f seconds: %f verts/sec" % (vLen, procDuration, pSpeed)
