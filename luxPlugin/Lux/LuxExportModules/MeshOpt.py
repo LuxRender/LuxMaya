@@ -12,6 +12,7 @@
 #
 # ------------------------------------------------------------------------------
 
+import time, os
 from maya import OpenMaya
 
 from ExportModule import ExportModule
@@ -21,11 +22,22 @@ class MeshOpt(ExportModule):
     Polygon mesh ExportModule (Optimised)
     """
 
+    doBenchmark = False
+
     fShape = OpenMaya.MFnMesh()
     fPolygonSets = OpenMaya.MObjectArray()
     fPolygonComponents = OpenMaya.MObjectArray()
     
     UVSets = []
+    currentUVSet = 0
+    
+    vertNormUVList = []
+    vertIndexList = []
+    vertPointList = []
+    vertNormList = []
+    vertUVList = []
+    
+    fileHandle = int()
     
     # used to determine appropriate UV and Normals output
     mode = 'trianglemesh' # or loopsubdiv
@@ -33,18 +45,17 @@ class MeshOpt(ExportModule):
 
     def __init__(self, fileHandles, dagPath):
         self.dagPath = dagPath
+        self.fShape = OpenMaya.MFnMesh( dagPath )
         
-        self.meshHandle, self.portalsHandle = fileHandles
+        meshHandle, portalsHandle = fileHandles
         
         if dagPath.fullPathName().lower().find('portal') != -1:
-            self.fileHandle = self.portalsHandle
+            self.fileHandle = portalsHandle
             self.type = 'portal'
         else:
-            self.fileHandle = self.meshHandle
+            self.fileHandle = meshHandle
             self.type = 'geom'
         
-        self.fShape = OpenMaya.MFnMesh( dagPath )
-
         dagPath.extendToShape()
 
         self.instanceNum = 0
@@ -55,12 +66,14 @@ class MeshOpt(ExportModule):
         
         shaderArray = OpenMaya.MObjectArray()
         polyShaderIdx = OpenMaya.MIntArray()
-        self.fShape.getConnectedShaders(self.instanceNum, shaderArray, polyShaderIdx)
         
-        self.setCount = shaderArray.length() #self.fPolygonSets.length()
-        
-        #if self.setCount > 1:
-        #    self.setCount -= 1
+        try:
+            # try to establish nimber of mesh sets through shader conections,
+            self.fShape.getConnectedShaders(self.instanceNum, shaderArray, polyShaderIdx)
+            self.setCount = shaderArray.length()
+        except:
+            # skip all sets in this mesh if no shaders assigned
+            self.setCount = 0
             
         if self.fShape.numUVSets() > 0:
             # Get UV sets for this mesh
@@ -89,7 +102,7 @@ class MeshOpt(ExportModule):
         if self.fShape.numUVSets() > 0:
             meshUArray = OpenMaya.MFloatArray()
             meshVArray = OpenMaya.MFloatArray()
-            self.fShape.getUVs(meshUArray, meshVArray, self.UVSets[0])
+            self.fShape.getUVs(meshUArray, meshVArray, self.UVSets[self.currentUVSet])
         
         # set up some scripting junk
         numTrianglesPx = OpenMaya.MScriptUtil()
@@ -98,8 +111,6 @@ class MeshOpt(ExportModule):
         uvIdxPx = OpenMaya.MScriptUtil()
         uvIdxPx.createFromInt(0)
         uvIdxPtr = uvIdxPx.asIntPtr()
-        
-
         
         # each set/shader on this object
         for iSet in range(0, self.setCount):
@@ -137,6 +148,18 @@ class MeshOpt(ExportModule):
             
             # start mesh face iteration            
             itMeshPolys = OpenMaya.MItMeshPolygon(self.dagPath, self.fPolygonComponents[iSet])
+            
+            # storage for obj-relative vert indices in a face
+            polygonVertices = OpenMaya.MIntArray()
+            
+            # storage for the face vert points
+            vertPoints = OpenMaya.MPointArray()
+                        
+            # storage for the face vert indices
+            vertIndices = OpenMaya.MIntArray()
+            
+            startTime = time.clock()
+            
             # each face
             while not itMeshPolys.isDone():
                 
@@ -144,20 +167,11 @@ class MeshOpt(ExportModule):
                 itMeshPolys.numTriangles(numTrianglesPtr)
                 numTriangles = OpenMaya.MScriptUtil(numTrianglesPtr).asInt()
 
-                # storage for obj-relative vert indices in a face
-                polygonVertices = OpenMaya.MIntArray()
-
                 #get object relative indices for verts in this face
                 itMeshPolys.getVertices( polygonVertices )
 
                 # each triangle in each face
                 for currentTriangle in range(0, numTriangles):
-                    
-                    # storage for the face vert points
-                    vertPoints = OpenMaya.MPointArray()
-                                
-                    # storage for the face vert indices
-                    vertIndices = OpenMaya.MIntArray()
 
                     # get the triangle points and indices
                     itMeshPolys.getTriangle( currentTriangle, vertPoints, vertIndices, OpenMaya.MSpace.kObject )
@@ -166,23 +180,23 @@ class MeshOpt(ExportModule):
                     localIndex = self.GetLocalIndex( polygonVertices, vertIndices )
                     
                     # each vert in this triangle
-                    for vertIndex, i in zip( vertIndices, range(0, vertIndices.length()) ):
-                    #for i in range(0, vertIndices.length()):
+                    #for vertIndex, i in zip( vertIndices, range(0, vertIndices.length()) ):
+                    for i in range(0, vertIndices.length()):
                         
                         # get indices to points/normals/uvs
-                        #vertIndex = vertIndices[i]
+                        vertIndex = vertIndices[i]
                         vertNormalIndex = itMeshPolys.normalIndex( localIndex[i] )
                         
                         if itMeshPolys.hasUVs():
-                            itMeshPolys.getUVIndex( localIndex[i], uvIdxPtr, self.UVSets[0] )
+                            itMeshPolys.getUVIndex( localIndex[i], uvIdxPtr, self.UVSets[self.currentUVSet] )
                             vertUVIndex = OpenMaya.MScriptUtil( uvIdxPtr ).asInt()
                         else:
                             vertUVIndex = 0
                         
-                        #print 'testing for (%i %i %i)' % (vertIndex, vertNormalIndex, vertUVIndex)
-                        
                         # if we've not seen this combo yet,
-                        if not (vertIndex, vertNormalIndex, vertUVIndex) in self.vertNormUVList:
+                        #if not (vertIndex, vertNormalIndex, vertUVIndex) in self.vertNormUVList:
+                        testVal = (vertIndex, vertNormalIndex, vertUVIndex) 
+                        if not testVal in self.vertNormUVList:
                             # add it to the lists
                             self.vertPointList.append( meshPoints[vertIndex] )
                             self.vertNormList.append( meshNormals[vertNormalIndex] )
@@ -190,21 +204,20 @@ class MeshOpt(ExportModule):
                                 self.vertUVList.append( ( meshUArray[vertUVIndex], meshVArray[vertUVIndex] ) )
                             
                             # and keep track of what we've seen
-                            self.vertNormUVList.append( (vertIndex, vertNormalIndex, vertUVIndex) )
+                            self.vertNormUVList.append( testVal )
                             # and use the most recent idx value
                             useVertIndex = len(self.vertNormUVList) - 1
-                            
-                            #print 'not found: %i' % useVertIndex
                         else:
-                            useVertIndex = self.vertNormUVList.index( (vertIndex, vertNormalIndex, vertUVIndex) )
-                            #print 'found: %i' % useVertIndex
-                        
-                        # print self.vertNormUVList
+                            useVertIndex = self.vertNormUVList.index( testVal )
                         
                         # use the appropriate vert index
                         self.vertIndexList.append( useVertIndex )
                         
                 itMeshPolys.next()
+                
+            procTime = time.clock()
+            procDuration = procTime - startTime
+            
             
             # mesh iteration done, do output.
 
@@ -212,10 +225,14 @@ class MeshOpt(ExportModule):
             self.addToOutput( '\t\t' + ' '.join(map(str,self.vertIndexList)) )
             self.addToOutput( '\t]' )
             
+            self.fileHandle.flush()
+            
             self.addToOutput( '\t"point P" [' )
             for vP in self.vertPointList:
                 self.addToOutput( '\t\t%f %f %f' % (vP.x, vP.y, vP.z) )
             self.addToOutput( '\t]' )
+            
+            self.fileHandle.flush()
             
             # add UVs for trianglemesh and loopsubdiv, but not for portals and only if the shape has uvs
             if self.type == 'geom' and len(self.vertUVList) > 0:
@@ -223,6 +240,8 @@ class MeshOpt(ExportModule):
                 for uv in self.vertUVList:
                     self.addToOutput( '\t\t%f %f' % uv )
                 self.addToOutput( '\t]' )
+            
+            self.fileHandle.flush()
             
             # Add normals to trianglemesh
             if self.mode == 'trianglemesh':
@@ -235,6 +254,21 @@ class MeshOpt(ExportModule):
             self.addToOutput( '' )
             
             self.fileHandle.flush()
+            
+            outTime = time.clock()
+            writeDuration = outTime - procTime
+            
+            
+            if self.doBenchmark:
+                vLen = len(self.vertNormUVList)
+                pSpeed = vLen/procDuration
+                wSpeed = vLen/writeDuration
+                print "%i verts processed in %f seconds: %f verts/sec" % (vLen, procDuration, pSpeed)
+                print " -> written in %f seconds: %f verts/sec" % (writeDuration, wSpeed)
+                
+                sf = open("e:\meshopt_stats.csv", "a")
+                sf.write ( ( '%i,%f,%f' % (vLen, pSpeed, wSpeed) ) + os.linesep )
+                sf.close()
             
     def GetLocalIndex(self, getVertices, getTriangle):
         """
