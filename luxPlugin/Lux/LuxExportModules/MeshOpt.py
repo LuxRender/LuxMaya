@@ -22,7 +22,7 @@ class MeshOpt(ExportModule):
     Polygon mesh ExportModule (Optimised)
     """
 
-    doBenchmark = False
+    doBenchmark = True
 
     fShape = OpenMaya.MFnMesh()
     fPolygonSets = OpenMaya.MObjectArray()
@@ -31,7 +31,7 @@ class MeshOpt(ExportModule):
     UVSets = []
     currentUVSet = 0
     
-    vertNormUVList = []
+    vertNormUVList = {}
     vertIndexList = []
     vertPointList = []
     vertNormList = []
@@ -82,7 +82,7 @@ class MeshOpt(ExportModule):
            
     def resetLists(self):
         # reset lists
-        self.vertNormUVList = []
+        self.vertNormUVList = {}
         self.vertIndexList = []
         self.vertPointList = []
         self.vertNormList = []
@@ -160,6 +160,8 @@ class MeshOpt(ExportModule):
             
             startTime = time.clock()
             
+            totalVertIndices = 0
+            
             # each face
             while not itMeshPolys.isDone():
                 
@@ -194,7 +196,6 @@ class MeshOpt(ExportModule):
                             vertUVIndex = 0
                         
                         # if we've not seen this combo yet,
-                        #if not (vertIndex, vertNormalIndex, vertUVIndex) in self.vertNormUVList:
                         testVal = (vertIndex, vertNormalIndex, vertUVIndex) 
                         if not testVal in self.vertNormUVList:
                             # add it to the lists
@@ -204,11 +205,12 @@ class MeshOpt(ExportModule):
                                 self.vertUVList.append( ( meshUArray[vertUVIndex], meshVArray[vertUVIndex] ) )
                             
                             # and keep track of what we've seen
-                            self.vertNormUVList.append( testVal )
+                            self.vertNormUVList[testVal] = totalVertIndices
                             # and use the most recent idx value
-                            useVertIndex = len(self.vertNormUVList) - 1
+                            useVertIndex = totalVertIndices
+                            totalVertIndices += 1
                         else:
-                            useVertIndex = self.vertNormUVList.index( testVal )
+                            useVertIndex = self.vertNormUVList[testVal]
                         
                         # use the appropriate vert index
                         self.vertIndexList.append( useVertIndex )
