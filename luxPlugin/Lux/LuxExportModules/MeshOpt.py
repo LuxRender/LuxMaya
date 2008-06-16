@@ -22,7 +22,7 @@ class MeshOpt(ExportModule):
     Polygon mesh ExportModule (Optimised)
     """
 
-    doBenchmark = False
+    doBenchmark = True
 
     fShape = OpenMaya.MFnMesh()
     fPolygonSets = OpenMaya.MObjectArray()
@@ -189,7 +189,7 @@ class MeshOpt(ExportModule):
                         localIndex = self.GetLocalIndex( polygonVertices, vertIndices )
                         
                         # each vert in this triangle
-                        for vertIndex, i in zip( vertIndices, range(0, vertIndices.length()) ):
+                        for i, vertIndex in enumerate( vertIndices ):
                             
                             # get indices to points/normals/uvs
                             vertNormalIndex = itMeshPolys.normalIndex( localIndex[i] )
@@ -197,9 +197,11 @@ class MeshOpt(ExportModule):
                             itMeshPolys.getUVIndex( localIndex[i], uvIdxPtr, self.UVSets[self.currentUVSet] )
                             vertUVIndex = OpenMaya.MScriptUtil( uvIdxPtr ).asInt()
                             
-                            # if we've not seen this combo yet,
+                            # if we've seen this combo before,
                             testVal = (vertIndex, vertNormalIndex, vertUVIndex) 
-                            if not testVal in self.vertNormUVList:
+                            try:
+                                self.vertIndexList.append( self.vertNormUVList[testVal] )
+                            except KeyError:
                                 # add it to the lists
                                 self.vertPointList.append( meshPoints[vertIndex] )
                                 self.vertNormList.append( meshNormals[vertNormalIndex] )
@@ -210,8 +212,6 @@ class MeshOpt(ExportModule):
                                 # and use the most recent idx value
                                 self.vertIndexList.append( totalVertIndices )
                                 totalVertIndices += 1
-                            else:
-                                self.vertIndexList.append( self.vertNormUVList[testVal] )
                             
                     itMeshPolys.next()
                     
@@ -238,14 +238,16 @@ class MeshOpt(ExportModule):
                         localIndex = self.GetLocalIndex( polygonVertices, vertIndices )
                         
                         # each vert in this triangle
-                        for vertIndex, i in zip( vertIndices, range(0, vertIndices.length()) ):
+                        for i, vertIndex in enumerate( vertIndices ):
                             
                             # get indices to points/normals/uvs
                             vertNormalIndex = itMeshPolys.normalIndex( localIndex[i] )
 
-                            # if we've not seen this combo yet,
-                            testVal = (vertIndex, vertNormalIndex) 
-                            if not testVal in self.vertNormUVList:
+                            # if we've seen this combo yet,
+                            testVal = (vertIndex, vertNormalIndex)
+                            try:
+                                self.vertIndexList.append( self.vertNormUVList[testVal] )
+                            except KeyError:
                                 # add it to the lists
                                 self.vertPointList.append( meshPoints[vertIndex] )
                                 self.vertNormList.append( meshNormals[vertNormalIndex] )
@@ -255,8 +257,7 @@ class MeshOpt(ExportModule):
                                 # and use the most recent idx value
                                 self.vertIndexList.append( totalVertIndices )
                                 totalVertIndices += 1
-                            else:
-                                self.vertIndexList.append( self.vertNormUVList[testVal] )
+                            
                             
                     itMeshPolys.next()
                     
