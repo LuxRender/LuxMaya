@@ -21,6 +21,8 @@ from LuxNode import LuxNode
 from LuxNode import ShaderColorAttribute
 from LuxNode import ShaderFloatAttribute
 from LuxNode import ShaderEnumAttribute
+from LuxNode import ShaderBoolAttribute
+from LuxNode import ShaderStringAttribute
 #from Lux.LuxMiscModules.FileCollector import FileCollector
 
 # ShaderModules serve dual purpose: Set up the custom shader in Maya
@@ -38,7 +40,10 @@ class ShaderNode(LuxNode):
         self.attributes['bumpmap'] = ShaderFloatAttribute('normalCamera')
         
         for attr in self.attributes:
-            if not isinstance( self.attributes[attr], ShaderEnumAttribute ):
+            if (
+                isinstance( self.attributes[attr], ShaderColorAttribute )
+             or isinstance( self.attributes[attr], ShaderFloatAttribute )
+                ):
                 self.addToOutput( self.attributes[attr].getOutput( attr, shaderNode, shaderName ) )
                 
                 
@@ -46,7 +51,10 @@ class ShaderNode(LuxNode):
         self.addToOutput( '\t"string type" ["%s"]' % self.luxType )
         
         for attr in self.attributes:
-            if isinstance( self.attributes[attr], ShaderEnumAttribute ):
+            if not (
+                    isinstance( self.attributes[attr], ShaderColorAttribute )
+                 or isinstance( self.attributes[attr], ShaderFloatAttribute )
+                    ):
                 self.addToOutput( self.attributes[attr].getOutput( attr, shaderNode, shaderName ) )
             else:
                 if self.attributes[attr].exportName == '':

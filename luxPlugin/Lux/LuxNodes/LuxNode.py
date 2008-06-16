@@ -221,6 +221,19 @@ class ShaderStringAttribute(NodeAttribute):
 		plug = shaderNode.findPlug(self.plugName)
 		self.rawValue = plug.asString()
 		return '\t"string %s" ["%s"]' % (luxName, self.rawValue)
+	
+class ShaderBoolAttribute(NodeAttribute):
+	"""
+	Bool Attribute for Shader nodes
+	"""
+	
+	def __init__(self, mayaAttrName):
+		self.plugName = mayaAttrName
+		
+	def getOutput(self, luxName, shaderNode, shaderName):
+		plug = shaderNode.findPlug(self.plugName)
+		self.rawValue = self.intToBoolString( plug.asInt() )
+		return '\t"bool %s" ["%s"]' % (luxName, self.rawValue)
 		
 class TextureFloatAttribute(NodeAttribute):
 	"""

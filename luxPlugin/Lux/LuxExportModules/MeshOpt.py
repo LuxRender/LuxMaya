@@ -22,7 +22,7 @@ class MeshOpt(ExportModule):
     Polygon mesh ExportModule (Optimised)
     """
 
-    doBenchmark = True
+    doBenchmark = False
 
     fShape = OpenMaya.MFnMesh()
     fPolygonSets = OpenMaya.MObjectArray()

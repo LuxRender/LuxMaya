@@ -247,6 +247,7 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
 			luxshader.addAttribute(luxshader.glass.kt)
 			luxshader.addAttribute(luxshader.glass.index)
 			luxshader.addAttribute(luxshader.glass.cauchyb)
+			luxshader.addAttribute(luxshader.glass.architectural)
 
 			# roughglass
 			luxshader.addAttribute(luxshader.roughglass.kr)

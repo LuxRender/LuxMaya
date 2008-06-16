@@ -46,6 +46,7 @@
 			editorTemplate -l "Transmission" -addControl "glassKt";
 			editorTemplate -l "Index" -addControl "glassIndex";
 			editorTemplate -l "Cauchy B" -addControl "glassCauchyB";
+			editorTemplate -l "Architectural" -addControl "glassArchitectural";
 		editorTemplate -endLayout;
 		
 		// RoughGlass
@@ -161,6 +162,7 @@ global proc luxshader_changeType( string $nodeName )
 		editorTemplate -dc $nodeName "glassKt" false;
 		editorTemplate -dc $nodeName "glassIndex" false;
 		editorTemplate -dc $nodeName "glassCauchyB" false;
+		editorTemplate -dc $nodeName "glassArchitectural" false;
 	}
 	else
 	{
@@ -168,6 +170,7 @@ global proc luxshader_changeType( string $nodeName )
 		editorTemplate -dc $nodeName "glassKt" true;
 		editorTemplate -dc $nodeName "glassIndex" true;
 		editorTemplate -dc $nodeName "glassCauchyB" true;
+		editorTemplate -dc $nodeName "glassArchitectural" true;
 	}
 	
 	if ($type==2) // == Rough Glass

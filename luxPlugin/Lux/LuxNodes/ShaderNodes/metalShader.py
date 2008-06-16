@@ -71,10 +71,12 @@ class metalShader(OpenMayaMPx.MPxNode, ShaderNode):
         self.attributes['k']            = ShaderColorAttribute('metalK')
         self.attributes['uroughness']   = ShaderFloatAttribute('metalURoughness', reciprocal = True)
         self.attributes['vroughness']   = ShaderFloatAttribute('metalVRoughness', reciprocal = True)
-
+        # metalNkFile not handled here, usein in overridden getMaterial() method
 
     # override
     def getMaterial(self, shaderNode, shaderName):
+        # TODO: add check for named preset, and skip all other attrs if not == "manual"
+        
         # Make the material as normal, with all regular attributes.
         ShaderNode.getMaterial( self, shaderNode, shaderName )
         
