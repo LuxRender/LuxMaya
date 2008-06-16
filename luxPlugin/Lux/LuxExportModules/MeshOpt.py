@@ -199,9 +199,11 @@ class MeshOpt(ExportModule):
                             
                             # if we've seen this combo before,
                             testVal = (vertIndex, vertNormalIndex, vertUVIndex) 
-                            try:
+                            #try:
+                            if testVal in self.vertNormUVList:
                                 self.vertIndexList.append( self.vertNormUVList[testVal] )
-                            except KeyError:
+                            #except KeyError:
+                            else:
                                 # add it to the lists
                                 self.vertPointList.append( meshPoints[vertIndex] )
                                 self.vertNormList.append( meshNormals[vertNormalIndex] )
@@ -245,9 +247,11 @@ class MeshOpt(ExportModule):
 
                             # if we've seen this combo yet,
                             testVal = (vertIndex, vertNormalIndex)
-                            try:
+                            #try:
+                            if testVal in self.vertNormUVList:
                                 self.vertIndexList.append( self.vertNormUVList[testVal] )
-                            except KeyError:
+                            #except KeyError:
+                            else:
                                 # add it to the lists
                                 self.vertPointList.append( meshPoints[vertIndex] )
                                 self.vertNormList.append( meshNormals[vertNormalIndex] )
