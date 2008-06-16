@@ -142,7 +142,7 @@ class luxEnvironmentLightLoader(ExportModule):
         lColorB = self.rgcAndClamp( lPlug.asFloat() )
         
         gainPlug = self.dpNode.findPlug("gain")
-        gain = gainPlus.asFloat()
+        gain = gainPlug.asFloat()
         
         samplesPlug = self.dpNode.findPlug("numSamples")
         numSamples = samplesPlug.asInt()
