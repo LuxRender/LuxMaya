@@ -17,22 +17,31 @@ os.altsep = '/'
 
 from maya import cmds
 from maya import OpenMaya
+from maya import OpenMayaMPx
 from maya import OpenMayaUI
 
 from luxexport    import luxexport
 
-class luxbatch:
+class luxbatch(OpenMayaMPx.MPxCommand):
     """
     Class to create a render batch script
     """
     
     mProgress = OpenMayaUI.MProgressWindow()
     
-    def doIt(self):
+    @staticmethod
+    def commandName():
+        return "lux_export"
+    
+    @staticmethod
+    def commandCreator():
+        return OpenMayaMPx.asMPxPtr( luxbatch() )
+    
+    def doIt(self, args):
         """
         Class entry point.
         1. Detect if lux_settings exists
-        2. Detecf if exporting an animation
+        2. Detect if exporting an animation
         3. Determine start and end frame to export, and pass control to startBatch()
         """
         

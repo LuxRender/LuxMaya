@@ -48,14 +48,16 @@ from Lux.LuxNodes.TextureNodes.mixTexture import mixTexture
 from Lux.LuxNodes.TextureNodes.windyTexture import windyTexture
 from Lux.LuxNodes.TextureNodes.wrinkledTexture import wrinkledTexture
 
-#GUI
-from Lux.LuxCommands.lux_gui   import lux_gui
+#GUI/Commands
+from Lux.LuxCommands.lux_gui    import lux_gui
+from Lux.LuxCommands.luxbatch   import luxbatch
 
 # ------------------------------------------------------------------------------
 
 # Global list of commands that we want to register with Maya.
 luxCommands= [
-			  # updateSunNode
+			  lux_gui,
+			  luxbatch
 			 ]
 
 # We need to know the node types when registering, so provide a dict

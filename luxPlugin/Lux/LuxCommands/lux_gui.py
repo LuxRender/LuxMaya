@@ -15,6 +15,7 @@
 import os
 os.altsep = '/'
 from maya import OpenMaya
+from maya import OpenMayaMPx
 from maya import cmds
 from maya import mel
 
@@ -87,7 +88,7 @@ class mOptionMenu(mMenu):
 		itemName = cmds.menuItem( label = label, data = self.data, parent = self.mName)
 		self.data += 1
 
-class lux_gui:
+class lux_gui(OpenMayaMPx.MPxCommand):
 	"""
 	The Lux Exporter GUI Main class. This is huge, and could possibly be split up.
 	"""
@@ -97,6 +98,14 @@ class lux_gui:
 	lux_GUI_thirdWidth = 120
 	lux_GUI_2thirdWidth = 240
 	lux_GUI_scrollbar_width = 41
+
+	@staticmethod
+	def commandName():
+		return "lux_gui"
+
+	@staticmethod
+	def commandCreator():
+		return OpenMayaMPx.asMPxPtr( lux_gui() )
 
 #	def __init__(self):
 #		pass
