@@ -66,15 +66,17 @@ class Material(ExportModule):
         The material factory.
         """
         
+        # global ExportedMaterials
+        
         nodeType = dpNode.typeName()
         
-        nodeName = dpNode.name #OpenMaya.MFnDependencyNode( dpNode ).name()
+        nodeName = dpNode.name
         
         # TODO this doesn't work
-        materialNotExported = not ExportedMaterials.__contains__(nodeName)
+        materialNotExported = nodeName not in ExportedMaterials
         
-        if (   (dpNode.classification( nodeType ) == "shader/surface") \
-            or (dpNode.classification( nodeType ) == "shader/displacement") \
+        if (   (dpNode.classification( nodeType ) == "shader/surface")
+            or (dpNode.classification( nodeType ) == "shader/displacement")
            ) \
         and materialNotExported:
             ExportedMaterials.append( nodeName )
@@ -149,7 +151,11 @@ class MaterialLux(ExportModule, MaterialBase):
         if validMaterial:
             self.addToOutput( '# Lux Shader Material ' + self.dpNode.name() )
             self.addToOutput( self.shaderSyntaxModule.getMaterial( self.dpNode, self.shaderName ) )
-    
+
+
+
+# TODO put these routine in *Shader.py as overrides
+
 # Lets do this one manually, because it's an exception
 class mixShaderHandler(ExportModule, MaterialBase):
     

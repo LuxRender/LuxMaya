@@ -37,7 +37,7 @@ class luxbatch(OpenMayaMPx.MPxCommand):
     def commandCreator():
         return OpenMayaMPx.asMPxPtr( luxbatch() )
     
-    def doIt(self, args):
+    def doIt(self, args = OpenMaya.MArgList() ):
         """
         Class entry point.
         1. Detect if lux_settings exists
