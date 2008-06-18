@@ -23,6 +23,7 @@ class MeshOpt(ExportModule):
     """
 
     doBenchmark = False
+    doProfiling = False
 
     fShape = OpenMaya.MFnMesh()
     fPolygonSets = OpenMaya.MObjectArray()
@@ -96,6 +97,21 @@ class MeshOpt(ExportModule):
         del self.vertUVList
 
     def getOutput(self):
+        
+        if self.doProfiling:
+            import hotshot, hotshot.stats
+            prof = hotshot.Profile("meshopt.prof")
+            benchtime = prof.runcall(self.getOutput_real)
+            prof.close()
+            stats = hotshot.stats.load("meshopt.prof")
+            stats.strip_dirs()
+            stats.sort_stats('time','calls')
+            stats.print_stats(20)
+        else:
+            self.getOutput_real()
+        
+
+    def getOutput_real(self):
         
         # get all object verts
         meshPoints = OpenMaya.MPointArray()
