@@ -15,6 +15,7 @@
 # ------------------------------------------------------------------------------
 
 import math, os
+from maya import cmds
 from maya import OpenMaya
 from maya import OpenMayaMPx
 
@@ -52,27 +53,19 @@ class fileTexture(TextureNode):
         inputFileTexturePlug = textureNode.findPlug('colorGainB')
         self.fileTextureScaleB =  inputFileTexturePlug.asFloat()
         
-        if attrType == "color":
-            self.fileTextureScale = '%f %f %f' % ( self.fileTextureScaleR, self.fileTextureScaleG, self.fileTextureScaleB )
-        else:
-            self.fileTextureScale = '%f' % ( self.fileTextureScaleR )
-        
-        outStr2  = ( 'Texture "%s.%s.scale"' % (textureName, plugName) ) + os.linesep
-        outStr2 +=   '\t"%s" "constant"' % attrType + os.linesep
-        outStr2 += ( '\t\t"%s value" [%s]' % ( attrType, self.fileTextureScale) )
-        
-        self.prependToOutput( outStr2 )
-        
-        outStr2  = ( 'Texture "%s.%s.image"' % (textureName, plugName) ) + os.linesep
-        outStr2 += ( '\t"%s" "imagemap"' % attrType ) + os.linesep
-        outStr2 +=   '\t\t"float vscale" [-1.0]' + os.linesep
-        outStr2 += ( '\t\t"string filename" ["%s"]' % FileCollector.collectTexture( self.fileTextureFileName ) )
-
-        self.prependToOutput( outStr2 )
+        #if attrType == "color":
+        #    self.fileTextureScale = '%f %f %f' % ( self.fileTextureScaleR, self.fileTextureScaleG, self.fileTextureScaleB )
+        #else:
+        self.fileTextureScale = '%f' % ( self.fileTextureScaleR )
         
         self.addToOutput( 'Texture "%s.%s"' % (textureName, plugName) )
-        self.addToOutput( '\t"%s" "scale"' % attrType )
-        self.addToOutput( '\t\t"texture tex1" ["%s.%s.scale"]' % (textureName, plugName) )
-        self.addToOutput( '\t\t"texture tex2" ["%s.%s.image"]' % (textureName, plugName) )
+        self.addToOutput( '\t"%s" "imagemap"' % attrType )
+        self.addToOutput( '\t\t"float vscale" [-1.0]' )
+        self.addToOutput( '\t\t"string filename" ["%s"]' % FileCollector.collectTexture( self.fileTextureFileName ) )
+        self.addToOutput( '\t\t"%s gain" [%s]' % ( attrType, self.fileTextureScale) )
         
+        if cmds.getAttr( 'lux_settings.scene_reverse_gamma' ) == 1:
+            self.addToOutput( '\t\t"float gamma" [%f]' % (cmds.getAttr( 'lux_settings.film_gamma' )) )
+
+
         return self.outputString
