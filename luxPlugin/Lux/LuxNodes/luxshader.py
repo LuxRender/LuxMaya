@@ -18,18 +18,18 @@
 from maya import OpenMaya
 from maya import OpenMayaMPx
 
-from ShaderNode						    import ShaderNode
+from ShaderNode							import ShaderNode
 
-from ShaderNodes.carpaintShader		    import carpaintShader
+from ShaderNodes.carpaintShader			import carpaintShader
 from ShaderNodes.glassShader			import glassShader
 from ShaderNodes.matteShader			import matteShader
 from ShaderNodes.mattetranslucentShader import mattetranslucentShader
 from ShaderNodes.metalShader			import metalShader
-from ShaderNodes.mixShader			    import mixShader
-from ShaderNodes.mirrorShader		    import mirrorShader
-from ShaderNodes.plasticShader		    import plasticShader
-from ShaderNodes.roughglassShader	    import roughglassShader
-from ShaderNodes.shinymetalShader	    import shinymetalShader
+from ShaderNodes.mixShader				import mixShader
+from ShaderNodes.mirrorShader			import mirrorShader
+from ShaderNodes.plasticShader			import plasticShader
+from ShaderNodes.roughglassShader		import roughglassShader
+from ShaderNodes.shinymetalShader		import shinymetalShader
 from ShaderNodes.substrateShader		import substrateShader
 
 from ShaderNodes.arealightShader		import arealightShader
@@ -46,6 +46,8 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
 	2. Provide a mapping of Maya attributes -> Lux parameters to be read
 	   at export time. 
 	"""
+	
+	colorTable = {}
 
 	@staticmethod
 	def nodeName():
@@ -86,12 +88,26 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
 		substrate			= substrateShader()
 		
 		arealight			= arealightShader()		# not technically a shader
+		
 
 	def postConstructor(self):
 		self._setMPSafe( True )
 		self.setExistWithoutOutConnections( True )
 		self.setExistWithoutInConnections( True )
-	
+		
+		self.colorTable = {
+					  0: self.carpaint.kd,
+					  1: self.glass.kt,
+					  2: self.roughglass.kt,
+					  3: self.matte.kd,
+					  4: self.mattetranslucent.kt,
+					  5: self.metal.n,
+					  6: self.shinymetal.ks,
+					  7: self.mirror.kr,
+					  8: self.plastic.kd,
+					  9: self.substrate.kd,
+					  10: self.arealight.L
+					  }
 
 	def compute(self, plug, block):
 		if plug == self.outColor or plug.parent() == self.outColor:
@@ -102,41 +118,44 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
 			matType = block.inputValue( self.iMaterialType ).asInt()
 			
 			# choose the appropriate color
-			if	 matType == 0:
-				 # carpaint
-				 resultColor = block.inputValue( self.carpaint.kd ).asFloatVector()
-			elif matType == 1:
-				 # glass
-				 resultColor = block.inputValue( self.glass.kt ).asFloatVector()
-			elif matType == 2:
-				 # roughglass
-				 resultColor = block.inputValue( self.roughglass.kt ).asFloatVector()
-			elif matType == 3:
-				 # matte
-				 resultColor = block.inputValue( self.matte.kd ).asFloatVector()
-			elif matType == 4:
-				 # mattetranslucent
-				 resultColor = block.inputValue( self.mattetranslucent.kt ).asFloatVector()
-			elif matType == 5:
-				 # metal
-				 resultColor = block.inputValue( self.metal.n ).asFloatVector()
-			elif matType == 6:
-				 # shinymetal
-				 resultColor = block.inputValue( self.shinymetal.ks ).asFloatVector()
-			elif matType == 7:
-				 # mirror
-				 resultColor = block.inputValue( self.mirror.kr ).asFloatVector()
-			elif matType == 8:
-				 # plastic
-				 resultColor = block.inputValue( self.plastic.kd ).asFloatVector()
-			elif matType == 9:
-				 # substrate
-				 resultColor = block.inputValue( self.substrate.kd ).asFloatVector()
-			elif matType == 10:
-				 # arealight
-				 resultColor = block.inputValue( self.arealight.L ).asFloatVector() # all arealights are 50% transparent
+#			if	 matType == 0:
+#				 # carpaint
+#				 resultColor = block.inputValue( self.carpaint.kd ).asFloatVector()
+#			elif matType == 1:
+#				 # glass
+#				 resultColor = block.inputValue( self.glass.kt ).asFloatVector()
+#			elif matType == 2:
+#				 # roughglass
+#				 resultColor = block.inputValue( self.roughglass.kt ).asFloatVector()
+#			elif matType == 3:
+#				 # matte
+#				 resultColor = block.inputValue( self.matte.kd ).asFloatVector()
+#			elif matType == 4:
+#				 # mattetranslucent
+#				 resultColor = block.inputValue( self.mattetranslucent.kt ).asFloatVector()
+#			elif matType == 5:
+#				 # metal
+#				 resultColor = block.inputValue( self.metal.n ).asFloatVector()
+#			elif matType == 6:
+#				 # shinymetal
+#				 resultColor = block.inputValue( self.shinymetal.ks ).asFloatVector()
+#			elif matType == 7:
+#				 # mirror
+#				 resultColor = block.inputValue( self.mirror.kr ).asFloatVector()
+#			elif matType == 8:
+#				 # plastic
+#				 resultColor = block.inputValue( self.plastic.kd ).asFloatVector()
+#			elif matType == 9:
+#				 # substrate
+#				 resultColor = block.inputValue( self.substrate.kd ).asFloatVector()
+#			elif matType == 10:
+#				 # arealight
+#				 resultColor = block.inputValue( self.arealight.L ).asFloatVector() # all arealights are 50% transparent
+			if matType in self.colorTable:
+				resultColor = block.inputValue( self.colorTable[matType] ).asFloatVector()
 			else:
 				resultColor = OpenMaya.MFloatVector(0.0, 0.0, 0.0)
+			
 
 			# set the output as a flat color
 			outColorHandle = block.outputValue( self.outColor )
