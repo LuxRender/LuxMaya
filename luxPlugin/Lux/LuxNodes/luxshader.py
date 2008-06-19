@@ -94,39 +94,41 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
 			# I CAN'T GET THE LAMBERTIAN BIT TO WORK
 			
 			# THIS IS ALSO VERY SLOW AND MAY BE REMOVED
+			matType = block.inputValue( self.iMaterialType ).asInt()
+			
 			
 			# choose the appropriate color
-			if	 block.inputValue( self.iMaterialType ).asInt() == 0:
+			if	 matType == 0:
 				 # carpaint
 				 resultColor = block.inputValue( self.carpaint.kd ).asFloatVector()
-			elif block.inputValue( self.iMaterialType ).asInt() == 1:
+			elif matType == 1:
 				 # glass
 				 resultColor = block.inputValue( self.glass.kt ).asFloatVector()
-			elif block.inputValue( self.iMaterialType ).asInt() == 2:
+			elif matType == 2:
 				 # roughglass
 				 resultColor = block.inputValue( self.roughglass.kt ).asFloatVector()
-			elif block.inputValue( self.iMaterialType ).asInt() == 3:
+			elif matType == 3:
 				 # matte
 				 resultColor = block.inputValue( self.matte.kd ).asFloatVector()
-			elif block.inputValue( self.iMaterialType ).asInt() == 4:
+			elif matType == 4:
 				 # mattetranslucent
 				 resultColor = block.inputValue( self.mattetranslucent.kt ).asFloatVector()
-			elif block.inputValue( self.iMaterialType ).asInt() == 5:
+			elif matType == 5:
 				 # metal
 				 resultColor = block.inputValue( self.metal.n ).asFloatVector()
-			elif block.inputValue( self.iMaterialType ).asInt() == 6:
+			elif matType == 6:
 				 # shinymetal
 				 resultColor = block.inputValue( self.shinymetal.ks ).asFloatVector()
-			elif block.inputValue( self.iMaterialType ).asInt() == 7:
+			elif matType == 7:
 				 # mirror
 				 resultColor = block.inputValue( self.mirror.kr ).asFloatVector()
-			elif block.inputValue( self.iMaterialType ).asInt() == 8:
+			elif matType == 8:
 				 # plastic
 				 resultColor = block.inputValue( self.plastic.kd ).asFloatVector()
-			elif block.inputValue( self.iMaterialType ).asInt() == 9:
+			elif matType == 9:
 				 # substrate
 				 resultColor = block.inputValue( self.substrate.kd ).asFloatVector()
-			elif block.inputValue( self.iMaterialType ).asInt() == 10:
+			elif matType == 10:
 				 # arealight
 				 resultColor = block.inputValue( self.arealight.L ).asFloatVector() # all arealights are 50% transparent
 			else:
