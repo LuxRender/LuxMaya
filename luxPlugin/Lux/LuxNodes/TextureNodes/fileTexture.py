@@ -62,7 +62,7 @@ class fileTexture(TextureNode):
         self.addToOutput( '\t"%s" "imagemap"' % attrType )
         self.addToOutput( '\t\t"float vscale" [-1.0]' )
         self.addToOutput( '\t\t"string filename" ["%s"]' % FileCollector.collectTexture( self.fileTextureFileName ) )
-        self.addToOutput( '\t\t"%s gain" [%s]' % ( attrType, self.fileTextureScale) )
+        self.addToOutput( '\t\t"float gain" [%s]' % self.fileTextureScale )
         
         if cmds.getAttr( 'lux_settings.scene_reverse_gamma' ) == 1:
             self.addToOutput( '\t\t"float gamma" [%f]' % (cmds.getAttr( 'lux_settings.film_gamma' )) )
