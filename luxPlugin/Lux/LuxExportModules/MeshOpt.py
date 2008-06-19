@@ -123,9 +123,13 @@ class MeshOpt(ExportModule):
         
         # get all object UVs, if any
         if self.fShape.numUVSets() > 0:
-            meshUArray = OpenMaya.MFloatArray()
-            meshVArray = OpenMaya.MFloatArray()
-            self.fShape.getUVs(meshUArray, meshVArray, self.UVSets[self.currentUVSet])
+            try:
+                meshUArray = OpenMaya.MFloatArray()
+                meshVArray = OpenMaya.MFloatArray()
+                self.fShape.getUVs(meshUArray, meshVArray, self.UVSets[self.currentUVSet])
+            except:
+                OpenMaya.MGlobal.displayError("Error with UV mapping on object: %s" % self.fShape.name() )
+                raise
         
         # set up some scripting junk
         numTrianglesPx = OpenMaya.MScriptUtil()
