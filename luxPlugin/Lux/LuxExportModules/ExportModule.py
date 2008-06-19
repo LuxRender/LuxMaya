@@ -113,6 +113,7 @@ class ExportModule:
         from Lux.LuxNodes.TextureNodes.fbmTexture import fbmTexture
         from Lux.LuxNodes.TextureNodes.marbleTexture import marbleTexture
         from Lux.LuxNodes.TextureNodes.mixTexture import mixTexture
+        from Lux.LuxNodes.TextureNodes.scaleTexture import scaleTexture
         from Lux.LuxNodes.TextureNodes.windyTexture import windyTexture
         from Lux.LuxNodes.TextureNodes.wrinkledTexture import wrinkledTexture
         
@@ -168,6 +169,9 @@ class ExportModule:
                 break
             if iNFn.typeName() == mixTexture.nodeName():
                 textureNode = mixTexture()
+                break
+            if iNFn.typeName() == scaleTexture.nodeName():
+                textureNode = scaleTexture()
                 break
             if iNFn.typeName() == windyTexture.nodeName():
                 textureNode = windyTexture()

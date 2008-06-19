@@ -45,6 +45,7 @@ from Lux.LuxNodes.TextureNodes.dotsTexture import dotsTexture
 from Lux.LuxNodes.TextureNodes.fbmTexture import fbmTexture
 from Lux.LuxNodes.TextureNodes.marbleTexture import marbleTexture
 from Lux.LuxNodes.TextureNodes.mixTexture import mixTexture
+from Lux.LuxNodes.TextureNodes.scaleTexture import scaleTexture
 from Lux.LuxNodes.TextureNodes.windyTexture import windyTexture
 from Lux.LuxNodes.TextureNodes.wrinkledTexture import wrinkledTexture
 
@@ -83,6 +84,7 @@ luxNodes = {
 			fbmTexture: OpenMayaMPx.MPxNode.kDependNode,
 			marbleTexture: OpenMayaMPx.MPxNode.kDependNode,
 			mixTexture: OpenMayaMPx.MPxNode.kDependNode,
+			scaleTexture: OpenMayaMPx.MPxNode.kDependNode,
 			windyTexture: OpenMayaMPx.MPxNode.kDependNode,
 			wrinkledTexture: OpenMayaMPx.MPxNode.kDependNode
 		   }

@@ -9,7 +9,7 @@
 #    0x6C757807    lux_bilerp               2D Texture
 #    0x6C757808    lux_checkerboard3d       3D Texture
 #    0x6C757809    lux_dots                 2D Texture
-#             A    TODO: use these values too
+#    0x6C75780A    lux_scale                3D texture
 #             B
 #             C
 #             D

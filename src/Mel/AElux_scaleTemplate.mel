@@ -1,0 +1,38 @@
+/**
+ * ------------------------------------------------------------------------------
+ * Lux exporter python script plugin for Maya
+ *
+ * by Doug Hammond 02/2008
+ *
+ * This file is licensed under the GPL
+ * http://www.gnu.org/licenses/gpl-3.0.txt
+ *
+ * $Id$
+ *
+ * ------------------------------------------------------------------------------
+ *
+ * This is the Attribute Editor template for lux_scale
+ *
+ * ------------------------------------------------------------------------------
+ */
+ 
+ global proc AElux_scaleTemplate( string $nodeName )
+{
+	//AEswatchDisplay $nodeName;
+	
+	editorTemplate -beginScrollLayout;
+	
+		editorTemplate -beginLayout "Scale Texture Attributes" -collapse 0;
+			editorTemplate -addControl "tex1";
+			editorTemplate -addControl "tex2";
+		editorTemplate -endLayout;
+		
+		editorTemplate -beginLayout "3D Texture Attributes" -collapse 1;
+			editorTemplate -addControl "placementMatrix";
+		editorTemplate -endLayout;
+		
+		// include/call base class/node attributes
+		AEdependNodeTemplate $nodeName;
+		
+	editorTemplate -endScrollLayout;
+}
