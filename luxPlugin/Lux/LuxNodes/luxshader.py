@@ -16,10 +16,7 @@
 # ------------------------------------------------------------------------------
 
 from maya import OpenMaya
-#from maya import OpenMayaUI
-#from maya import OpenMayaRender
 from maya import OpenMayaMPx
-
 
 from ShaderNode						    import ShaderNode
 
@@ -94,66 +91,7 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
 		self._setMPSafe( True )
 		self.setExistWithoutOutConnections( True )
 		self.setExistWithoutInConnections( True )
-		
-		
-	# HW Shader stuff - doesn't and won't work :(
 	
-	
-#	def normalsPerVertex(self):
-#		return 0
-#	
-#	def colorsPrtVertex(self):
-#		return 0
-#	
-#	def texCoordsPerVertex(self):
-#		return 1
-#	
-#	def hasTransparency(self):
-#		return True
-#	
-#	def provideVertexIds(self):
-#		return False
-#
-#	def GetFloat(self, oAttr):
-#		plug = OpenMaya.MPlug(self.thisMObject(), oAttr)
-#		return plug.asFloat()
-#	
-#	def GetColour(self, oAttr):
-#		plug = OpenMaya.MPlug(self.thisMObject(), oAttr)
-#		object = plug.asMObject()
-#		fn = OpenMaya.MFnNumericData(object)
-#		rptr = OpenMaya.MScriptUtil().createFromDouble(0.0)
-#		gptr = OpenMaya.MScriptUtil().createFromDouble(0.0)
-#		bptr = OpenMaya.MScriptUtil().createFromDouble(0.0)
-#		
-#		fn.getData(rptr,gptr,bptr)
-#		
-#		return OpenMaya.MFloatArray( [OpenMaya.MScriptUtil(rptr).asFloat(), OpenMaya.MScriptUtil(gptr).asFloat(), OpenMaya.MScriptUtil(bptr).asFloat()], 3 )
-#		
-#	def glGeometry(self,
-#				   dagPath,
-#				   prim,
-#				   writable,
-#				   indexCount,
-#				   indexArray,
-#				   vertexCount,
-#				   vertexIDs,
-#				   vertexArray,
-#				   normalCount,
-#				   normalArrays,
-#				   colorCount,
-#				   colorArrays,
-#				   texCoordCount,
-#				   texCoordArrays):
-#		# default HW color
-#		hwColor = OpenMaya.MFloatArray( [0.5, 0.5, 0.5, 1.0], 4 )
-#		
-#		theColor = self.GetColour( self.matte.kd )
-#		
-#		glf = OpenMayaRender.MGLFunctionTable
-#		
-#		glf.glMaterialfv(glf.MGL_FRONT_AND_BACK, glf.MGL_DIFFUSE, theColor)
-		
 
 	def compute(self, plug, block):
 		if plug == self.outColor or plug.parent() == self.outColor:
@@ -162,7 +100,6 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
 			
 			# THIS IS ALSO VERY SLOW AND MAY BE REMOVED
 			matType = block.inputValue( self.iMaterialType ).asInt()
-			
 			
 			# choose the appropriate color
 			if	 matType == 0:
@@ -205,6 +142,7 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
 			outColorHandle = block.outputValue( self.outColor )
 			outColorHandle.setMFloatVector(resultColor)
 			outColorHandle.setClean()
+			return OpenMaya.MStatus.kSuccess
 		else:
 			return OpenMaya.kUnknownParameter
 
