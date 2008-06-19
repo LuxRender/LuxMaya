@@ -83,7 +83,10 @@ class checkerboard3dTexture(OpenMayaMPx.MPxNode, TextureNode):
         self.attributes['scale'] = TextureVectorAttribute('scale', self.addToOutput, self.prependToOutput)
         
     def postConstructor(self):
-        self._setMPSafe(True)
+        self._setMPSafe( True )
+        self.setExistWithoutOutConnections( True )
+        self.setExistWithoutInConnections( True )
+
     
     @staticmethod
     def nodeInitializer():

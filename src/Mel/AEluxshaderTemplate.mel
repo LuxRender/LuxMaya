@@ -18,13 +18,17 @@
  
  global proc AEluxshaderTemplate( string $nodeName )
 {
-	AEswatchDisplay $nodeName;
-	
-	//Material Type
-	editorTemplate -addControl "material" "luxshader_changeType";
-	
-	editorTemplate -beginScrollLayout;
+	// this custom display loads a static jpg rather then a real material swatch
+	AEswatchDisplay_lux $nodeName;
 
+	editorTemplate -beginScrollLayout;
+		
+		// transparency and bump mapping
+		AElambertCommon $nodeName;	
+			
+		//Material Type
+		editorTemplate -addControl "material" "luxshader_changeType";
+	
 		// Carpaint
 		editorTemplate -beginLayout "Carpaint Attributes" -collapse 1;
 			editorTemplate -l "Preset" -addControl "carpaintName" "luxshader_carpaint_changePreset";
@@ -130,11 +134,15 @@
 		AEdependNodeTemplate $nodeName;
 		
 		editorTemplate -addExtraControls;
+		
 	editorTemplate -endScrollLayout;
 }
 
 global proc luxshader_changeType( string $nodeName )
 {
+
+	AEswatchDisplayReplace_lux ( $nodeName, "" );
+
 	string $type = `getAttr ($nodeName+".material")`;
 	if ($type==0) // == carpaint
 	{
@@ -392,4 +400,62 @@ global proc AEfilenkBrowser( string $fileAttribute )
 {
 	string $nkFile = `fileDialog -m 0 -dm "*.nk"`;
 	setAttr $fileAttribute -type "string" $nkFile;
+}
+
+global proc AEswatchDisplayNew_lux ( string $nodeName, string $msg )
+{
+	global int $gTextColumnWidthIndex;
+
+	string $node[];
+	tokenize($msg, ".", $node);
+	string $label = "Material Sample";
+	
+	string $iconName = "matpreview_" + `getAttr ($nodeName+".material")` + ".jpg";
+	string $iconPath[];
+	tokenize `getenv XBMLANGPATH` ";" $iconPath; 
+	string $iconFile = searchPathArray($iconName, $iconPath);
+
+	formLayout swatchDisplayForm;
+		text -label $label swatchLabel;
+
+		//swatchDisplayPort -wh 32 32 -rs 32 -sn $node[0] swatchDisplay;
+		image -w 120 -h 120 -image $iconFile swatchDisplay;
+	
+		setParent ..;
+	formLayout -e 
+		-af swatchLabel top 0 
+		-af swatchLabel bottom 0 
+		-an swatchLabel left 
+		-aof swatchLabel right (-$gTextColumnWidthIndex) 
+
+		-ac swatchDisplay left 5 swatchLabel
+		-af swatchDisplay top 0
+		-af swatchDisplay bottom 0
+		-an swatchDisplay right
+		swatchDisplayForm;
+}
+
+
+global proc AEswatchDisplayReplace_lux ( string $nodeName, string $msg )
+{
+	string $node[];
+	tokenize($msg, ".", $node);
+	
+	string $iconName = "matpreview_" + `getAttr ($nodeName+".material")` + ".jpg";
+	string $iconPath[];
+	tokenize `getenv XBMLANGPATH` ";" $iconPath; 
+	string $iconFile = searchPathArray($iconName, $iconPath);
+
+	//swatchDisplayPort -wh 32 32 -rs 32 -edit -sn $node[0] swatchDisplay;
+	image -edit -w 120 -h 120 -image $iconFile swatchDisplay;
+	
+	string $label = "Material Sample";
+	text -e -label $label swatchLabel;
+}
+
+
+global proc AEswatchDisplay_lux ( string $nodeName )
+{
+	editorTemplate -callCustom ("AEswatchDisplayNew_lux " + $nodeName )
+			("AEswatchDisplayReplace_lux " + $nodeName ) "message";
 }

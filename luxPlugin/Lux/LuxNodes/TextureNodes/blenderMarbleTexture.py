@@ -146,7 +146,10 @@ class blenderMarbleTexture(OpenMayaMPx.MPxNode, TextureNode):
         self.attributes['tex2']   = TextureFloatAttribute('tex2',  self.addToOutput, self.prependToOutput)
     
     def postConstructor(self):
-        self._setMPSafe(True)
+        self._setMPSafe( True )
+        self.setExistWithoutOutConnections( True )
+        self.setExistWithoutInConnections( True )
+
     
 #    def compute(self, plug, block):
 #        

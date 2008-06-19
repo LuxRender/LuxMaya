@@ -140,7 +140,10 @@ class blenderMusgraveTexture(OpenMayaMPx.MPxNode, TextureNode):
         
     
     def postConstructor(self):
-        self._setMPSafe(True)
+        self._setMPSafe( True )
+        self.setExistWithoutOutConnections( True )
+        self.setExistWithoutInConnections( True )
+
     
 #    def compute(self, plug, block):
 #        

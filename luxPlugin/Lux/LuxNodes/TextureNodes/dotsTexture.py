@@ -94,7 +94,10 @@ class dotsTexture(OpenMayaMPx.MPxNode, TextureNode):
         #self.attributes['v2']  = TextureVectorAttribute('v2', self.addToOutput, self.prependToOutput)
     
     def postConstructor(self):
-        self._setMPSafe(True)
+        self._setMPSafe( True )
+        self.setExistWithoutOutConnections( True )
+        self.setExistWithoutInConnections( True )
+
     
     @staticmethod
     def nodeInitializer():
