@@ -53,7 +53,8 @@ class luxbatch(OpenMayaMPx.MPxCommand):
             return
         
         # here we go
-        doAnimation = cmds.getAttr( 'lux_settings.render_animation' )
+        doAnimation  = cmds.getAttr( 'lux_settings.render_animation' )
+        doInSequence = cmds.getAttr( 'lux_settings.render_animation_sequence' )
         
         startFrame = round( cmds.currentTime( query = True ) )
         
@@ -63,7 +64,42 @@ class luxbatch(OpenMayaMPx.MPxCommand):
         else:
             endFrame = startFrame
         
-        self.startBatch(startFrame, endFrame)
+        if doInSequence:
+            self.startSequence(startFrame, endFrame)
+        else:
+            self.startBatch(startFrame, endFrame)
+    
+    def startSequence(self, startFrame, endFrame):
+        """
+        Start the sequential export process.
+        1. for each frame to export, export it to a temp folder
+        2. render it
+        3. loop
+        """
+        
+        self.mProgress.reserve()
+        self.mProgress.setInterruptable(True)
+        self.mProgress.setProgressRange(0, int(endFrame-startFrame)+1)
+        self.mProgress.setProgress(0)
+        self.mProgress.startProgress()
+        
+        if startFrame == endFrame:
+            self.runProcess( self.exportFile(startFrame) )
+            self.mProgress.advanceProgress(1)
+        else:
+            # frame range export
+            ct = cmds.currentTime( query = True )
+            for f in range(int(startFrame), int(endFrame)+1): 
+                self.mProgress.setTitle( 'Frames %i - %i: %i' % (int(startFrame), int(endFrame), f) )
+                cmds.currentTime( f )
+                self.runProcess( self.exportFile(f, tempExportPath = True) )
+                self.mProgress.advanceProgress(1)
+                if self.mProgress.isCancelled(): break
+            
+            cmds.currentTime( ct )
+        
+        OpenMaya.MGlobal.displayInfo( 'Lux Export Successful' )
+        self.mProgress.endProgress()
     
     def startBatch(self, startFrame, endFrame):
         """
@@ -103,7 +139,7 @@ class luxbatch(OpenMayaMPx.MPxCommand):
         self.mProgress.endProgress()
             
     
-    def exportFile(self, frameNumber = 1):
+    def exportFile(self, frameNumber = 1, tempExportPath = False):
         """
         Export a single frame, and return the name of the created scene file
         """
@@ -132,11 +168,21 @@ class luxbatch(OpenMayaMPx.MPxCommand):
             
         imageSaveName = renderFolder + sceneFileBaseName
         
-        saveFolder += ('%06i' % frameNumber) + os.altsep
-        if not os.path.exists(saveFolder):
-            os.mkdir( saveFolder )
-        
-        sceneFileName =  saveFolder + sceneFileBaseName + '.lxs'
+        if tempExportPath:
+            saveFolder += ('tmp') + os.altsep
+            if not os.path.exists(saveFolder):
+                os.mkdir( saveFolder )
+            else:
+                for file in os.listdir(saveFolder):
+                    os.remove(saveFolder+file)
+                os.rmdir( saveFolder )
+                os.mkdir( saveFolder )
+        else:
+            saveFolder += ('%06i' % frameNumber) + os.altsep
+            if not os.path.exists(saveFolder):
+                os.mkdir( saveFolder )
+                
+        sceneFileName = saveFolder + sceneFileBaseName + '.lxs'
         
         renderWidth = cmds.getAttr( 'defaultResolution.width' )
         renderHeight = cmds.getAttr( 'defaultResolution.height' )
@@ -237,5 +283,40 @@ class luxbatch(OpenMayaMPx.MPxCommand):
                     os.system('(xterm -T "Lux Render" -e %s)&' % batchFileName)
             except:
                 OpenMaya.MGlobal.displayError( "Failed to launch process\n" )
+                raise
+            
+            
+    def runProcess(self, sceneFile):
+        self.mProgress.setProgressStatus( 'Rendering' )
+
+        luxPath = cmds.getAttr( 'lux_settings.lux_path' ) + os.altsep
+        guiMode = cmds.getAttr( 'lux_settings.render_interface', asString = True ) == 'GUI'
+        threads = cmds.getAttr( 'lux_settings.render_threads' )
+        priority = cmds.getAttr( 'lux_settings.render_priority', asString = True )
+        # scale 0...5 to -9...6 - keeping normal at 0
+        niceValue = (cmds.getAttr( 'lux_settings.render_priority' ) - 3) * 3
+        
+        if guiMode:
+            luxPath += 'luxrender'
+        else:
+            luxPath += 'luxconsole'
+            
+        if os.name == 'nt':
+            luxPath += '.exe'
+            
+        if os.name == 'nt':
+            # windows batch file
+            try:
+                cmdPrefix = str()
+                if guiMode:
+                    cmdPrefix = 'start /WAIT /%s' % priority
+                else:
+                    cmdPrefix = 'start /WAIT /MIN /%s' % priority
+                
+                ccmd = '%s %s -t %i "%s"' % ( cmdPrefix, luxPath, threads, sceneFile )
+                os.system( ccmd )
+                
+            except:
+                OpenMaya.MGlobal.displayError( 'Could not start lux' )
                 raise
     

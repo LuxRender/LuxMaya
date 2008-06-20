@@ -458,6 +458,16 @@ class lux_gui(OpenMayaMPx.MPxCommand):
 		self.endRow()
 		#--
 		
+		fileRow6B = self.newRow( parent = fileFrame )
+		#---
+		self.newText( label = '', parent = fileRow6B )
+		fileAnimLevelB = self.startLevel()
+		lux_file_animation_seq = self.addCheckBox( parent = fileAnimLevelB, label = 'Export/Render in sequence', value = False)
+		cmds.connectControl( lux_file_animation_seq, 'lux_settings.render_animation_sequence' )
+		self.endLevel()
+		#---
+		self.endRow()
+		#--
 		
 		fileRow7 = self.newRow( parent = fileFrame )
 		#---

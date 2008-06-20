@@ -23,7 +23,7 @@ class lux_settings:
     """
 
     # IMPORTANT!! Be sure to update this constant if you make changes to this file
-    CURRENT_SC_VERSION = 14
+    CURRENT_SC_VERSION = 15
 
     def addString(self, ln):
         """
@@ -233,6 +233,7 @@ class lux_settings:
         # Process settings
         self.addBool ( ln = 'render_launch' )
         self.addBool ( ln = 'render_animation' )
+        self.addBool ( ln = 'render_animation_sequence' )
         self.addEnum ( ln = 'render_interface', options = "GUI:Console" )
         self.addShort( ln = 'render_threads', min = 1, max = 32, dv = 1 )
         self.addEnum ( ln = 'render_priority', options = "REALTIME:HIGH:ABOVENORMAL:NORMAL:BELOWNORMAL:LOW", dv = 4 )
