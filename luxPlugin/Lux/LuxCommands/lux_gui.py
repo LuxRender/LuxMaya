@@ -271,13 +271,17 @@ class lux_gui(OpenMayaMPx.MPxCommand):
 		all child control groups.
 		"""
 		
-		# Check for existing window and remove it
-		if cmds.window('luxGuiMain', exists=True):
-			cmds.deleteUI('luxGuiMain', window=True)
-		
 		# Check for script node and create/upgrade as necessary
 		ls = lux_settings()
 		ls.doIt(OpenMaya.MArgList())
+
+		# Check for existing window and remove it
+		if cmds.window('luxGuiMain', exists=True):
+			cmds.deleteUI('luxGuiMain', window=True)
+			
+		if OpenMaya.MGlobal.mayaState() != OpenMaya.MGlobal.kInteractive:
+			OpenMaya.MGlobal.displayInfo('LuxMaya: Running in console, not building GUI')
+			return
 		
 		# Create window
 		cmds.window('luxGuiMain', title="Lux Render Exporter",

@@ -30,6 +30,21 @@ from maya import OpenMaya
 from maya import OpenMayaUI
 from maya import cmds
 
+class consoleProgress:
+    cProgress = 0
+    tProgress = 0
+    def advanceProgress(self, int):
+        self.cProgress = int
+        print 'Progress: %i / %i' % (self.cProgress, self.tProgress)
+    def isCancelled(self):
+        return False
+    def setTitle(self, string):
+        print string
+    def setProgressStatus(self, string):
+        print string
+    def endProgress(self):
+        print "Done!"
+
 class luxexport:
 	"""
 	Scene iterator-controller for export process.
@@ -40,12 +55,16 @@ class luxexport:
 	debug = False					   # displays output on stdout, no file write
 	tempDagPath = OpenMaya.MDagPath()  # temp storage for dagPaths in iterators
 	
-	mProgress = OpenMayaUI.MProgressWindow()
 		
 	def doIt(self, args):
 		"""
 		Class entry point. Starts the frame export process.
 		"""
+		
+		if OpenMaya.MGlobal.mayaState() == OpenMaya.MGlobal.kInteractive:
+			self.mProgress = OpenMayaUI.MProgressWindow()
+		else:
+			self.mProgress = consoleProgress()
 		
 		# check args length
 		if (args.length() < 5):

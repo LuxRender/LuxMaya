@@ -21,14 +21,13 @@ from maya import OpenMayaMPx
 from maya import OpenMayaUI
 
 from luxexport    import luxexport
+from luxexport    import consoleProgress 
 
 class luxbatch(OpenMayaMPx.MPxCommand):
     """
     Class to create a render batch script
     """
-    
-    mProgress = OpenMayaUI.MProgressWindow()
-    
+
     @staticmethod
     def commandName():
         return "lux_export"
@@ -64,10 +63,30 @@ class luxbatch(OpenMayaMPx.MPxCommand):
         else:
             endFrame = startFrame
         
+        self.initProgressWindow()
+        
         if doInSequence:
             self.startSequence(startFrame, endFrame)
         else:
             self.startBatch(startFrame, endFrame)
+    
+    def initProgressWindow(self):
+        self.MayaGUIMode = OpenMaya.MGlobal.mayaState() == OpenMaya.MGlobal.kInteractive
+        
+        if self.MayaGUIMode:
+            self.mProgress = OpenMayaUI.MProgressWindow()
+        else:
+            self.mProgress = consoleProgress()
+            
+    def showProgressWindow(self, startFrame, endFrame):
+        if self.MayaGUIMode:
+            self.mProgress.reserve()
+            self.mProgress.setInterruptable(True)
+            self.mProgress.setProgressRange(0, int(endFrame-startFrame)+1)
+            self.mProgress.setProgress(0)
+            self.mProgress.startProgress()
+        else:
+            self.mProgress.tProgress = int(endFrame-startFrame)+1
     
     def startSequence(self, startFrame, endFrame):
         """
@@ -77,11 +96,7 @@ class luxbatch(OpenMayaMPx.MPxCommand):
         3. loop
         """
         
-        self.mProgress.reserve()
-        self.mProgress.setInterruptable(True)
-        self.mProgress.setProgressRange(0, int(endFrame-startFrame)+1)
-        self.mProgress.setProgress(0)
-        self.mProgress.startProgress()
+        self.showProgressWindow(startFrame, endFrame)
         
         if startFrame == endFrame:
             self.runProcess( self.exportFile(startFrame) )
@@ -111,13 +126,8 @@ class luxbatch(OpenMayaMPx.MPxCommand):
         
         fileList = []
         
-        self.mProgress.reserve()
-        self.mProgress.setInterruptable(True)
-        self.mProgress.setProgressRange(0, int(endFrame-startFrame)+1)
-        self.mProgress.setProgress(0)
-        self.mProgress.startProgress()
+        self.showProgressWindow(startFrame, endFrame)
         
-
         if startFrame == endFrame:
             # single frame export
             fileList.append( self.exportFile(startFrame) )

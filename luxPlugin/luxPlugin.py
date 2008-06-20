@@ -111,9 +111,12 @@ def initializePlugin(mobject):
 								  luxNodes[node],
 								  node.nodeClassify() )
 		
-		# Create Lux menu
-		lg = lux_gui()
-		lg.makeMainMenu()
+		if OpenMaya.MGlobal.mayaState() == OpenMaya.MGlobal.kInteractive:
+			# Create Lux menu
+			lg = lux_gui()
+			lg.makeMainMenu()
+		else:
+			OpenMaya.MGlobal.displayInfo('LuxMaya: Plugin loaded in console mode')
 
 		# OpenMaya.MGlobal.displayInfo("Plugin Loaded OK.")
 	except:
