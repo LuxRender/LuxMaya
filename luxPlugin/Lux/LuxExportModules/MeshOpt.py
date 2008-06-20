@@ -26,8 +26,6 @@ class MeshOpt(ExportModule):
     doProfiling = False
 
     fShape = OpenMaya.MFnMesh()
-    fPolygonSets = OpenMaya.MObjectArray()
-    fPolygonComponents = OpenMaya.MObjectArray()
     
     UVSets = []
     currentUVSet = 0
@@ -64,24 +62,23 @@ class MeshOpt(ExportModule):
         if dagPath.isInstanced():
             self.instanceNum = dagPath.instanceNumber()
             
+            
+        self.fPolygonSets = OpenMaya.MObjectArray()
+        self.fPolygonComponents = OpenMaya.MObjectArray()
         self.fShape.getConnectedSetsAndMembers(self.instanceNum, self.fPolygonSets, self.fPolygonComponents, True)
         
         shaderArray = OpenMaya.MObjectArray()
         polyShaderIdx = OpenMaya.MIntArray()
         
-        try:
-            # try to establish nimber of mesh sets through shader conections,
-            self.fShape.getConnectedShaders(self.instanceNum, shaderArray, polyShaderIdx)
-            self.setCount = shaderArray.length()
-        except:
-            # skip all sets in this mesh if no shaders assigned
-            self.setCount = 0
+        self.setCount = 0
+        self.setCount = self.fPolygonSets.length()
             
-        #if self.setCount > 1:
-        #    self.setCount -= 1
+        if self.setCount > 1:
+            self.setCount -= 1
             
         if self.fShape.numUVSets() > 0:
             # Get UV sets for this mesh
+            self.UVSets = []
             self.fShape.getUVSetNames( self.UVSets )
         
            
@@ -368,7 +365,7 @@ class MeshOpt(ExportModule):
                 sf.write ( ( '%i,%f,%f' % (vLen, pSpeed, wSpeed) ) + os.linesep )
                 sf.close()
                 
-        self.deleteLists()
+            self.deleteLists()
             
     def GetLocalIndex(self, getVertices, getTriangle):
         """
