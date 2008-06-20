@@ -264,14 +264,11 @@ class luxexport:
 		
 		
 		# WRITE INCLUDES IF EXTERNAL FILES EXIST
-		if os.path.exists(sceneFilePath + materialFileName):
-			self.sceneFileHandle.write( 'Include "' + materialFileName + '"' + os.linesep )
-		if os.path.exists(sceneFilePath + meshFileName):
-			self.sceneFileHandle.write( 'Include "' + meshFileName + '"' + os.linesep )
-		if os.path.exists(sceneFilePath + nurbsFileName):
-			self.sceneFileHandle.write( 'Include "' + nurbsFileName + '"' + os.linesep )
-		if os.path.exists(sceneFilePath + volumeFileName):
-			self.sceneFileHandle.write( 'Include "' + volumeFileName + '"' + os.linesep )
+		
+		for includeFile in [materialFileName, meshFileName, nurbsFileName, volumeFileName]:
+			if os.path.exists(sceneFilePath + includeFile):
+				self.sceneFileHandle.write( 'Include "' + includeFile + '"' + os.linesep )
+			
 
 		
 		# loop though lights
@@ -363,8 +360,8 @@ class luxexport:
 			visible = False
 
 		parentCount = fnDag.parentCount()
-		if parentCount > 0:
-			visible = self.isVisible( OpenMaya.MFnDagNode(fnDag.parent(0)) ) and visible
+		if parentCount > 0 and visible:
+			visible = self.isVisible( OpenMaya.MFnDagNode(fnDag.parent(0)) )
 			
 		return visible
 	# end def isVisible()
