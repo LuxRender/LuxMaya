@@ -62,7 +62,6 @@ class MeshOpt(ExportModule):
         if dagPath.isInstanced():
             self.instanceNum = dagPath.instanceNumber()
             
-            
         self.fPolygonSets = OpenMaya.MObjectArray()
         self.fPolygonComponents = OpenMaya.MObjectArray()
         self.fShape.getConnectedSetsAndMembers(self.instanceNum, self.fPolygonSets, self.fPolygonComponents, True)
@@ -72,7 +71,7 @@ class MeshOpt(ExportModule):
         
         self.setCount = 0
         self.setCount = self.fPolygonSets.length()
-            
+        
         if self.setCount > 1:
             self.setCount -= 1
             
@@ -143,22 +142,24 @@ class MeshOpt(ExportModule):
         # each set/shader on this object
         for iSet in range(0, self.setCount):
             
+            if self.setCount > 1:
+                skipThisSet = False
+                try:
+                    fComponent = OpenMaya.MFnComponent( self.fPolygonComponents[iSet] )
+                    skipThisSet = fComponent.isEmpty()
+                except:
+                    skipThisSet = True
+                    
+                if skipThisSet:
+                    OpenMaya.MGlobal.displayWarning( "Skipping empty set %s : %i" % (self.fShape.name(), iSet) )
+                    continue
+            
             # start afresh for this set
             self.resetLists()
             
             # set up mesh face iterator            
             itMeshPolys = OpenMaya.MItMeshPolygon(self.dagPath, self.fPolygonComponents[iSet])
-            
-            
-            
-            # skip this set if nothing to iterate
-            if (
-                itMeshPolys.polygonVertexCount() < 3
-             or self.fPolygonComponents[iSet] == OpenMaya.MObject()
-                ):
-                OpenMaya.MGlobal.displayWarning( "Skipping empty set %s : %i" % (self.fShape.name(), iSet) )
-                continue
-            
+
             if not itMeshPolys.hasValidTriangulation():
                 OpenMaya.MGlobal.displayWarning( "Shape %s has innvalid triangulation, skipping" % self.fShape.name() )
                 continue
@@ -210,12 +211,7 @@ class MeshOpt(ExportModule):
                     itMeshPolys.numTriangles(numTrianglesPtr)
                     numTriangles = OpenMaya.MScriptUtil(numTrianglesPtr).asInt()
                     
-                    if numTriangles > 1:
-                        #print "invalid face found"
-                        #break
-    
-                        #get object relative indices for verts in this face
-                        itMeshPolys.getVertices( polygonVertices )
+                    itMeshPolys.getVertices( polygonVertices )
     
                     # each triangle in each face
                     for currentTriangle in range(0, numTriangles):
@@ -265,12 +261,7 @@ class MeshOpt(ExportModule):
                     itMeshPolys.numTriangles(numTrianglesPtr)
                     numTriangles = OpenMaya.MScriptUtil(numTrianglesPtr).asInt()
                     
-                    if numTriangles > 1:
-                        #print "invalid face found"
-                        #break
-    
-                        #get object relative indices for verts in this face
-                        itMeshPolys.getVertices( polygonVertices )
+                    itMeshPolys.getVertices( polygonVertices )
     
                     # each triangle in each face
                     for currentTriangle in range(0, numTriangles):
