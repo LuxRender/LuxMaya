@@ -45,6 +45,7 @@ class MeshOpt(ExportModule):
     type = 'geom' # or portal
 
     def __init__(self, fileHandles, dagPath):
+        
         self.dagPath = dagPath
         self.fShape = OpenMaya.MFnMesh( dagPath )
         
@@ -56,13 +57,13 @@ class MeshOpt(ExportModule):
         else:
             self.fileHandle = meshHandle
             self.type = 'geom'
-        
+            
         dagPath.extendToShape()
 
         self.instanceNum = 0
         if dagPath.isInstanced():
             self.instanceNum = dagPath.instanceNumber()
-        
+            
         self.fShape.getConnectedSetsAndMembers(self.instanceNum, self.fPolygonSets, self.fPolygonComponents, True)
         
         shaderArray = OpenMaya.MObjectArray()
@@ -75,6 +76,9 @@ class MeshOpt(ExportModule):
         except:
             # skip all sets in this mesh if no shaders assigned
             self.setCount = 0
+            
+        #if self.setCount > 1:
+        #    self.setCount -= 1
             
         if self.fShape.numUVSets() > 0:
             # Get UV sets for this mesh
@@ -145,6 +149,27 @@ class MeshOpt(ExportModule):
             # start afresh for this set
             self.resetLists()
             
+            # set up mesh face iterator            
+            itMeshPolys = OpenMaya.MItMeshPolygon(self.dagPath, self.fPolygonComponents[iSet])
+            
+            # skip this set if nothing to iterate
+            if itMeshPolys.count() < 1:
+                OpenMaya.MGlobal.displayWarning( "Skipping empty set %s : %i" % (self.fShape.name(), iSet) )
+                continue
+            
+            if not itMeshPolys.hasValidTriangulation():
+                OpenMaya.MGlobal.displayWarning( "Shape %s has innvalid triangulation, skipping" % self.fShape.name() )
+                continue
+            
+            # storage for obj-relative vert indices in a face
+            polygonVertices = OpenMaya.MIntArray()
+            
+            # storage for the face vert points
+            vertPoints = OpenMaya.MPointArray()
+                        
+            # storage for the face vert indices
+            vertIndices = OpenMaya.MIntArray()
+            
             # start shape syntax
             self.addToOutput( '# Polygon Shape %s (set %i)' % (self.dagPath.fullPathName(), iSet) )
             self.addToOutput( 'AttributeBegin' )
@@ -173,31 +198,22 @@ class MeshOpt(ExportModule):
             else:
                 self.addToOutput( '\tPortalShape "trianglemesh"' )
             
-            # start mesh face iteration            
-            itMeshPolys = OpenMaya.MItMeshPolygon(self.dagPath, self.fPolygonComponents[iSet])
-            
-            # storage for obj-relative vert indices in a face
-            polygonVertices = OpenMaya.MIntArray()
-            
-            # storage for the face vert points
-            vertPoints = OpenMaya.MPointArray()
-                        
-            # storage for the face vert indices
-            vertIndices = OpenMaya.MIntArray()
-            
-            
                         
             def compileWithUVs():
                 totalVertIndices = 0
                 # each face
                 while not itMeshPolys.isDone():
                     
-                    # get nuber of triangles in face
+                    # get number of triangles in face
                     itMeshPolys.numTriangles(numTrianglesPtr)
                     numTriangles = OpenMaya.MScriptUtil(numTrianglesPtr).asInt()
+                    
+                    if numTriangles > 1:
+                        #print "invalid face found"
+                        #break
     
-                    #get object relative indices for verts in this face
-                    itMeshPolys.getVertices( polygonVertices )
+                        #get object relative indices for verts in this face
+                        itMeshPolys.getVertices( polygonVertices )
     
                     # each triangle in each face
                     for currentTriangle in range(0, numTriangles):
@@ -243,12 +259,16 @@ class MeshOpt(ExportModule):
                 # each face
                 while not itMeshPolys.isDone():
                     
-                    # get nuber of triangles in face
+                    # get number of triangles in face
                     itMeshPolys.numTriangles(numTrianglesPtr)
                     numTriangles = OpenMaya.MScriptUtil(numTrianglesPtr).asInt()
+                    
+                    if numTriangles > 1:
+                        #print "invalid face found"
+                        #break
     
-                    #get object relative indices for verts in this face
-                    itMeshPolys.getVertices( polygonVertices )
+                        #get object relative indices for verts in this face
+                        itMeshPolys.getVertices( polygonVertices )
     
                     # each triangle in each face
                     for currentTriangle in range(0, numTriangles):
@@ -348,7 +368,7 @@ class MeshOpt(ExportModule):
                 sf.write ( ( '%i,%f,%f' % (vLen, pSpeed, wSpeed) ) + os.linesep )
                 sf.close()
                 
-            self.deleteLists()
+        self.deleteLists()
             
     def GetLocalIndex(self, getVertices, getTriangle):
         """

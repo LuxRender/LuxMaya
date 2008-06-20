@@ -193,11 +193,15 @@ class ExportModule:
     
     def findShadingGroup(self, instanceNum = 0, setNumber = 0):
         if self.fShape.type() == OpenMaya.MFn.kMesh:
-            shadingGroups = OpenMaya.MObjectArray()
-            faceIndices = OpenMaya.MIntArray()
-            self.fShape.getConnectedShaders(instanceNum, shadingGroups, faceIndices)
-            # we return the material connected to the given setNumber
-            theShadingGroup = OpenMaya.MFnDependencyNode( shadingGroups[setNumber] )
+            try:
+                shadingGroups = OpenMaya.MObjectArray()
+                faceIndices = OpenMaya.MIntArray()
+                self.fShape.getConnectedShaders(instanceNum, shadingGroups, faceIndices)
+                # we return the material connected to the given setNumber
+                theShadingGroup = OpenMaya.MFnDependencyNode( shadingGroups[setNumber] )
+            except:
+                OpenMaya.MGlobal.displayError("Could not find shading group")
+                raise
         
         elif self.fShape.type() == OpenMaya.MFn.kNurbsSurface:
             plugs = OpenMaya.MPlugArray()
