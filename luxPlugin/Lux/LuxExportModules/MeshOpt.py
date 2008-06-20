@@ -149,8 +149,13 @@ class MeshOpt(ExportModule):
             # set up mesh face iterator            
             itMeshPolys = OpenMaya.MItMeshPolygon(self.dagPath, self.fPolygonComponents[iSet])
             
+            
+            
             # skip this set if nothing to iterate
-            if itMeshPolys.count() < 1:
+            if (
+                itMeshPolys.polygonVertexCount() < 3
+             or self.fPolygonComponents[iSet] == OpenMaya.MObject()
+                ):
                 OpenMaya.MGlobal.displayWarning( "Skipping empty set %s : %i" % (self.fShape.name(), iSet) )
                 continue
             
