@@ -15,14 +15,14 @@
 
 import Lux.LuxExportModules.Film			as LuxModuleFilm
 import Lux.LuxExportModules.Rendersettings  as LuxModuleRendersettings
-import Lux.LuxExportModules.Camera		    as LuxModuleCamera
-import Lux.LuxExportModules.Light		    as LuxModuleLight
+import Lux.LuxExportModules.Camera			as LuxModuleCamera
+import Lux.LuxExportModules.Light			as LuxModuleLight
 import Lux.LuxExportModules.Mesh			as LuxModuleMesh
 import Lux.LuxExportModules.MeshOpt			as LuxModuleMeshOpt
-import Lux.LuxExportModules.Nurbs		    as LuxModuleNurbs
-import Lux.LuxExportModules.Volume		    as LuxModuleVolume
+import Lux.LuxExportModules.Nurbs			as LuxModuleNurbs
+import Lux.LuxExportModules.Volume			as LuxModuleVolume
 import Lux.LuxExportModules.Material		as LuxModuleMaterial
-import Lux.LuxExportModules.MiscNodes	    as LuxModuleMiscNodes
+import Lux.LuxExportModules.MiscNodes		as LuxModuleMiscNodes
 
 import os
 os.altsep = '/'
@@ -31,19 +31,19 @@ from maya import OpenMayaUI
 from maya import cmds
 
 class consoleProgress:
-    cProgress = 0
-    tProgress = 0
-    def advanceProgress(self, int):
-        self.cProgress = int
-        print 'Progress: %i / %i' % (self.cProgress, self.tProgress)
-    def isCancelled(self):
-        return False
-    def setTitle(self, string):
-        print string
-    def setProgressStatus(self, string):
-        print string
-    def endProgress(self):
-        print "Done!"
+	cProgress = 0
+	tProgress = 0
+	def advanceProgress(self, int):
+		self.cProgress = int
+		print 'Progress: %i / %i' % (self.cProgress, self.tProgress)
+	def isCancelled(self):
+		return False
+	def setTitle(self, string):
+		print string
+	def setProgressStatus(self, string):
+		print string
+	def endProgress(self):
+		print "Done!"
 
 class luxexport:
 	"""
@@ -345,33 +345,27 @@ class luxexport:
 		"""
 		
 		self.mProgress.setProgressStatus(string)
-	
 
 	def isVisible(self, fnDag):
 		"""
-		Detect if the given fnDag is visible.
-		Does this account for parenting/display layers etc? NO
-		TODO search up the DAG if not... ;)
-		there's a routine in MtI somewhere for this.
-		
-		TODO: this doesn't really work very well.
+		Detect if the given fnDag is visible. (Also checks fnDag's parents.)
 		"""
+		visible = True
 		
 		if fnDag.isIntermediateObject():
-			return False
+			visible = False
 			
 		try:
 			visPlug = fnDag.findPlug("visibility")
-		except:
-			OpenMaya.MGlobal.displayError("MPlug.findPlug")
-			return
-		
-		try:
 			visible = visPlug.asBool()
 		except:
 			OpenMaya.MGlobal.displayError("MPlug.asBool")
-			return
-		
+			visible = False
+
+		parentCount = fnDag.parentCount()
+		if parentCount > 0:
+			visible = self.isVisible( OpenMaya.MFnDagNode(fnDag.parent(0)) ) and visible
+			
 		return visible
 	# end def isVisible()
 	
