@@ -17,9 +17,10 @@ import Lux.LuxExportModules.Film			as LuxModuleFilm
 import Lux.LuxExportModules.Rendersettings  as LuxModuleRendersettings
 import Lux.LuxExportModules.Camera			as LuxModuleCamera
 import Lux.LuxExportModules.Light			as LuxModuleLight
-import Lux.LuxExportModules.Mesh			as LuxModuleMesh
+#import Lux.LuxExportModules.Mesh			as LuxModuleMesh
 import Lux.LuxExportModules.MeshOpt			as LuxModuleMeshOpt
 import Lux.LuxExportModules.Nurbs			as LuxModuleNurbs
+import Lux.LuxExportModules.Subdiv			as LuxModuleSubdiv
 import Lux.LuxExportModules.Volume			as LuxModuleVolume
 import Lux.LuxExportModules.Material		as LuxModuleMaterial
 import Lux.LuxExportModules.MiscNodes		as LuxModuleMiscNodes
@@ -103,9 +104,11 @@ class luxexport:
 		materialFileName = sceneFileName.replace(".lxs", ".lxm")
 		meshFileName = sceneFileName.replace(".lxs", ".mesh.lxo")
 		nurbsFileName = sceneFileName.replace(".lxs", ".nurbs.lxo")
+		subdivFileName = sceneFileName.replace(".lxs", ".subdiv.lxo")
 		volumeFileName = sceneFileName.replace(".lxs", ".volume.lxo")
 		portalsMeshFileName = sceneFileName.replace(".lxs", ".mesh.portals.lxo")
 		portalsNurbsFileName = sceneFileName.replace(".lxs", ".nurbs.portals.lxo")
+		#portalsSubdivFileName = sceneFileName.replace(".lxs", ".subdiv.portals.lxo")
 		
 		sceneFilePath = os.altsep.join(sceneFilePathParts) + os.altsep
 				
@@ -155,6 +158,22 @@ class luxexport:
 				self.nurbsFileHandle.close()
 				self.portalsNurbsFileHandle.close()
 
+		# SUBDIVS
+		
+		if cmds.getAttr( 'lux_settings.scene_export_subdivs' ) == 1:
+			if not self.debug:
+				try:		
+					self.subdivFileHandle = open(sceneFilePath + subdivFileName, "wb")
+					self.portalsSubdivFileHandle = None # open(sceneFilePath + portalsMeshFileName, "wb")
+				except:
+					OpenMaya.MGlobal.displayError( "Failed to open files for writing\n" )
+					raise		
+			# loop through subdivs
+			self.exportType( OpenMaya.MFn.kSubdiv, LuxModuleSubdiv.Subdiv, "Subdiv", (self.subdivFileHandle, self.portalsSubdivFileHandle) )
+			if not self.debug:
+				self.subdivFileHandle.close()
+				#self.portalsSubdivFileHandle.close()
+				
 				
 		# FLUID VOLUMES
 			
@@ -265,7 +284,7 @@ class luxexport:
 		
 		# WRITE INCLUDES IF EXTERNAL FILES EXIST
 		
-		for includeFile in [materialFileName, meshFileName, nurbsFileName, volumeFileName]:
+		for includeFile in [materialFileName, meshFileName, nurbsFileName, subdivFileName, volumeFileName]:
 			if os.path.exists(sceneFilePath + includeFile):
 				self.sceneFileHandle.write( 'Include "' + includeFile + '"' + os.linesep )
 			

@@ -23,7 +23,7 @@ class lux_settings:
     """
 
     # IMPORTANT!! Be sure to update this constant if you make changes to this file
-    CURRENT_SC_VERSION = 15
+    CURRENT_SC_VERSION = 16
 
     def addString(self, ln):
         """
@@ -139,6 +139,7 @@ class lux_settings:
         self.addBool(ln = 'scene_export_materials' , dv = 1)
         self.addBool(ln = 'scene_export_meshes' , dv = 1)
         self.addBool(ln = 'scene_export_nurbs' , dv = 0)
+        self.addBool(ln = 'scene_export_subdivs' , dv = 0)
         self.addBool(ln = 'scene_export_volumes' , dv = 0)
         
         self.addBool(ln = 'scene_reverse_gamma', dv = 1)
