@@ -351,13 +351,28 @@ class luxexport:
 		
 		if fnDag.isIntermediateObject():
 			visible = False
-			
+		
 		try:
 			visPlug = fnDag.findPlug("visibility")
 			visible = visPlug.asBool()
 		except:
 			OpenMaya.MGlobal.displayError("MPlug.asBool")
 			visible = False
+			
+		try:
+			dOPlug = fnDag.findPlug("drawOverride")
+			
+			# ignore object is in template or reference layer
+			normalDisplayPlug = dOPlug.child(0)
+			if normalDisplayPlug.asInt() != 0:
+				visible = False
+			
+			# ignore object if later is not visible
+			layerVisiblePlug = dOPlug.child(6)
+			if layerVisiblePlug.asInt() == 0:
+				visible = False
+		except:
+			pass # this is an optional override, so forget about it if it doesn't exist
 
 		parentCount = fnDag.parentCount()
 		if parentCount > 0 and visible:
