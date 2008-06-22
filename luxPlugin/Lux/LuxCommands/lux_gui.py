@@ -93,11 +93,13 @@ class lux_gui(OpenMayaMPx.MPxCommand):
 	The Lux Exporter GUI Main class. This is huge, and could possibly be split up.
 	"""
 
+	VERSION = '0.5.1'
+
 	lux_GUI_height = 550	   # Maya adds 20px to this
-	lux_GUI_width  = 340	   # this is the width of a column.
+	lux_GUI_width  = 360	   # this is the width of a column.
 	lux_GUI_thirdWidth = 120
 	lux_GUI_2thirdWidth = 240
-	lux_GUI_scrollbar_width = 41
+	lux_GUI_scrollbar_width = 0 # no scrollbars anymore
 
 	@staticmethod
 	def commandName():
@@ -191,13 +193,23 @@ class lux_gui(OpenMayaMPx.MPxCommand):
 		
 		cmds.setParent( '..', upLevel = True )
 		
-	def newText(self, label, parent):
+	def newText(self, label, parent, addColon = True, width = False):
 		"""
 		Insert a text control (ie, print text on the GUI)
 		"""
 		
-		cmds.text( label = '%s:' % label,
-				   parent = parent )
+		if addColon:
+			lString = '%s:'
+		else:
+			lString = '%s'
+			
+		if not width == False:
+			cmds.text( label = lString % label,
+					   parent = parent,
+					   width = width )
+		else:
+			cmds.text( label = lString % label,
+					   parent = parent )
 		
 	def startLevel(self):
 		"""
@@ -342,10 +354,13 @@ class lux_gui(OpenMayaMPx.MPxCommand):
 				settingsMenu.addItem( label = niceName, command = "from Lux.LuxMiscModules.fn_attr import fn_attr\nfn_attr.applyAttrPreset( 'lux_settings', '%s', 100)" % preset, parent = settingsRSMenu)
 		settingsMenu.end()
 		
-		#		helpMenu = mMenu( label = 'Help', helpMenu = True )
-		#		helpMenu.addItem( label = 'Development Forum', command = self.mnuHelpDevForum )
-		#		helpMenu.addItem( label = 'About', command = self.mnuHelpAbout )
-		#		helpMenu.end()
+		helpMenu = mMenu( label = 'Help', helpMenu = True )
+		helpMenu.addItem( label = 'LuxRender website', command = self.mnuHelpWebsite )
+		helpMenu.addItem( label = 'Documentation Wiki', command = self.mnuHelpWiki )
+		helpMenu.addItem( label = 'Development Forum', command = self.mnuHelpDevForum )
+		helpMenu.addItem( label = '', command = '', divider = True )
+		helpMenu.addItem( label = 'About', command = self.mnuHelpAbout )
+		helpMenu.end()
 		
 	
 	# GUI Frames start here.
@@ -453,21 +468,23 @@ class lux_gui(OpenMayaMPx.MPxCommand):
 		
 		fileRow6 = self.newRow( parent = fileFrame )
 		#---
-		self.newText( label = '', parent = fileRow6 )
+		self.newText( label = 'Animation Options', parent = fileRow6 )
 		fileAnimLevel = self.startLevel()
-		lux_file_animation = self.addCheckBox( parent = fileAnimLevel, label = 'Render animation', value = False)
+		#----
+		lux_file_anim_row1 = self.newRow( parent = fileAnimLevel, numberOfColumns = 1 )
+		#-----
+		lux_file_animation = self.addCheckBox( parent = lux_file_anim_row1, label = 'Export animation', value = False)
 		cmds.connectControl( lux_file_animation, 'lux_settings.render_animation' )
-		self.endLevel()
-		#---
+		#-----
 		self.endRow()
-		#--
-		
-		fileRow6B = self.newRow( parent = fileFrame )
-		#---
-		self.newText( label = '', parent = fileRow6B )
-		fileAnimLevelB = self.startLevel()
-		lux_file_animation_seq = self.addCheckBox( parent = fileAnimLevelB, label = 'Export/Render in sequence', value = False)
+		#----
+		lux_file_anim_row2 = self.newRow( parent = fileAnimLevel, numberOfColumns = 1 )
+		#-----
+		lux_file_animation_seq = self.addCheckBox( parent = lux_file_anim_row2, label = 'Export/Render in sequence', value = False)
 		cmds.connectControl( lux_file_animation_seq, 'lux_settings.render_animation_sequence' )
+		#-----
+		self.endRow()
+		#----
 		self.endLevel()
 		#---
 		self.endRow()
@@ -1527,11 +1544,52 @@ class lux_gui(OpenMayaMPx.MPxCommand):
 		cmds.deleteUI( 'luxGuiMain' )
 		
 		
-#	def mnuHelpDevForum(self, *args):
-#		cmds.webBrowser( openURL = 'http://www.luxrender.net/forum/viewforum.php?f=28' )
-#		
-#	def mnuHelpAbout(self, *args):
-#		cmds.promptDialog( title = 'Lux Exporter', message = 'Written by Doug Hammond\n\nReleased under the GPL3 Licence.', button = ['OK'], defaultButton = 'OK' )
+	def mnuHelpWebsite(self, *args):
+		if os.name == 'nt':
+			os.system('start http://www.luxrender.net/' )
+			 
+	def mnuHelpWiki(self, *args):
+		if os.name == 'nt':
+			os.system('start http://www.luxrender.net/wiki/index.php/Main_Page' )
+		
+	def mnuHelpDevForum(self, *args):
+		if os.name == 'nt':
+			os.system('start http://www.luxrender.net/forum/viewforum.php?f=28' )
+		
+	def mnuHelpAbout(self, *args):
+		if cmds.window('luxGuiAbout', exists=True):
+			cmds.deleteUI('luxGuiAbout', window=True)
+			
+		# Create window
+		abWin = cmds.window('luxGuiAbout', title="Lux Render Exporter",
+								  height = 128,
+								  width = ((self.lux_GUI_width) + self.lux_GUI_scrollbar_width),
+								  sizeable = False,
+								  resizeToFitChildren = True,
+								  menuBar = False,
+								  minimizeButton = False)
+		
+		tForm, tFormContainer = self.newFrame(label='About', parent = abWin, collapsable = False, collapsed = False)
+		
+		abStrings = [
+					 'LuxMaya v%s By Doug Hammond' % self.VERSION,
+					 '',
+					 'Released under the GPLv3 License',
+					 '',
+					 'Check the LuxRender website for latest release info and support:',
+					 '',
+					 'http://www.luxrender.net/'
+					 ]
+		
+		tRows = {}
+		for i, string in enumerate(abStrings):
+			tRows[i] = self.newRow(parent = tForm, numberOfColumns = 1)
+			self.newText(label = string, parent = tRows[i], addColon = False, width = ((self.lux_GUI_width) + self.lux_GUI_scrollbar_width) )
+			self.endRow()
+		
+		self.endFrame()
+		cmds.showWindow( 'luxGuiAbout' )
+		
 	
 	# OTHER COMMANDS
 	
