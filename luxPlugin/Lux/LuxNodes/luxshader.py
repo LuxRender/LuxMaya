@@ -101,7 +101,7 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
 					  2: self.roughglass.kt,
 					  3: self.matte.kd,
 					  4: self.mattetranslucent.kt,
-					  5: self.metal.n,
+					  #5: self.metal.n,
 					  6: self.shinymetal.ks,
 					  7: self.mirror.kr,
 					  8: self.plastic.kd,
@@ -310,7 +310,7 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
 			luxshader.attributeAffects(luxshader.roughglass.kt, 			luxshader.outColor)
 			luxshader.attributeAffects(luxshader.matte.kd,					luxshader.outColor)
 			luxshader.attributeAffects(luxshader.mattetranslucent.kt,		luxshader.outColor)
-			luxshader.attributeAffects(luxshader.metal.n,					luxshader.outColor)
+			#luxshader.attributeAffects(luxshader.metal.n,					luxshader.outColor)
 			luxshader.attributeAffects(luxshader.shinymetal.kr, 			luxshader.outColor)
 			luxshader.attributeAffects(luxshader.mirror.kr, 				luxshader.outColor)
 			luxshader.attributeAffects(luxshader.plastic.kd,				luxshader.outColor)
