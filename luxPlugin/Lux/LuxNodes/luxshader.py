@@ -114,43 +114,9 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
 			# THIS IS A VERY SIMPLE FLAT COLOUR SHADER.
 			# I CAN'T GET THE LAMBERTIAN BIT TO WORK
 			
-			# THIS IS ALSO VERY SLOW AND MAY BE REMOVED
 			matType = block.inputValue( self.iMaterialType ).asInt()
 			
 			# choose the appropriate color
-#			if	 matType == 0:
-#				 # carpaint
-#				 resultColor = block.inputValue( self.carpaint.kd ).asFloatVector()
-#			elif matType == 1:
-#				 # glass
-#				 resultColor = block.inputValue( self.glass.kt ).asFloatVector()
-#			elif matType == 2:
-#				 # roughglass
-#				 resultColor = block.inputValue( self.roughglass.kt ).asFloatVector()
-#			elif matType == 3:
-#				 # matte
-#				 resultColor = block.inputValue( self.matte.kd ).asFloatVector()
-#			elif matType == 4:
-#				 # mattetranslucent
-#				 resultColor = block.inputValue( self.mattetranslucent.kt ).asFloatVector()
-#			elif matType == 5:
-#				 # metal
-#				 resultColor = block.inputValue( self.metal.n ).asFloatVector()
-#			elif matType == 6:
-#				 # shinymetal
-#				 resultColor = block.inputValue( self.shinymetal.ks ).asFloatVector()
-#			elif matType == 7:
-#				 # mirror
-#				 resultColor = block.inputValue( self.mirror.kr ).asFloatVector()
-#			elif matType == 8:
-#				 # plastic
-#				 resultColor = block.inputValue( self.plastic.kd ).asFloatVector()
-#			elif matType == 9:
-#				 # substrate
-#				 resultColor = block.inputValue( self.substrate.kd ).asFloatVector()
-#			elif matType == 10:
-#				 # arealight
-#				 resultColor = block.inputValue( self.arealight.L ).asFloatVector() # all arealights are 50% transparent
 			if matType in self.colorTable:
 				resultColor = block.inputValue( self.colorTable[matType] ).asFloatVector()
 			else:
@@ -294,8 +260,8 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
 
 			# metal
 			luxshader.addAttribute(luxshader.metal.name)
-			luxshader.addAttribute(luxshader.metal.n)
-			luxshader.addAttribute(luxshader.metal.k)
+			#luxshader.addAttribute(luxshader.metal.n)
+			#luxshader.addAttribute(luxshader.metal.k)
 			luxshader.addAttribute(luxshader.metal.uroughness)
 			luxshader.addAttribute(luxshader.metal.vroughness)
 			luxshader.addAttribute(luxshader.metal.nkFile)

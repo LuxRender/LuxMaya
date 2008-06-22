@@ -30,36 +30,21 @@ class metalShader(OpenMayaMPx.MPxNode, ShaderNode):
     
     # metal
     name        =    OpenMaya.MObject()    # enum
-    n           =    OpenMaya.MObject()    # color
-    k           =    OpenMaya.MObject()    # color
+    #n           =    OpenMaya.MObject()    # color
+    #k           =    OpenMaya.MObject()    # color
+    nkFile      = OpenMaya.MObject()
     uroughness  =    OpenMaya.MObject()    # float
     vroughness  =    OpenMaya.MObject()    # float
     
     nameValues  = {
                     0: "manual",
-                    1: "nickel",
-                    2: "potassium",
-                    3: "platinum",
-                    4: "iridium",
-                    5: "silicon",
-                    6: "amorphous silicon",
-                    7: "sodium",
-                    8: "rhodium",
-                    9: "tungsten",
-                    10: "vanadium",
-                    11: "aluminium",
-                    12: "amorphous carbon",
-                    13: "silver",
-                    14: "gold",
-                    15: "cobalt",
-                    16: "copper",
-                    17: "chromium",
-                    18: "lithium",
-                    19: "mercury"
+                    1: "aluminium",
+                    2: "amorphous carbon",
+                    3: "silver",
+                    4: "gold",
+                    5: "copper"
                    }
     
-    nkFile      = OpenMaya.MObject()
-
     def __init__(self):
         OpenMayaMPx.MPxNode.__init__(self)
         
@@ -67,8 +52,8 @@ class metalShader(OpenMayaMPx.MPxNode, ShaderNode):
         self.attributes = {}
         self.luxType = "metal"
         self.attributes['name']         = ShaderEnumAttribute('metalName', self.nameValues)
-        self.attributes['n']            = ShaderColorAttribute('metalN')
-        self.attributes['k']            = ShaderColorAttribute('metalK')
+        #self.attributes['n']            = ShaderColorAttribute('metalN')
+        #self.attributes['k']            = ShaderColorAttribute('metalK')
         self.attributes['uroughness']   = ShaderFloatAttribute('metalURoughness', reciprocal = True)
         self.attributes['vroughness']   = ShaderFloatAttribute('metalVRoughness', reciprocal = True)
         # metalNkFile not handled here, usein in overridden getMaterial() method
@@ -100,8 +85,8 @@ class metalShader(OpenMayaMPx.MPxNode, ShaderNode):
                 enumAttr.addField( metalShader.nameValues[ind], ind )
 
             # n and k components of complex IOR for manual type
-            metalShader.n = metalShader.makeColor("metalN", "mn")
-            metalShader.k = metalShader.makeColor("metalK", "mk")
+            #metalShader.n = metalShader.makeColor("metalN", "mn")
+            #metalShader.k = metalShader.makeColor("metalK", "mk")
 
             # surface roughness
             metalShader.uroughness = metalShader.makeFloat("metalURoughness", "mur", 500.0)

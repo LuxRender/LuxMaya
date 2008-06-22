@@ -79,8 +79,8 @@
 		// Metal
 		editorTemplate -beginLayout "Metal Attributes" -collapse 1;
 			editorTemplate -l "Preset" -addControl "metalName" "luxshader_metal_changePreset";
-			editorTemplate -l "N" -addControl "metalN";
-			editorTemplate -l "K" -addControl "metalK";
+			//editorTemplate -l "N" -addControl "metalN";
+			//editorTemplate -l "K" -addControl "metalK";
 			editorTemplate -callCustom "AEnkFileNew" "AEnkFileReplace" "metalNkFile";
 			editorTemplate -l "U Exponent" -addControl "metalURoughness";
 			editorTemplate -l "V Exponent" -addControl "metalVRoughness";
