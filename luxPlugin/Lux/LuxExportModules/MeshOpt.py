@@ -27,6 +27,7 @@ class MeshOpt(ExportModule):
 
     fShape = OpenMaya.MFnMesh()
     
+    hasUVs = False
     UVSets = []
     currentUVSet = 0
     
@@ -79,6 +80,8 @@ class MeshOpt(ExportModule):
             # Get UV sets for this mesh
             self.UVSets = []
             self.fShape.getUVSetNames( self.UVSets )
+            if len(self.UVSets) > 0:
+                self.hasUVs = True
         
            
     def resetLists(self):
@@ -122,7 +125,7 @@ class MeshOpt(ExportModule):
         self.fShape.getNormals(meshNormals)
         
         # get all object UVs, if any
-        if self.fShape.numUVSets() > 0:
+        if self.hasUVs:
             try:
                 meshUArray = OpenMaya.MFloatArray()
                 meshVArray = OpenMaya.MFloatArray()
@@ -228,8 +231,16 @@ class MeshOpt(ExportModule):
                             # get indices to points/normals/uvs
                             vertNormalIndex = itMeshPolys.normalIndex( localIndex[i] )
                             
-                            itMeshPolys.getUVIndex( localIndex[i], uvIdxPtr, self.UVSets[self.currentUVSet] )
-                            vertUVIndex = OpenMaya.MScriptUtil( uvIdxPtr ).asInt()
+                            try:
+                                itMeshPolys.getUVIndex( localIndex[i], uvIdxPtr, self.UVSets[self.currentUVSet] )
+                                vertUVIndex = OpenMaya.MScriptUtil( uvIdxPtr ).asInt()
+                            except:
+                                OpenMaya.MGlobal.displayWarning( 'Invalid UV data on object %s, restarting object export without UVs' % self.dagPath.fullPathName() )
+                                self.resetLists()
+                                itMeshPolys.reset()
+                                compileWithoutUVs()
+                                self.hasUVs = False
+                                return
                             
                             # if we've seen this combo before,
                             testVal = (vertIndex, vertNormalIndex, vertUVIndex) 
@@ -253,7 +264,6 @@ class MeshOpt(ExportModule):
                     
             def compileWithoutUVs():
                 totalVertIndices = 0
-                vertUVIndex = 0
                 # each face
                 while not itMeshPolys.isDone():
                     
@@ -326,7 +336,7 @@ class MeshOpt(ExportModule):
             self.fileHandle.flush()
             
             # add UVs for trianglemesh and loopsubdiv, but not for portals and only if the shape has uvs
-            if self.type == 'geom' and len(self.vertUVList) > 0:
+            if self.type == 'geom' and self.hasUVs:
                 self.addToOutput( '\t"float uv" [' )
                 for uv in self.vertUVList:
                     self.addToOutput( '\t\t%f %f' % uv )
