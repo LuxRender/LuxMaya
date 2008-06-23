@@ -336,7 +336,7 @@ class MeshOpt(ExportModule):
             self.fileHandle.flush()
             
             # add UVs for trianglemesh and loopsubdiv, but not for portals and only if the shape has uvs
-            if self.type == 'geom' and self.hasUVs:
+            if self.type == 'geom' and itMeshPolys.hasUVs():
                 self.addToOutput( '\t"float uv" [' )
                 for uv in self.vertUVList:
                     self.addToOutput( '\t\t%f %f' % uv )
