@@ -235,7 +235,7 @@ class MeshOpt(ExportModule):
                                 itMeshPolys.getUVIndex( localIndex[i], uvIdxPtr, self.UVSets[self.currentUVSet] )
                                 vertUVIndex = OpenMaya.MScriptUtil( uvIdxPtr ).asInt()
                             except:
-                                OpenMaya.MGlobal.displayWarning( 'Invalid UV data on object %s, restarting object export without UVs' % self.dagPath.fullPathName() )
+                                OpenMaya.MGlobal.displayWarning( 'Invalid UV data on object %s (UV set "%s"), restarting object export without UVs' % (self.dagPath.fullPathName(), self.UVSets[self.currentUVSet]) )
                                 self.resetLists()
                                 itMeshPolys.reset()
                                 compileWithoutUVs()
