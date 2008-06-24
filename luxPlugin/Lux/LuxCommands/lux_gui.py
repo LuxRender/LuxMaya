@@ -1307,17 +1307,17 @@ class lux_gui(OpenMayaMPx.MPxCommand):
 		
 		lux_render_surface_integrator_row1 = self.newRow( parent = siControls )
 		#---
-		self.newText( label = 'eyemaxdepth' , parent = lux_render_surface_integrator_row1 )
-		lux_render_surface_integrator_eyemaxdepth = cmds.intField( parent = lux_render_surface_integrator_row1, min = 0, max = 10000, value = 8)
-		cmds.connectControl( lux_render_surface_integrator_eyemaxdepth, 'lux_settings.surface_integrator_eyemaxdepth' )
+		self.newText( label = 'eyedepth' , parent = lux_render_surface_integrator_row1 )
+		lux_render_surface_integrator_eyedepth = cmds.intField( parent = lux_render_surface_integrator_row1, min = 0, max = 10000, value = 8)
+		cmds.connectControl( lux_render_surface_integrator_eyedepth, 'lux_settings.surface_integrator_eyedepth' )
 		#---
 		self.endRow()
 		#--
 		lux_render_surface_integrator_row2 = self.newRow( parent = siControls )
 		#---
-		self.newText( label = 'lightmaxdepth' , parent = lux_render_surface_integrator_row2 )
-		lux_render_surface_integrator_lightmaxdepth = cmds.intField( parent = lux_render_surface_integrator_row2, min = 0, max = 10000, value = 8)
-		cmds.connectControl( lux_render_surface_integrator_lightmaxdepth, 'lux_settings.surface_integrator_lightmaxdepth' )
+		self.newText( label = 'lightdepth' , parent = lux_render_surface_integrator_row2 )
+		lux_render_surface_integrator_lightdepth = cmds.intField( parent = lux_render_surface_integrator_row2, min = 0, max = 10000, value = 8)
+		cmds.connectControl( lux_render_surface_integrator_lightdepth, 'lux_settings.surface_integrator_lightdepth' )
 		#---
 		self.endRow()
 		#--

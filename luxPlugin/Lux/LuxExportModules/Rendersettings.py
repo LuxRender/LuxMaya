@@ -92,8 +92,8 @@ class Rendersettings(ExportModule):
         """
         
         surface_integrator                      = cmds.getAttr( 'lux_settings.surface_integrator', asString = True ).lower()
-        surface_integrator_eyemaxdepth          = cmds.getAttr( 'lux_settings.surface_integrator_eyemaxdepth' )
-        surface_integrator_lightmaxdepth        = cmds.getAttr( 'lux_settings.surface_integrator_lightmaxdepth' )
+        surface_integrator_eyedepth          = cmds.getAttr( 'lux_settings.surface_integrator_eyedepth' )
+        surface_integrator_lightdepth        = cmds.getAttr( 'lux_settings.surface_integrator_lightdepth' )
         surface_integrator_maxdepth             = cmds.getAttr( 'lux_settings.surface_integrator_maxdepth' )
         surface_integrator_strategy             = cmds.getAttr( 'lux_settings.surface_integrator_strategy', asString = True ).lower()
         surface_integrator_rrcontinueprob       = cmds.getAttr( 'lux_settings.surface_integrator_rrcontinueprob' )
@@ -109,8 +109,8 @@ class Rendersettings(ExportModule):
         self.addToOutput( 'SurfaceIntegrator "%s"' % surface_integrator )
         
         if surface_integrator == 'bidirectional':
-            self.addToOutput( '\t"integer eyemaxdepth" [%i]' % surface_integrator_eyemaxdepth )
-            self.addToOutput( '\t"integer lightmaxdepth" [%i]' % surface_integrator_lightmaxdepth )
+            self.addToOutput( '\t"integer eyedepth" [%i]' % surface_integrator_eyedepth )
+            self.addToOutput( '\t"integer lightdepth" [%i]' % surface_integrator_lightdepth )
             
         if surface_integrator == 'directlighting':
             self.addToOutput( '\t"string strategy" ["%s"]' % surface_integrator_strategy )

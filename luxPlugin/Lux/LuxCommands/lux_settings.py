@@ -23,7 +23,7 @@ class lux_settings:
     """
 
     # IMPORTANT!! Be sure to update this constant if you make changes to this file
-    CURRENT_SC_VERSION = 16
+    CURRENT_SC_VERSION = 17
 
     def addString(self, ln):
         """
@@ -185,8 +185,8 @@ class lux_settings:
         
         self.addEnum ( ln = 'surface_integrator', options = 'Bidirectional:Directlighting:Particletracing:Path:Exphotonmap', dv = 3)
         #  Surface integrator settings
-        self.addShort( ln = 'surface_integrator_eyemaxdepth', dv = 8 )
-        self.addShort( ln = 'surface_integrator_lightmaxdepth', dv = 8 )
+        self.addShort( ln = 'surface_integrator_eyedepth', dv = 8 )
+        self.addShort( ln = 'surface_integrator_lightdepth', dv = 8 )
         self.addFloat( ln = 'surface_integrator_maxdepth', dv = 12 )
         self.addEnum ( ln = 'surface_integrator_strategy', options = 'All:One' )
         self.addFloat( ln = 'surface_integrator_rrcontinueprob', dv = 0.65 )
