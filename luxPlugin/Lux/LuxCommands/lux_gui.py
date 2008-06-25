@@ -582,6 +582,25 @@ class lux_gui(OpenMayaMPx.MPxCommand):
 		self.endFrame()
 		#-
 		
+		process_row5 = self.newRow( parent = processFrame )
+		#--
+		self.newText( label = '', parent = process_row5 )
+		lux_render_network = self.addCheckBox( parent = process_row5, label = 'Network Render' )
+		cmds.connectControl( lux_render_network, 'lux_settings.render_network' )
+		#--
+		self.endRow()
+		#-
+		
+		process_row6 = self.newRow( parent = processFrame )
+		#--
+		self.newText( label = 'Network servers', parent = process_row6 )
+		lux_render_network_servers = self.addTextField( parent = process_row6 )
+		cmds.connectControl( lux_render_network_servers, 'lux_settings.render_network_servers' )
+		#--
+		self.endRow()
+		#-
+		
+		
 		return processFrameContainer
 		
 	def cameraFrame(self, parent):
