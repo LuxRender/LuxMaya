@@ -214,10 +214,22 @@ class luxbatch(OpenMayaMPx.MPxCommand):
 
         return sceneFileName
     
-    def checkServerList(self, list):
-        for item in list:
-            if len(item) == 0: list.remove(item)
-        return list
+    def getNetworkServers(self):
+        networking = cmds.getAttr( 'lux_settings.render_network' )
+        networkinterval = cmds.getAttr( 'lux_settings.render_network_interval' )
+        serversList = (cmds.getAttr( 'lux_settings.render_network_servers') or ' ; ' ).split(';')
+        
+        for item in serversList:
+            if len(item.strip()) == 0: serversList.remove(item)
+        
+        servers = str()
+        if networking and len(serversList) > 0:
+            for server in serversList:
+                servers += '-u %s ' % server
+                
+            servers += '-i %i ' % networkinterval
+            
+        return servers
     
     def makeBatchFile(self, fileList):
         """
@@ -234,16 +246,7 @@ class luxbatch(OpenMayaMPx.MPxCommand):
         threads = cmds.getAttr( 'lux_settings.render_threads' )
         priority = cmds.getAttr( 'lux_settings.render_priority', asString = True )
         
-        networking = cmds.getAttr( 'lux_settings.render_network' )
-        networkinterval = cmds.getAttr( 'lux_settings.render_network_interval' )
-        serversList = self.checkServerList(cmds.getAttr( 'lux_settings.render_network_servers' ).split(';'))
-        
-        servers = str()
-        if networking and len(serversList) > 0:
-            for server in serversList:
-                servers += '-u %s ' % server
-                
-            servers += '-i %i ' % networkinterval
+        servers = self.getNetworkServers()
                 
         # scale 0...5 to -9...6 - keeping normal at 0
         niceValue = (cmds.getAttr( 'lux_settings.render_priority' ) - 3) * 3
@@ -318,16 +321,7 @@ class luxbatch(OpenMayaMPx.MPxCommand):
         # scale 0...5 to -9...6 - keeping normal at 0
         niceValue = (cmds.getAttr( 'lux_settings.render_priority' ) - 3) * 3
         
-        networking = cmds.getAttr( 'lux_settings.render_network' )
-        networkinterval = cmds.getAttr( 'lux_settings.render_network_interval' )
-        serversList = self.checkServerList(cmds.getAttr( 'lux_settings.render_network_servers' ).split(';'))
-        
-        servers = str()
-        if networking and len(serversList) > 0:
-            for server in serversList:
-                servers += '-u %s ' % server
-                
-            servers += '-i %i ' % networkinterval
+        servers = self.getNetworkServers()
         
         if guiMode:
             luxPath += 'luxrender'
