@@ -235,11 +235,15 @@ class luxbatch(OpenMayaMPx.MPxCommand):
         priority = cmds.getAttr( 'lux_settings.render_priority', asString = True )
         
         networking = cmds.getAttr( 'lux_settings.render_network' )
+        networkinterval = cmds.getAttr( 'lux_settings.render_network_interval' )
         serversList = self.checkServerList(cmds.getAttr( 'lux_settings.render_network_servers' ).split(';'))
+        
         servers = str()
         if networking and len(serversList) > 0:
             for server in serversList:
                 servers += '-u %s ' % server
+                
+            servers += '-i %i ' % networkinterval
                 
         # scale 0...5 to -9...6 - keeping normal at 0
         niceValue = (cmds.getAttr( 'lux_settings.render_priority' ) - 3) * 3
@@ -248,10 +252,7 @@ class luxbatch(OpenMayaMPx.MPxCommand):
             luxPath += 'luxrender'
         else:
             luxPath += 'luxconsole'
-        
-        
 
-        
         if os.name == 'nt':
             luxPath += '.exe'
             # windows batch file
@@ -318,11 +319,15 @@ class luxbatch(OpenMayaMPx.MPxCommand):
         niceValue = (cmds.getAttr( 'lux_settings.render_priority' ) - 3) * 3
         
         networking = cmds.getAttr( 'lux_settings.render_network' )
+        networkinterval = cmds.getAttr( 'lux_settings.render_network_interval' )
         serversList = self.checkServerList(cmds.getAttr( 'lux_settings.render_network_servers' ).split(';'))
+        
         servers = str()
         if networking and len(serversList) > 0:
             for server in serversList:
                 servers += '-u %s ' % server
+                
+            servers += '-i %i ' % networkinterval
         
         if guiMode:
             luxPath += 'luxrender'

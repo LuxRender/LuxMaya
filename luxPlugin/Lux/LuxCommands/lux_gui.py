@@ -593,8 +593,17 @@ class lux_gui(OpenMayaMPx.MPxCommand):
 		
 		process_row6 = self.newRow( parent = processFrame )
 		#--
-		self.newText( label = 'Network servers', parent = process_row6 )
-		lux_render_network_servers = self.addTextField( parent = process_row6 )
+		self.newText( label = 'Server request interval', parent = process_row6 )
+		lux_render_network_interval = cmds.intField( parent = process_row6, min = 1, value = 180 )
+		cmds.connectControl( lux_render_network_interval, 'lux_settings.render_network_interval' )
+		#--
+		self.endRow()
+		#-
+		
+		process_row7 = self.newRow( parent = processFrame )
+		#--
+		self.newText( label = 'Network servers', parent = process_row7 )
+		lux_render_network_servers = self.addTextField( parent = process_row7 )
 		cmds.connectControl( lux_render_network_servers, 'lux_settings.render_network_servers' )
 		#--
 		self.endRow()
