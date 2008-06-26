@@ -663,6 +663,16 @@ class lux_gui(OpenMayaMPx.MPxCommand):
 		cmds.connectControl( lux_camera_autofocus, 'lux_settings.camera_autofocus' )
 		#---
 		self.endRow()
+		
+		#--
+		camera_row5 = self.newRow( parent = cameraFakeLevel )
+		#---
+		self.newText( label = '', parent = camera_row5 )
+		lux_camera_infinite_focus = self.addCheckBox( parent = camera_row5, label = 'Infinite focus', value = False)
+		cmds.connectControl( lux_camera_infinite_focus, 'lux_settings.camera_infinite_focus' )
+		#---
+		self.endRow()
+		
 		self.endLevel()
 		#--
 		self.endFrame()

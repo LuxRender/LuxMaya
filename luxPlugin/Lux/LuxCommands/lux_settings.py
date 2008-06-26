@@ -23,7 +23,7 @@ class lux_settings:
     """
 
     # IMPORTANT!! Be sure to update this constant if you make changes to this file
-    CURRENT_SC_VERSION = 19
+    CURRENT_SC_VERSION = 20
 
     def addString(self, ln):
         """
@@ -149,7 +149,8 @@ class lux_settings:
         self.addFloat ( ln = 'camera_exposuretime', dv = 1 )
         self.addEnum  ( ln = 'camera_persptype', options = 'Perspective:Environment') #:Realistic' )
         self.addBool  ( ln = 'camera_autofocus', dv = 0 )
-        
+        self.addBool  ( ln = 'camera_infinite_focus', dv = 0 )
+                
         # Renderer settings
         self.addEnum ( ln = 'pixel_sampler', options = 'Random:Low Discrepancy:Halton:Metropolis:erpt', dv = 1 )
         #  pixel sampler settings

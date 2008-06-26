@@ -216,20 +216,25 @@ class luxbatch(OpenMayaMPx.MPxCommand):
     
     def getNetworkServers(self):
         networking = cmds.getAttr( 'lux_settings.render_network' )
-        networkinterval = cmds.getAttr( 'lux_settings.render_network_interval' )
-        serversList = (cmds.getAttr( 'lux_settings.render_network_servers') or ' ; ' ).split(';')
         
-        for item in serversList:
-            if len(item.strip()) == 0: serversList.remove(item)
-        
-        servers = str()
-        if networking and len(serversList) > 0:
-            for server in serversList:
-                servers += '-u %s ' % server
+        if networking:
+            serversList = (cmds.getAttr( 'lux_settings.render_network_servers') or ' ; ' ).split(';')
+            for item in serversList:
+                if len(item.strip()) == 0: serversList.remove(item)
                 
-            servers += '-i %i ' % networkinterval
+            if len(serversList) > 0:
+                servers = str()
+                for server in serversList:
+                    servers += '-u %s ' % server
+
+                networkinterval = cmds.getAttr( 'lux_settings.render_network_interval' )                
+                servers += '-i %i ' % networkinterval
             
-        return servers
+                return servers
+            else:
+                return ''
+        else:
+            return ''
     
     def makeBatchFile(self, fileList):
         """
