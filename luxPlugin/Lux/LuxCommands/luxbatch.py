@@ -216,9 +216,10 @@ class luxbatch(OpenMayaMPx.MPxCommand):
     
     def getNetworkServers(self):
         networking = cmds.getAttr( 'lux_settings.render_network' )
+        serversList = cmds.getAttr( 'lux_settings.render_network_servers')
         
-        if networking:
-            serversList = (cmds.getAttr( 'lux_settings.render_network_servers') or ' ; ' ).split(';')
+        if networking and serversList != None and len(serversList.strip()) > 0:
+            serversList = serversList.strip().split(';')
             for item in serversList:
                 if len(item.strip()) == 0: serversList.remove(item)
                 
