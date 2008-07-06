@@ -947,6 +947,7 @@ class lux_gui(OpenMayaMPx.MPxCommand):
 		lux_render_surface_integrator.addItem(label = "Particle Tracing")
 		lux_render_surface_integrator.addItem(label = "Path")
 		lux_render_surface_integrator.addItem(label = "ExPhotonMap")
+		lux_render_surface_integrator.addItem(label = "Distributed Path")
 		lux_render_surface_integrator.end()
 		cmds.connectControl( lux_render_surface_integrator.getName(), 'lux_settings.surface_integrator' )
 		#---
@@ -958,7 +959,8 @@ class lux_gui(OpenMayaMPx.MPxCommand):
 					   self.renderSurfaceIntegratorDirectLighting: 'DirectLighting',
 					   self.renderSurfaceIntegratorParticleTracing: 'Particle',
 					   self.renderSurfaceIntegratorPath: 'Path',
-					   self.renderSurfaceIntegratorExPhotonMap: 'ExPhotonMap'
+					   self.renderSurfaceIntegratorExPhotonMap: 'ExPhotonMap',
+					   self.renderSurfaceIntegratorDistributedPath: 'DistributedPath'
 					   })
 		self.endRow()
 		
@@ -1134,6 +1136,7 @@ class lux_gui(OpenMayaMPx.MPxCommand):
 		lux_render_sampler_pixelsampler_select.addItem( label = 'Low Discrepancy' )
 		lux_render_sampler_pixelsampler_select.addItem( label = 'Tile' )
 		lux_render_sampler_pixelsampler_select.addItem( label = 'Random' )
+		lux_render_sampler_pixelsampler_select.addItem( label = 'Hilbert' )
 		lux_render_sampler_pixelsampler_select.end()
 		cmds.connectControl( lux_render_sampler_pixelsampler_select.getName(), 'lux_settings.pixel_sampler_pixelsampler' )
 		#---
@@ -1377,19 +1380,24 @@ class lux_gui(OpenMayaMPx.MPxCommand):
 		#---
 		self.endRow()
 		#--
-		lux_render_surface_integrator_row2 = self.newRow( parent = siControls )
+		self.renderSurfaceIntegratorStrategy( siControls )
+		
+		return siControlContainer
+	
+	
+	def renderSurfaceIntegratorStrategy(self, parent):
+		lux_render_surface_integrator_row2 = self.newRow( parent = parent )
 		#---
 		self.newText( label = 'strategy' , parent = lux_render_surface_integrator_row2 )
 		lux_render_surface_integrator_strategy = mOptionMenu(parent = lux_render_surface_integrator_row2 )
 		lux_render_surface_integrator_strategy.addItem( label = 'All' )
 		lux_render_surface_integrator_strategy.addItem( label = 'One' )
+		lux_render_surface_integrator_strategy.addItem( label = 'Auto' )
 		lux_render_surface_integrator_strategy.end()
 		cmds.connectControl( lux_render_surface_integrator_strategy.getName(), 'lux_settings.surface_integrator_strategy' )
 		#---
 		self.endRow()
 		#--
-	
-		return siControlContainer
 		
 	def renderSurfaceIntegratorParticleTracing(self, parent):
 		"""
@@ -1433,6 +1441,7 @@ class lux_gui(OpenMayaMPx.MPxCommand):
 		#---
 		self.endRow()
 		#--
+		self.renderSurfaceIntegratorStrategy( siControls )
 		
 		return siControlContainer
 	
@@ -1524,6 +1533,43 @@ class lux_gui(OpenMayaMPx.MPxCommand):
 		#---
 		self.endRow()
 		#--
+		self.renderSurfaceIntegratorStrategy( siControls )
+		
+		return siControlContainer
+	
+	def renderSurfaceIntegratorDistributedPath(self, parent):
+		
+		siControls, siControlContainer = self.newFrame( label = 'DistributedPath Surface Integrator Settings', parent = parent )
+		
+		lux_render_surface_integrator_row1 = self.newRow( parent = siControls )
+		#---
+		self.newText( label = 'Diffuse Depth' , parent = lux_render_surface_integrator_row1 )
+		lux_render_surface_integrator_diffusedepth = cmds.intField( parent = lux_render_surface_integrator_row1, min = 0, max = 1000, value = 3 )
+		cmds.connectControl( lux_render_surface_integrator_diffusedepth, 'lux_settings.surface_integrator_diffusedepth' )
+		#---
+		self.endRow()
+		#--
+		
+		lux_render_surface_integrator_row2 = self.newRow( parent = siControls )
+		#---
+		self.newText( label = 'Glossy Depth' , parent = lux_render_surface_integrator_row2 )
+		lux_render_surface_integrator_glossydepth = cmds.intField( parent = lux_render_surface_integrator_row2, min = 0, max = 1000, value = 2 )
+		cmds.connectControl( lux_render_surface_integrator_glossydepth, 'lux_settings.surface_integrator_glossydepth' )
+		#---
+		self.endRow()
+		#--
+		
+		lux_render_surface_integrator_row3 = self.newRow( parent = siControls )
+		#---
+		self.newText( label = 'Specular Depth' , parent = lux_render_surface_integrator_row3 )
+		lux_render_surface_integrator_speculardepth = cmds.intField( parent = lux_render_surface_integrator_row3, min = 0, max = 1000, value = 5 )
+		cmds.connectControl( lux_render_surface_integrator_speculardepth, 'lux_settings.surface_integrator_speculardepth' )
+		#---
+		self.endRow()
+		#--
+		
+		
+		self.renderSurfaceIntegratorStrategy( siControls )
 		
 		return siControlContainer
 

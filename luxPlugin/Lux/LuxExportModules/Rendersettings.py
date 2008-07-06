@@ -92,8 +92,8 @@ class Rendersettings(ExportModule):
         """
         
         surface_integrator                      = cmds.getAttr( 'lux_settings.surface_integrator', asString = True ).lower()
-        surface_integrator_eyedepth          = cmds.getAttr( 'lux_settings.surface_integrator_eyedepth' )
-        surface_integrator_lightdepth        = cmds.getAttr( 'lux_settings.surface_integrator_lightdepth' )
+        surface_integrator_eyedepth             = cmds.getAttr( 'lux_settings.surface_integrator_eyedepth' )
+        surface_integrator_lightdepth           = cmds.getAttr( 'lux_settings.surface_integrator_lightdepth' )
         surface_integrator_maxdepth             = cmds.getAttr( 'lux_settings.surface_integrator_maxdepth' )
         surface_integrator_strategy             = cmds.getAttr( 'lux_settings.surface_integrator_strategy', asString = True ).lower()
         surface_integrator_rrcontinueprob       = cmds.getAttr( 'lux_settings.surface_integrator_rrcontinueprob' )
@@ -105,6 +105,9 @@ class Rendersettings(ExportModule):
         surface_integrator_finalgathersamples   = cmds.getAttr( 'lux_settings.surface_integrator_finalgathersamples' )
         surface_integrator_maxdist              = cmds.getAttr( 'lux_settings.surface_integrator_maxdist' )
         surface_integrator_gatherangle          = cmds.getAttr( 'lux_settings.surface_integrator_gatherangle' )
+        surface_integrator_diffusedepth         = cmds.getAttr( 'lux_settings.surface_integrator_diffusedepth' )
+        surface_integrator_glossydepth          = cmds.getAttr( 'lux_settings.surface_integrator_glossydepth' )
+        surface_integrator_speculardepth        = cmds.getAttr( 'lux_settings.surface_integrator_speculardepth' )
         
         self.addToOutput( 'SurfaceIntegrator "%s"' % surface_integrator )
         
@@ -112,7 +115,7 @@ class Rendersettings(ExportModule):
             self.addToOutput( '\t"integer eyedepth" [%i]' % surface_integrator_eyedepth )
             self.addToOutput( '\t"integer lightdepth" [%i]' % surface_integrator_lightdepth )
             
-        if surface_integrator == 'directlighting':
+        if surface_integrator in ('directlighting', 'path', 'distributedpath'):
             self.addToOutput( '\t"string strategy" ["%s"]' % surface_integrator_strategy )
             
         if surface_integrator == 'particletracing':
@@ -129,6 +132,11 @@ class Rendersettings(ExportModule):
             self.addToOutput( '\t"integer finalgathersamples" [%i]' % surface_integrator_finalgathersamples )
             self.addToOutput( '\t"float maxdist" [%f]' % surface_integrator_maxdist )
             self.addToOutput( '\t"float gatherangle" [%f]' % surface_integrator_gatherangle )
+            
+        if surface_integrator == 'distributedpath':
+            self.addToOutput( '\t"integer diffusedepth" [%i]' % surface_integrator_diffusedepth )
+            self.addToOutput( '\t"integer glossydepth" [%i]' % surface_integrator_glossydepth )
+            self.addToOutput( '\t"integer speculardepth" [%i]' % surface_integrator_speculardepth )
             
         self.addToOutput( '' )
     #end def doSurfaceIntegrator

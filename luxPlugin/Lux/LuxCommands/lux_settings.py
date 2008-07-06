@@ -23,7 +23,7 @@ class lux_settings:
     """
 
     # IMPORTANT!! Be sure to update this constant if you make changes to this file
-    CURRENT_SC_VERSION = 20
+    CURRENT_SC_VERSION = 21
 
     def addString(self, ln):
         """
@@ -156,7 +156,7 @@ class lux_settings:
         #  pixel sampler settings
         self.addShort( ln = 'pixel_sampler_xsamples', dv = 2 )
         self.addShort( ln = 'pixel_sampler_ysamples', dv = 2 )
-        self.addEnum ( ln = 'pixel_sampler_pixelsampler', options = 'Linear:Vegas:Lowdiscrepancy:Tile:Random', dv = 2 )
+        self.addEnum ( ln = 'pixel_sampler_pixelsampler', options = 'Linear:Vegas:Lowdiscrepancy:Tile:Random:Hilbert', dv = 2 )
         self.addShort( ln = 'pixel_sampler_pixelsamples', dv = 4 )
         self.addLong ( ln = 'pixel_sampler_initsamples', dv = 100000 )
         self.addLong ( ln = 'pixel_sampler_maxconsecrejects', dv = 128 )
@@ -184,12 +184,12 @@ class lux_settings:
         self.addLong ( ln = 'accelerator_maxprims', dv = 1 )
         self.addLong ( ln = 'accelerator_maxdepth', dv = -1 )
         
-        self.addEnum ( ln = 'surface_integrator', options = 'Bidirectional:Directlighting:Particletracing:Path:Exphotonmap', dv = 3)
+        self.addEnum ( ln = 'surface_integrator', options = 'Bidirectional:Directlighting:Particletracing:Path:Exphotonmap:Distributedpath', dv = 3)
         #  Surface integrator settings
         self.addShort( ln = 'surface_integrator_eyedepth', dv = 8 )
         self.addShort( ln = 'surface_integrator_lightdepth', dv = 8 )
         self.addFloat( ln = 'surface_integrator_maxdepth', dv = 12 )
-        self.addEnum ( ln = 'surface_integrator_strategy', options = 'All:One' )
+        self.addEnum ( ln = 'surface_integrator_strategy', options = 'All:One:Auto', dv = 2 )
         self.addFloat( ln = 'surface_integrator_rrcontinueprob', dv = 0.65 )
         self.addLong ( ln = 'surface_integrator_causticphotons', dv = 20000 )
         self.addLong ( ln = 'surface_integrator_indirectphotons', dv = 100000 )
@@ -199,6 +199,9 @@ class lux_settings:
         self.addFloat( ln = 'surface_integrator_maxdist', dv = 0.1 )
         # self.addFloat( ln = 'rrthreshold' ) # UNUSED ?!
         self.addFloat( ln = 'surface_integrator_gatherangle', dv = 10.0)
+        self.addShort( ln = 'surface_integrator_diffusedepth', dv = 3 )
+        self.addShort( ln = 'surface_integrator_glossydepth', dv = 2 )
+        self.addShort( ln = 'surface_integrator_speculardepth', dv = 5 )
         
         self.addEnum ( ln = 'volume_integrator', options = 'Emission:Single', dv = 1 )
         #  volume integrator settings
