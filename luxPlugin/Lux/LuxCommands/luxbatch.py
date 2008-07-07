@@ -55,20 +55,21 @@ class luxbatch(OpenMayaMPx.MPxCommand):
         doAnimation  = cmds.getAttr( 'lux_settings.render_animation' )
         doInSequence = cmds.getAttr( 'lux_settings.render_animation_sequence' )
         
-        startFrame = round( cmds.currentTime( query = True ) )
+        self.startFrame = round( cmds.currentTime( query = True ) )
         
         if doAnimation:
-            startFrame = round( cmds.playbackOptions( query = True, animationStartTime = True ) ) 
-            endFrame =   round( cmds.playbackOptions( query = True, animationEndTime = True   ) )
+            self.startFrame  = round( cmds.getAttr( 'defaultRenderGlobals.startFrame'  ) ) 
+            self.endFrame    = round( cmds.getAttr( 'defaultRenderGlobals.endFrame'    ) )
+            self.stepFrame   = round( cmds.getAttr( 'defaultRenderGlobals.byFrameStep' ) )
         else:
-            endFrame = startFrame
+            self.endFrame = self.startFrame
         
         self.initProgressWindow()
         
         if doInSequence:
-            self.startSequence(startFrame, endFrame)
+            self.startSequence()
         else:
-            self.startBatch(startFrame, endFrame)
+            self.startBatch()
     
     def initProgressWindow(self):
         self.MayaGUIMode = OpenMaya.MGlobal.mayaState() == OpenMaya.MGlobal.kInteractive
@@ -78,17 +79,17 @@ class luxbatch(OpenMayaMPx.MPxCommand):
         else:
             self.mProgress = consoleProgress()
             
-    def showProgressWindow(self, startFrame, endFrame):
+    def showProgressWindow(self):
         if self.MayaGUIMode:
             self.mProgress.reserve()
             self.mProgress.setInterruptable(True)
-            self.mProgress.setProgressRange(0, int(endFrame-startFrame)+1)
+            self.mProgress.setProgressRange(0, int(self.endFrame-self.startFrame)+1)
             self.mProgress.setProgress(0)
             self.mProgress.startProgress()
         else:
-            self.mProgress.tProgress = int(endFrame-startFrame)+1
+            self.mProgress.tProgress = int(self.endFrame-self.startFrame)+1
     
-    def startSequence(self, startFrame, endFrame):
+    def startSequence(self):
         """
         Start the sequential export process.
         1. for each frame to export, export it to a temp folder
@@ -96,16 +97,16 @@ class luxbatch(OpenMayaMPx.MPxCommand):
         3. loop
         """
         
-        self.showProgressWindow(startFrame, endFrame)
+        self.showProgressWindow()
         
-        if startFrame == endFrame:
-            self.runProcess( self.exportFile(startFrame) )
+        if self.startFrame == self.endFrame:
+            self.runProcess( self.exportFile(self.startFrame) )
             self.mProgress.advanceProgress(1)
         else:
             # frame range export
             ct = cmds.currentTime( query = True )
-            for f in range(int(startFrame), int(endFrame)+1): 
-                self.mProgress.setTitle( 'Frames %i - %i: %i' % (int(startFrame), int(endFrame), f) )
+            for f in range(int(self.startFrame), int(self.endFrame)+1, self.stepFrame): 
+                self.mProgress.setTitle( 'Frames %i - %i: %i' % (int(self.startFrame), int(self.endFrame), f) )
                 cmds.currentTime( f )
                 self.runProcess( self.exportFile(f, tempExportPath = True) )
                 self.mProgress.advanceProgress(1)
@@ -116,7 +117,7 @@ class luxbatch(OpenMayaMPx.MPxCommand):
         OpenMaya.MGlobal.displayInfo( 'Lux Export Successful' )
         self.mProgress.endProgress()
     
-    def startBatch(self, startFrame, endFrame):
+    def startBatch(self):
         """
         Start the batch export process.
         1. For each frame to export, export it
@@ -126,17 +127,17 @@ class luxbatch(OpenMayaMPx.MPxCommand):
         
         fileList = []
         
-        self.showProgressWindow(startFrame, endFrame)
+        self.showProgressWindow()
         
-        if startFrame == endFrame:
+        if self.startFrame == self.endFrame:
             # single frame export
-            fileList.append( self.exportFile(startFrame) )
+            fileList.append( self.exportFile(self.startFrame) )
             self.mProgress.advanceProgress(1)
         else:
             # frame range export
             ct = cmds.currentTime( query = True )
-            for f in range(int(startFrame), int(endFrame)+1): 
-                self.mProgress.setTitle( 'Frames %i - %i: %i' % (int(startFrame), int(endFrame), f) )
+            for f in range(int(self.startFrame), int(self.endFrame)+1, self.stepFrame): 
+                self.mProgress.setTitle( 'Frames %i - %i: %i' % (int(self.startFrame), int(self.endFrame), f) )
                 cmds.currentTime( f )
                 fileList.append( self.exportFile(f) )
                 self.mProgress.advanceProgress(1)
@@ -349,6 +350,18 @@ class luxbatch(OpenMayaMPx.MPxCommand):
                 ccmd = '%s %s -t %i %s"%s"' % ( cmdPrefix, luxPath, threads, servers, sceneFile )
                 os.system( ccmd )
                 
+            except:
+                OpenMaya.MGlobal.displayError( 'Could not start lux' )
+                raise
+        else:
+            try:
+                cmdPrefix = 'nice -n %i %s -t %i %s"%s"' % (niceValue, luxPath, threads, servers, sceneFile)
+                if guiMode:
+                    ccmd = '(xterm -T "Lux Render" -e %s)' & cmdPrefix
+                else:
+                    ccmd = '(%s)' % cmdPrefix
+                    
+                os.system( ccmd )
             except:
                 OpenMaya.MGlobal.displayError( 'Could not start lux' )
                 raise
