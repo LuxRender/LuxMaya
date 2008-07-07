@@ -105,7 +105,7 @@ class luxbatch(OpenMayaMPx.MPxCommand):
         else:
             # frame range export
             ct = cmds.currentTime( query = True )
-            for f in range(int(self.startFrame), int(self.endFrame)+1, self.stepFrame): 
+            for f in range(int(self.startFrame), int(self.endFrame)+1, int(self.stepFrame)): 
                 self.mProgress.setTitle( 'Frames %i - %i: %i' % (int(self.startFrame), int(self.endFrame), f) )
                 cmds.currentTime( f )
                 self.runProcess( self.exportFile(f, tempExportPath = True) )
@@ -136,7 +136,7 @@ class luxbatch(OpenMayaMPx.MPxCommand):
         else:
             # frame range export
             ct = cmds.currentTime( query = True )
-            for f in range(int(self.startFrame), int(self.endFrame)+1, self.stepFrame): 
+            for f in range(int(self.startFrame), int(self.endFrame)+1, int(self.stepFrame)): 
                 self.mProgress.setTitle( 'Frames %i - %i: %i' % (int(self.startFrame), int(self.endFrame), f) )
                 cmds.currentTime( f )
                 fileList.append( self.exportFile(f) )
