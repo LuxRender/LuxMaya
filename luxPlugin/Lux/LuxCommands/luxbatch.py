@@ -304,12 +304,12 @@ class luxbatch(OpenMayaMPx.MPxCommand):
                 OpenMaya.MGlobal.displayError( 'Could not write render batch file' )
                 raise
         
-        # launch process doesn't work on linux
         if cmds.getAttr( 'lux_settings.render_launch' ) == 1:
             try:
                 if os.name == 'nt':
                     # windows
-                    os.spawnv(os.P_NOWAIT, batchFileName, [batchFileName] )
+                    #os.spawnv(os.P_NOWAIT, batchFileName, [batchFileName] )
+                    os.system('start cmd /c "%s"' % batchFileName)
                 else:
                     # assuming linux, this probably won't work on OSX
                     os.system('(xterm -T "Lux Render" -e %s)&' % batchFileName)
