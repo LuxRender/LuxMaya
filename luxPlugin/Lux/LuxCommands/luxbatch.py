@@ -248,7 +248,7 @@ class luxbatch(OpenMayaMPx.MPxCommand):
         saveFolder = cmds.getAttr( 'lux_settings.scene_path' )
         sceneFileBaseName = cmds.getAttr( 'lux_settings.scene_filename' )
         batchFileName = saveFolder + sceneFileBaseName + '_render'
-        luxPath = cmds.getAttr( 'lux_settings.lux_path' ) + os.altsep
+        luxPath = '"' + cmds.getAttr( 'lux_settings.lux_path' ) + os.altsep + '"'
         guiMode = cmds.getAttr( 'lux_settings.render_interface', asString = True ) == 'GUI'
         threads = cmds.getAttr( 'lux_settings.render_threads' )
         priority = cmds.getAttr( 'lux_settings.render_priority', asString = True )
@@ -321,7 +321,7 @@ class luxbatch(OpenMayaMPx.MPxCommand):
     def runProcess(self, sceneFile):
         self.mProgress.setProgressStatus( 'Rendering' )
 
-        luxPath = cmds.getAttr( 'lux_settings.lux_path' ) + os.altsep
+        luxPath = '"' + cmds.getAttr( 'lux_settings.lux_path' ) + os.altsep + '"'
         guiMode = cmds.getAttr( 'lux_settings.render_interface', asString = True ) == 'GUI'
         threads = cmds.getAttr( 'lux_settings.render_threads' )
         priority = cmds.getAttr( 'lux_settings.render_priority', asString = True )
