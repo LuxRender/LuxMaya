@@ -274,9 +274,9 @@ class luxbatch(OpenMayaMPx.MPxCommand):
                 
                 cmdPrefix = str()
                 if guiMode:
-                    cmdPrefix = 'start /WAIT /%s' % priority
+                    cmdPrefix = 'start /WAIT /%s ""' % priority
                 else:
-                    cmdPrefix = 'start /WAIT /MIN /%s' % priority
+                    cmdPrefix = 'start /WAIT /MIN /%s ""' % priority
                 
                 for file in fileList:
                     ccmd = '%s %s -t %i %s"%s"' % ( cmdPrefix, luxPath, threads, servers, file )
@@ -343,9 +343,9 @@ class luxbatch(OpenMayaMPx.MPxCommand):
             try:
                 cmdPrefix = str()
                 if guiMode:
-                    cmdPrefix = 'start /WAIT /%s' % priority
+                    cmdPrefix = 'start /WAIT /%s ""' % priority
                 else:
-                    cmdPrefix = 'start /WAIT /MIN /%s' % priority
+                    cmdPrefix = 'start /WAIT /MIN /%s ""' % priority
                 
                 ccmd = '%s %s -t %i %s"%s"' % ( cmdPrefix, luxPath, threads, servers, sceneFile )
                 os.system( ccmd )
