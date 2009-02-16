@@ -52,7 +52,7 @@ class Film(ExportModule):
         utm_exr         = self.intToBoolString( cmds.getAttr( 'lux_settings.film_write_untonemapped_exr' ) )
         utm_igi         = self.intToBoolString( cmds.getAttr( 'lux_settings.film_write_untonemapped_igi' ) )
         resume          = self.intToBoolString( cmds.getAttr( 'lux_settings.film_write_resume_film' ) )
-        restart        = self.intToBoolString( cmds.getAttr( 'lux_settings.film_restart_resume_film' ) )
+        restart         = self.intToBoolString( cmds.getAttr( 'lux_settings.film_restart_resume_film' ) )
         
         r_prescale      = cmds.getAttr( 'lux_settings.film_reinhard_prescale' )
         r_postscale     = cmds.getAttr( 'lux_settings.film_reinhard_postscale' )
