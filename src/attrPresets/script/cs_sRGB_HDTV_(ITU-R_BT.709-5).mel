@@ -1,0 +1,12 @@
+// requires maya "2008";
+startAttrPreset( "script" );
+blendAttr "scriptType" 0;
+blendAttr "film_colourspace_white_x" 0.314275;
+blendAttr "film_colourspace_white_y" 0.329411;
+blendAttr "film_colourspace_red_x" 0.63;
+blendAttr "film_colourspace_red_y" 0.34;
+blendAttr "film_colourspace_green_x" 0.31;
+blendAttr "film_colourspace_green_y" 0.595;
+blendAttr "film_colourspace_blue_x" 0.155;
+blendAttr "film_colourspace_blue_y" 0.07;
+endAttrPreset();

@@ -28,10 +28,9 @@ from Lux.LuxNodes.ShaderNodes.metalShader             import metalShader
 from Lux.LuxNodes.ShaderNodes.mirrorShader            import mirrorShader
 from Lux.LuxNodes.ShaderNodes.mixShader               import mixShader
 from Lux.LuxNodes.ShaderNodes.nullShader              import nullShader
-from Lux.LuxNodes.ShaderNodes.plasticShader           import plasticShader
 from Lux.LuxNodes.ShaderNodes.roughglassShader        import roughglassShader
 from Lux.LuxNodes.ShaderNodes.shinymetalShader        import shinymetalShader
-from Lux.LuxNodes.ShaderNodes.substrateShader         import substrateShader
+from Lux.LuxNodes.ShaderNodes.glossyShader            import glossyShader
 
 # ...and the types that we can translate
 from Lux.MayaShaderModules.displacementShader         import displacementShader
@@ -91,7 +90,7 @@ class Material(ExportModule):
                 # translate lambert -> matte
                 return MaterialLambert( dpNode )
             elif nodeType == "phong":
-                # translate phong -> plastic
+                # translate phong -> glossy
                 return MaterialPhong( dpNode )
             else:
                 OpenMaya.MGlobal.displayWarning("Shader type %s not supported" % nodeType )
@@ -136,10 +135,8 @@ class MaterialLux(ExportModule, MaterialBase):
             self.shaderSyntaxModule = shinymetalShader()
         elif materialType == 7:
             self.shaderSyntaxModule = mirrorShader()
-        elif materialType == 8:
-            self.shaderSyntaxModule = plasticShader()
         elif materialType == 9:
-            self.shaderSyntaxModule = substrateShader()
+            self.shaderSyntaxModule = glossyShader()
         # 10 is AreaLight, not a material
         elif materialType == 11:
             self.shaderSyntaxModule = mixShaderHandler( self.dpNode )

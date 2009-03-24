@@ -1,0 +1,54 @@
+/**
+ * ------------------------------------------------------------------------------
+ * Lux exporter python script plugin for Maya
+ *
+ * by Doug Hammond 02/2008
+ *
+ * This file is licensed under the GPL
+ * http://www.gnu.org/licenses/gpl-3.0.txt
+ *
+ * $Id$
+ *
+ * ------------------------------------------------------------------------------
+ *
+ * This is the Attribute Editor template for blender_wood
+ *
+ * ------------------------------------------------------------------------------
+ */
+ 
+global proc AEblender_voronoiTemplate( string $nodeName )
+{
+	//AEswatchDisplay $nodeName;
+	
+	editorTemplate -beginScrollLayout;
+	
+		editorTemplate -beginLayout "Blender Voronoi Attributes" -collapse 0;
+			editorTemplate -addControl "distmetric";
+			
+			editorTemplate -addControl "minkovsky_exp";
+			editorTemplate -addControl "outscale";
+			editorTemplate -addControl "noisesize";
+			editorTemplate -addControl "nabla";
+			editorTemplate -addControl "w1";
+			editorTemplate -addControl "w2";
+			editorTemplate -addControl "w3";
+			editorTemplate -addControl "w4";
+			
+			editorTemplate -addControl "bright";
+			editorTemplate -addControl "contrast";
+			editorTemplate -addControl "tex1";
+			editorTemplate -addControl "tex2";
+		editorTemplate -endLayout;
+		
+		editorTemplate -beginLayout "3D Texture Attributes" -collapse 1;
+			editorTemplate -addControl "placementMatrix";
+			editorTemplate -addControl "translate";
+			editorTemplate -addControl "rotate";
+			editorTemplate -addControl "scale";
+		editorTemplate -endLayout;
+		
+		// include/call base class/node attributes
+		AEdependNodeTemplate $nodeName;
+		
+	editorTemplate -endScrollLayout;
+}

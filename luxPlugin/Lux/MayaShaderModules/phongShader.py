@@ -24,7 +24,7 @@ from Lux.LuxNodes.LuxNode import ShaderFloatAttribute
 class phongShader(OpenMayaMPx.MPxNode, ShaderNode):
     """
     This class provides an interface to translate Maya phong shaders
-    into lux plastic materials.
+    into lux glossy materials.
     """
     
     def __init__(self):
@@ -37,7 +37,7 @@ class phongShader(OpenMayaMPx.MPxNode, ShaderNode):
 
         # translation table for shader
         self.attributes = {}
-        self.luxType = "plastic"
+        self.luxType = "glossy"
         self.attributes['Kd']         = ShaderColorAttribute('color')
         self.attributes['Ks']         = ShaderColorAttribute('specularColor')
         self.attributes['uroughness'] = ShaderFloatAttribute('cosinePower', preScale = 0.01, invert=True, reciprocal = True, postScale = 0.1)

@@ -141,8 +141,8 @@ class blenderWoodTexture(OpenMayaMPx.MPxNode, TextureNode):
         self.attributes['rotate'] = TextureVectorAttribute('rotate', self.addToOutput, self.prependToOutput)
         self.attributes['scale'] = TextureVectorAttribute('scale', self.addToOutput, self.prependToOutput)
         
-        self.attributes['tex1']   = TextureFloatAttribute('tex1',  self.addToOutput, self.prependToOutput)
-        self.attributes['tex2']   = TextureFloatAttribute('tex2',  self.addToOutput, self.prependToOutput)
+        self.attributes['tex1']   = TextureColorAttribute('tex1',  self.addToOutput, self.prependToOutput)
+        self.attributes['tex2']   = TextureColorAttribute('tex2',  self.addToOutput, self.prependToOutput)
     
     def postConstructor(self):
         self._setMPSafe( True )
@@ -261,8 +261,8 @@ class blenderWoodTexture(OpenMayaMPx.MPxNode, TextureNode):
             blenderWoodTexture.bright = blenderWoodTexture.makeFloat("bright", "br", 1.0)
             blenderWoodTexture.contrast = blenderWoodTexture.makeFloat("contrast", "co", 1.0)
             
-            blenderWoodTexture.tex1 = blenderWoodTexture.makeFloat("tex1", "t1", 0.0)
-            blenderWoodTexture.tex2 = blenderWoodTexture.makeFloat("tex2", "t2", 1.0)
+            blenderWoodTexture.tex1 = blenderWoodTexture.makeColor("tex1", "t1", 0.0, 0.0, 0.0)
+            blenderWoodTexture.tex2 = blenderWoodTexture.makeColor("tex2", "t2", 1.0, 1.0, 1.0)
 
 
         except:

@@ -20,14 +20,14 @@ from maya import OpenMaya
 from maya import OpenMayaMPx
 from maya import OpenMayaUI
 
-from luxexport    import luxexport
-from luxexport    import consoleProgress 
+from luxexport import luxexport
+from luxexport import consoleProgress 
 
 class luxbatch(OpenMayaMPx.MPxCommand):
     """
     Class to create a render batch script
     """
-
+    
     @staticmethod
     def commandName():
         return "lux_export"
@@ -78,7 +78,7 @@ class luxbatch(OpenMayaMPx.MPxCommand):
             self.mProgress = OpenMayaUI.MProgressWindow()
         else:
             self.mProgress = consoleProgress()
-            
+    
     def showProgressWindow(self):
         if self.MayaGUIMode:
             self.mProgress.reserve()
@@ -142,19 +142,18 @@ class luxbatch(OpenMayaMPx.MPxCommand):
                 fileList.append( self.exportFile(f) )
                 self.mProgress.advanceProgress(1)
                 if self.mProgress.isCancelled(): break
-            
+                
             cmds.currentTime( ct )
         
         self.makeBatchFile(fileList)
         OpenMaya.MGlobal.displayInfo( 'Lux Export Successful' )
         self.mProgress.endProgress()
-            
     
     def exportFile(self, frameNumber = 1, tempExportPath = False):
         """
         Export a single frame, and return the name of the created scene file
         """
-
+        
         render_cam = ''
         
         for cam in cmds.listCameras():
@@ -162,21 +161,20 @@ class luxbatch(OpenMayaMPx.MPxCommand):
             if renderable == 1:
                 render_cam = cam
                 break
-            
+        
         if render_cam == '':
             OpenMaya.MGlobal.displayError('No renderable camera in scene')
-
         
         saveFolder = cmds.getAttr( 'lux_settings.scene_path' )
         if not os.path.exists(saveFolder):
             os.mkdir( saveFolder )
-            
+        
         sceneFileBaseName = cmds.getAttr( 'lux_settings.scene_filename' ) + ('.%06i' % frameNumber)
-            
+        
         renderFolder = saveFolder + os.altsep + "renders" + os.altsep
         if not os.path.exists(renderFolder):
             os.mkdir(renderFolder)
-            
+        
         imageSaveName = renderFolder + sceneFileBaseName
         
         if tempExportPath:
@@ -192,7 +190,7 @@ class luxbatch(OpenMayaMPx.MPxCommand):
             saveFolder += ('%06i' % frameNumber) + os.altsep
             if not os.path.exists(saveFolder):
                 os.mkdir( saveFolder )
-                
+        
         sceneFileName = saveFolder + sceneFileBaseName + '.lxs'
         
         renderWidth = cmds.getAttr( 'defaultResolution.width' )
@@ -212,7 +210,7 @@ class luxbatch(OpenMayaMPx.MPxCommand):
         except:
             self.mProgress.endProgress()
             raise
-
+        
         return sceneFileName
     
     def getNetworkServers(self):
@@ -223,15 +221,14 @@ class luxbatch(OpenMayaMPx.MPxCommand):
             serversList = serversList.strip().split(';')
             for item in serversList:
                 if len(item.strip()) == 0: serversList.remove(item)
-                
+            
             if len(serversList) > 0:
                 servers = str()
                 for server in serversList:
                     servers += '-u %s ' % server
-
                 networkinterval = cmds.getAttr( 'lux_settings.render_network_interval' )                
                 servers += '-i %i ' % networkinterval
-            
+                
                 return servers
             else:
                 return ''
@@ -254,7 +251,7 @@ class luxbatch(OpenMayaMPx.MPxCommand):
         priority = cmds.getAttr( 'lux_settings.render_priority', asString = True )
         
         servers = self.getNetworkServers()
-                
+        
         # scale 0...5 to -9...6 - keeping normal at 0
         niceValue = (cmds.getAttr( 'lux_settings.render_priority' ) - 3) * 3
         
@@ -262,7 +259,7 @@ class luxbatch(OpenMayaMPx.MPxCommand):
             luxPath += 'luxrender'
         else:
             luxPath += 'luxconsole'
-
+            
         if os.name == 'nt':
             luxPath += '.exe'
             # windows batch file
@@ -282,12 +279,12 @@ class luxbatch(OpenMayaMPx.MPxCommand):
                     ccmd = '%s %s -t %i %s"%s"' % ( cmdPrefix, luxPath, threads, servers, file )
                     fh.write( ('echo Rendering file %s' % file) + os.linesep )
                     fh.write( ccmd + os.linesep )
-                    
+                
                 fh.close()
             except:
                 OpenMaya.MGlobal.displayError( 'Could not write render batch file' )
                 raise
-            
+        
         else:
             #unix bash script
             batchFileName += '.sh'
@@ -295,7 +292,6 @@ class luxbatch(OpenMayaMPx.MPxCommand):
                 fh = open( batchFileName, 'wb')
                 fh.write( '#!/bin/bash' + os.linesep)
                 fh.write( '# Lux batch render file generated by LuxMaya ' + cmds.date() + os.linesep )
-                
                 
                 for file in fileList:
                     fh.write( ('nice -n %i %s -t %i %s"%s"' % (niceValue, luxPath, threads, servers, file)) + os.linesep )
@@ -316,8 +312,7 @@ class luxbatch(OpenMayaMPx.MPxCommand):
             except:
                 OpenMaya.MGlobal.displayError( "Failed to launch process\n" )
                 raise
-            
-            
+    
     def runProcess(self, sceneFile):
         self.mProgress.setProgressStatus( 'Rendering' )
 
@@ -334,10 +329,10 @@ class luxbatch(OpenMayaMPx.MPxCommand):
             luxPath += 'luxrender'
         else:
             luxPath += 'luxconsole'
-            
+        
         if os.name == 'nt':
             luxPath += '.exe'
-            
+        
         if os.name == 'nt':
             # windows batch file
             try:
@@ -360,9 +355,10 @@ class luxbatch(OpenMayaMPx.MPxCommand):
                     ccmd = '(xterm -T "Lux Render" -e %s)' & cmdPrefix
                 else:
                     ccmd = '(%s)' % cmdPrefix
-                    
+                
                 os.system( ccmd )
             except:
                 OpenMaya.MGlobal.displayError( 'Could not start lux' )
                 raise
+
     

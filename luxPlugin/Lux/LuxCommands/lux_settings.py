@@ -152,7 +152,8 @@ class lux_settings:
         self.addBool  ( ln = 'camera_infinite_focus', dv = 0 )
                 
         # Renderer settings
-        self.addEnum ( ln = 'pixel_sampler', options = 'Random:Low Discrepancy:Halton:Metropolis:erpt', dv = 1 )
+        # DH-0.6RC 24/03/2009
+        self.addEnum ( ln = 'pixel_sampler', options = 'Random:Low Discrepancy:Metropolis:erpt', dv = 1 ) #:Halton
         #  pixel sampler settings
         self.addShort( ln = 'pixel_sampler_xsamples', dv = 2 )
         self.addShort( ln = 'pixel_sampler_ysamples', dv = 2 )
@@ -175,7 +176,8 @@ class lux_settings:
         self.addFloat( ln = 'pixel_filter_c', dv = 0.333333 )
         self.addFloat( ln = 'pixel_filter_tau', dv = 3 )
         
-        self.addEnum ( ln = 'accelerator', options = 'Kdtree:Grid:Unsafekdtree:None' )
+        # DH-0.6RC change UnsafeKD to BVH, change kdtree to tabreckdtree
+        self.addEnum ( ln = 'accelerator', options = 'tabreckdtree:Grid:BVH:None' )
         #  accelerator settings
         self.addBool ( ln = 'accelerator_refineimmediately' )
         self.addShort( ln = 'accelerator_intersectcost', dv = 80 )
@@ -184,10 +186,12 @@ class lux_settings:
         self.addLong ( ln = 'accelerator_maxprims', dv = 1 )
         self.addLong ( ln = 'accelerator_maxdepth', dv = -1 )
         
-        self.addEnum ( ln = 'surface_integrator', options = 'Bidirectional:Directlighting:Particletracing:Path:Exphotonmap:Distributedpath', dv = 3)
+        # DH-0.6RC 24/03/2009 remove particletracing and exphotonmap
+        self.addEnum ( ln = 'surface_integrator', options = 'Bidirectional:Directlighting:Path:Distributedpath', dv = 0)
+        # :Particletracing:Exphotonmap
         #  Surface integrator settings
-        self.addShort( ln = 'surface_integrator_eyedepth', dv = 8 )
-        self.addShort( ln = 'surface_integrator_lightdepth', dv = 8 )
+        self.addShort( ln = 'surface_integrator_eyedepth', dv = 10 )
+        self.addShort( ln = 'surface_integrator_lightdepth', dv = 10 )
         self.addFloat( ln = 'surface_integrator_maxdepth', dv = 12 )
         self.addEnum ( ln = 'surface_integrator_strategy', options = 'All:One:Auto', dv = 2 )
         self.addFloat( ln = 'surface_integrator_rrcontinueprob', dv = 0.65 )
@@ -218,9 +222,9 @@ class lux_settings:
         self.addFloat( ln = 'film_cropwindowXmax', dv = 1 )
         self.addFloat( ln = 'film_cropwindowYmin', dv = 0 )
         self.addFloat( ln = 'film_cropwindowYmax', dv = 1 )
-        self.addFloat( ln = 'film_gamma', dv = 2.2 )
+        
         self.addBool ( ln = 'film_premultiplyalpha', dv = 1 )
-        self.addBool ( ln = 'film_write_tonemapped_exr', dv = 1 )
+        self.addBool ( ln = 'film_write_tonemapped_exr', dv = 0 )
         self.addBool ( ln = 'film_write_tonemapped_igi' )
         self.addBool ( ln = 'film_write_tonemapped_tga', dv = 1 )
         self.addBool ( ln = 'film_write_untonemapped_exr' )
@@ -230,9 +234,30 @@ class lux_settings:
         self.addShort( ln = 'film_writeinterval', dv = 60 )
         self.addShort( ln = 'film_displayinterval', dv = 12 )
         self.addShort( ln = 'film_reject_warmup', dv = 12 )
+        
+        # DH-0.6RC 24/03/2009 add new tonemapping options
+        self.addEnum ( ln = 'film_tonemapping', options = 'reinhard:linear:contrast:maxwhite', dv = 0 )
+        self.addBool ( ln = 'film_reinhard_autoywa', dv = 1)
+        self.addFloat( ln = 'film_reinhard_ywa', dv = 0.1)
         self.addFloat( ln = 'film_reinhard_prescale', dv = 1.0 )
         self.addFloat( ln = 'film_reinhard_postscale', dv = 1.0 )
         self.addFloat( ln = 'film_reinhard_burn', dv = 6.0 )
+        self.addFloat( ln = 'film_linear_sensitivity', dv = 50.0 )
+        self.addFloat( ln = 'film_linear_exposure', dv = 1.0 )
+        self.addFloat( ln = 'film_linear_fstop', dv = 2.8 )
+        self.addFloat( ln = 'film_linear_gamma', dv = 1.0 )
+        self.addFloat( ln = 'film_contrast_ywa', dv = 0.1 )
+        
+        self.addFloat( ln = 'film_colourspace_white_x', dv = 0.3143 )
+        self.addFloat( ln = 'film_colourspace_white_y', dv = 0.3294 )
+        self.addFloat( ln = 'film_colourspace_red_x', dv = 0.63 )
+        self.addFloat( ln = 'film_colourspace_red_y', dv = 0.34 )
+        self.addFloat( ln = 'film_colourspace_green_x', dv = 0.31 )
+        self.addFloat( ln = 'film_colourspace_green_y', dv = 0.595 )
+        self.addFloat( ln = 'film_colourspace_blue_x', dv = 0.155 )
+        self.addFloat( ln = 'film_colourspace_blue_y', dv = 0.07 )
+        self.addFloat( ln = 'film_gamma', dv = 2.2 )
+        
         self.addLong ( ln = 'film_haltspp', dv = 0 )
         
         # Process settings

@@ -1,0 +1,6 @@
+// requires maya "2008";
+startAttrPreset( "script" );
+blendAttr "scriptType" 0;
+blendAttr "film_colourspace_white_x" 0.348;
+blendAttr "film_colourspace_white_y" 0.352;
+endAttrPreset();

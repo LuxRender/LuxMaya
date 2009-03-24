@@ -39,6 +39,12 @@ from Lux.LuxNodes.TextureNodes.blenderCloudsTexture import blenderCloudsTexture
 from Lux.LuxNodes.TextureNodes.blenderMarbleTexture import blenderMarbleTexture
 from Lux.LuxNodes.TextureNodes.blenderMusgraveTexture import blenderMusgraveTexture
 from Lux.LuxNodes.TextureNodes.blenderWoodTexture import blenderWoodTexture
+from Lux.LuxNodes.TextureNodes.blenderVoronoiTexture import blenderVoronoiTexture
+from Lux.LuxNodes.TextureNodes.blenderStucciTexture import blenderStucciTexture
+from Lux.LuxNodes.TextureNodes.blenderMagicTexture import blenderMagicTexture
+from Lux.LuxNodes.TextureNodes.blenderNoiseTexture import blenderNoiseTexture
+from Lux.LuxNodes.TextureNodes.blenderDistortednoiseTexture import blenderDistortednoiseTexture
+from Lux.LuxNodes.TextureNodes.blenderBlendTexture import blenderBlendTexture
 from Lux.LuxNodes.TextureNodes.checkerboard2dTexture import checkerboard2dTexture
 from Lux.LuxNodes.TextureNodes.checkerboard3dTexture import checkerboard3dTexture
 from Lux.LuxNodes.TextureNodes.dotsTexture import dotsTexture
@@ -50,98 +56,104 @@ from Lux.LuxNodes.TextureNodes.windyTexture import windyTexture
 from Lux.LuxNodes.TextureNodes.wrinkledTexture import wrinkledTexture
 
 #GUI/Commands
-from Lux.LuxCommands.lux_gui    import lux_gui
-from Lux.LuxCommands.luxbatch   import luxbatch
+from Lux.LuxCommands.lux_gui import lux_gui
+from Lux.LuxCommands.luxbatch import luxbatch
 
 # ------------------------------------------------------------------------------
 
 # Global list of commands that we want to register with Maya.
-luxCommands= [
-			  lux_gui,
-			  luxbatch
-			 ]
+luxCommands = [
+    lux_gui,
+    luxbatch
+]
 
 # We need to know the node types when registering, so provide a dict
 # of the nodes and their types.
 luxNodes = {
-		    # shaders
-			luxshader: OpenMayaMPx.MPxNode.kDependNode,
-			
-			# locators / lights
-			luxObjectLocator: OpenMayaMPx.MPxNode.kLocatorNode,
-			luxEnvironmentLight: OpenMayaMPx.MPxNode.kLocatorNode,
-			luxSunsky: OpenMayaMPx.MPxNode.kLocatorNode,
-			
-			# textures
-			bilerpTexture: OpenMayaMPx.MPxNode.kDependNode,
-			blenderCloudsTexture: OpenMayaMPx.MPxNode.kDependNode,
-			blenderMarbleTexture: OpenMayaMPx.MPxNode.kDependNode,
-			blenderMusgraveTexture: OpenMayaMPx.MPxNode.kDependNode,
-			blenderWoodTexture: OpenMayaMPx.MPxNode.kDependNode,
-			checkerboard2dTexture: OpenMayaMPx.MPxNode.kDependNode,
-			checkerboard3dTexture: OpenMayaMPx.MPxNode.kDependNode,
-			dotsTexture: OpenMayaMPx.MPxNode.kDependNode,
-			fbmTexture: OpenMayaMPx.MPxNode.kDependNode,
-			marbleTexture: OpenMayaMPx.MPxNode.kDependNode,
-			mixTexture: OpenMayaMPx.MPxNode.kDependNode,
-			scaleTexture: OpenMayaMPx.MPxNode.kDependNode,
-			windyTexture: OpenMayaMPx.MPxNode.kDependNode,
-			wrinkledTexture: OpenMayaMPx.MPxNode.kDependNode
-		   }
+    # shaders
+    luxshader: OpenMayaMPx.MPxNode.kDependNode,
+    
+    # locators / lights
+    luxObjectLocator: OpenMayaMPx.MPxNode.kLocatorNode,
+    luxEnvironmentLight: OpenMayaMPx.MPxNode.kLocatorNode,
+    luxSunsky: OpenMayaMPx.MPxNode.kLocatorNode,
+    
+    # textures
+    bilerpTexture: OpenMayaMPx.MPxNode.kDependNode,
+    blenderCloudsTexture: OpenMayaMPx.MPxNode.kDependNode,
+    blenderMarbleTexture: OpenMayaMPx.MPxNode.kDependNode,
+    blenderMusgraveTexture: OpenMayaMPx.MPxNode.kDependNode,
+    blenderWoodTexture: OpenMayaMPx.MPxNode.kDependNode,
+    blenderVoronoiTexture: OpenMayaMPx.MPxNode.kDependNode,
+    blenderStucciTexture: OpenMayaMPx.MPxNode.kDependNode,
+    blenderMagicTexture: OpenMayaMPx.MPxNode.kDependNode,
+    blenderNoiseTexture: OpenMayaMPx.MPxNode.kDependNode,
+    blenderDistortednoiseTexture: OpenMayaMPx.MPxNode.kDependNode,
+    blenderBlendTexture: OpenMayaMPx.MPxNode.kDependNode,
+    checkerboard2dTexture: OpenMayaMPx.MPxNode.kDependNode,
+    checkerboard3dTexture: OpenMayaMPx.MPxNode.kDependNode,
+    dotsTexture: OpenMayaMPx.MPxNode.kDependNode,
+    fbmTexture: OpenMayaMPx.MPxNode.kDependNode,
+    marbleTexture: OpenMayaMPx.MPxNode.kDependNode,
+    mixTexture: OpenMayaMPx.MPxNode.kDependNode,
+    scaleTexture: OpenMayaMPx.MPxNode.kDependNode,
+    windyTexture: OpenMayaMPx.MPxNode.kDependNode,
+    wrinkledTexture: OpenMayaMPx.MPxNode.kDependNode
+}
 
 # initialize the script plug-ins
 def initializePlugin(mobject):
-	"""
-	Start the plugin by registering all commands and nodes etc that this plugin provides
-	"""
-	
-	mplugin = OpenMayaMPx.MFnPlugin(mobject, "Lux (D Hammond)", "1.0", "Any")
-	try:
+    """
+    Start the plugin by registering all commands and nodes etc that this plugin provides
+    """
+    
+    mplugin = OpenMayaMPx.MFnPlugin(mobject, "Lux (D Hammond)", "0.6", "Any")
+    try:
 
-		# Register commands
-		for command in luxCommands:
-			mplugin.registerCommand( command.commandName(), command.commandCreator )
+        # Register commands
+        for command in luxCommands:
+            mplugin.registerCommand( command.commandName(), command.commandCreator )
 
-		#Register nodes
-		for node in luxNodes:
-			mplugin.registerNode( node.nodeName(),
-								  node.nodeId(),
-								  node.nodeCreator,
-								  node.nodeInitializer,
-								  luxNodes[node],
-								  node.nodeClassify() )
-		
-		if OpenMaya.MGlobal.mayaState() == OpenMaya.MGlobal.kInteractive:
-			# Create Lux menu
-			lg = lux_gui()
-			lg.makeMainMenu()
-		else:
-			OpenMaya.MGlobal.displayInfo('LuxMaya: Plugin loaded in console mode')
+        #Register nodes
+        for node in luxNodes:
+            mplugin.registerNode(
+                node.nodeName(),
+                node.nodeId(),
+                node.nodeCreator,
+                node.nodeInitializer,
+                luxNodes[node],
+                node.nodeClassify()
+            )
+        
+        if OpenMaya.MGlobal.mayaState() == OpenMaya.MGlobal.kInteractive:
+            # Create Lux menu
+            lg = lux_gui()
+            lg.makeMainMenu()
+        else:
+            OpenMaya.MGlobal.displayInfo('LuxMaya: Plugin loaded in console mode')
 
-		# OpenMaya.MGlobal.displayInfo("Plugin Loaded OK.")
-	except:
-		OpenMaya.MGlobal.displayError( "Failed to register Lux Plugin" )
-		raise
+        # OpenMaya.MGlobal.displayInfo("Plugin Loaded OK.")
+    except:
+        OpenMaya.MGlobal.displayError( "Failed to register Lux Plugin" )
+        raise
 
 # uninitialize the script plug-in
 def uninitializePlugin(mobject):
-	"""
-	Unregister all commands and nodes etc that the initializePlugin() method registered with Maya
-	"""
-	 
-	mplugin = OpenMayaMPx.MFnPlugin(mobject)
-	try:
-		# deregister commands
-		for command in luxCommands:
-			mplugin.deregisterCommand ( command.commandName() )
-	
-		# deregister nodes
-		for node in luxNodes:
-			mplugin.deregisterNode( node.nodeId() )
+    """
+    Unregister all commands and nodes etc that the initializePlugin() method registered with Maya
+    """
+     
+    mplugin = OpenMayaMPx.MFnPlugin(mobject)
+    try:
+        # deregister commands
+        for command in luxCommands:
+            mplugin.deregisterCommand ( command.commandName() )
+    
+        # deregister nodes
+        for node in luxNodes:
+            mplugin.deregisterNode( node.nodeId() )
 
-		# OpenMaya.MGlobal.displayInfo("Plugin Removed OK.")
-	except:
-		OpenMaya.MGlobal.displayError( "Failed to deregister plugin" )
-		raise
-		
-		
+        # OpenMaya.MGlobal.displayInfo("Plugin Removed OK.")
+    except:
+        OpenMaya.MGlobal.displayError( "Failed to deregister plugin" )
+        raise

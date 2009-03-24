@@ -54,9 +54,20 @@ class Film(ExportModule):
         resume          = self.intToBoolString( cmds.getAttr( 'lux_settings.film_write_resume_film' ) )
         restart         = self.intToBoolString( cmds.getAttr( 'lux_settings.film_restart_resume_film' ) )
         
+        tm              = cmds.getAttr( 'lux_settings.film_tonemapping', asString = True ).lower()
+        
+        r_autoywa       = self.intToBoolString( cmds.getAttr( 'lux_settings.film_reinhard_autoywa' ) )
+        r_ywa           = cmds.getAttr( 'lux_settings.film_reinhard_ywa' )
         r_prescale      = cmds.getAttr( 'lux_settings.film_reinhard_prescale' )
         r_postscale     = cmds.getAttr( 'lux_settings.film_reinhard_postscale' )
         r_burn          = cmds.getAttr( 'lux_settings.film_reinhard_burn' )
+        
+        l_sensitivity   = cmds.getAttr( 'lux_settings.film_linear_sensitivity' )
+        l_exposure      = cmds.getAttr( 'lux_settings.film_linear_exposure' )
+        l_fstop         = cmds.getAttr( 'lux_settings.film_linear_fstop' )
+        l_gamma         = cmds.getAttr( 'lux_settings.film_linear_gamma' )
+        
+        c_ywa           = cmds.getAttr( 'lux_settings.film_contrast_ywa' )
         
         writeinterval   = cmds.getAttr( 'lux_settings.film_writeinterval' )
         displayinterval = cmds.getAttr( 'lux_settings.film_displayinterval' )
@@ -64,6 +75,14 @@ class Film(ExportModule):
         
         haltspp         = cmds.getAttr( 'lux_settings.film_haltspp' )
         
+        cs_wx           = cmds.getAttr( 'lux_settings.film_colourspace_white_x' )
+        cs_wy           = cmds.getAttr( 'lux_settings.film_colourspace_white_y' )
+        cs_rx           = cmds.getAttr( 'lux_settings.film_colourspace_red_x' )
+        cs_ry           = cmds.getAttr( 'lux_settings.film_colourspace_red_y' )
+        cs_gx           = cmds.getAttr( 'lux_settings.film_colourspace_green_x' )
+        cs_gy           = cmds.getAttr( 'lux_settings.film_colourspace_green_y' )
+        cs_bx           = cmds.getAttr( 'lux_settings.film_colourspace_blue_x' )
+        cs_by           = cmds.getAttr( 'lux_settings.film_colourspace_blue_y' )
         
         # send to Film output
         self.addToOutput( 'Film "fleximage"' )
@@ -72,7 +91,6 @@ class Film(ExportModule):
         self.addToOutput( '\t"string filename" ["%s"]' % self.imageName )
         
         self.addToOutput( '\t"float cropwindow" [%f %f %f %f]' % ( cx1, cx2, cy1, cy2 ) )
-        self.addToOutput( '\t"float gamma" [%f]' % gamma )
         self.addToOutput( '\t"bool premultiplyalpha" ["%s"]' % prealpha )
         
         self.addToOutput( '\t"bool write_tonemapped_exr" ["%s"]' % tm_exr )
@@ -81,17 +99,42 @@ class Film(ExportModule):
         self.addToOutput( '\t"bool write_untonemapped_exr" ["%s"]' % utm_exr )
         self.addToOutput( '\t"bool write_untonemapped_igi" ["%s"]' % utm_igi )
         
-        
         self.addToOutput( '\t"bool write_resume_flm" ["%s"]' % resume )
         self.addToOutput( '\t"bool restart_resume_flm" ["%s"]' % restart )
         
-        self.addToOutput( '\t"float reinhard_prescale" [%f]'  % r_prescale )
-        self.addToOutput( '\t"float reinhard_postscale" [%f]' % r_postscale )
-        self.addToOutput( '\t"float reinhard_burn" [%f]' % r_burn )
+        if tm == 'reinhard':
+            self.addToOutput( '\t"string tonemapkernel" ["reinhard"]' )
+            
+            if r_autoywa == 'false':
+                self.addToOutput( '\t"float reinhard_ywa" [%f]'  % r_ywa )
+            self.addToOutput( '\t"float reinhard_prescale" [%f]'  % r_prescale )
+            self.addToOutput( '\t"float reinhard_postscale" [%f]' % r_postscale )
+            self.addToOutput( '\t"float reinhard_burn" [%f]' % r_burn )
+            
+        elif tm == 'linear':
+            self.addToOutput( '\t"string tonemapkernel" ["linear"]' )
+            self.addToOutput( '\t"float linear_sensitivity" [%f]'  % l_sensitivity )
+            self.addToOutput( '\t"float linear_exposure" [%f]'  % l_exposure )
+            self.addToOutput( '\t"float linear_fstop" [%f]'  % l_fstop )
+            self.addToOutput( '\t"float linear_gamma" [%f]'  % l_gamma )
+            
+        elif tm == 'contrast':
+            self.addToOutput( '\t"string tonemapkernel" ["contrast"]' )
+            self.addToOutput( '\t"float contrast_ywa" [%f]'  % c_ywa )
+            
+        elif tm == 'maxwhite':
+            self.addToOutput( '\t"string tonemapkernel" ["maxwhite"]' )
         
         self.addToOutput( '\t"integer writeinterval" [%i]' % writeinterval )
         self.addToOutput( '\t"integer displayinterval" [%i]' % displayinterval )
         self.addToOutput( '\t"integer reject_warmup" [%i]' % reject_warmup )
+        
+        self.addToOutput( '\t"float colorspace_white" [%f %f]' % (cs_wx, cs_wy) )
+        self.addToOutput( '\t"float colorspace_red" [%f %f]'   % (cs_rx, cs_ry) )
+        self.addToOutput( '\t"float colorspace_green" [%f %f]' % (cs_gx, cs_gy) )
+        self.addToOutput( '\t"float colorspace_blue" [%f %f]'  % (cs_bx, cs_by) )
+        
+        self.addToOutput( '\t"float gamma" [%f]' % gamma )
         
         self.addToOutput( '\t"integer haltspp" [%i]' % haltspp )
         

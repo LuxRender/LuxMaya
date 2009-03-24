@@ -10,7 +10,7 @@
 #
 # ------------------------------------------------------------------------------
 #
-# Lux material shader node for Maya ( substrate attributes )
+# Lux material shader node for Maya ( glossy attributes )
 #
 # ------------------------------------------------------------------------------
 
@@ -21,12 +21,12 @@ from Lux.LuxNodes.ShaderNode import ShaderNode
 from Lux.LuxNodes.LuxNode import ShaderColorAttribute
 from Lux.LuxNodes.LuxNode import ShaderFloatAttribute
 
-class substrateShader(OpenMayaMPx.MPxNode, ShaderNode):
+class glossyShader(OpenMayaMPx.MPxNode, ShaderNode):
     """
-    Substrate fragment of luxshader
+    Glossy fragment of luxshader
     """
     
-    # substrate
+    # glossy
     kd            =    OpenMaya.MObject()    # color
     ks            =    OpenMaya.MObject()    # color
     uroughness    =    OpenMaya.MObject()    # float
@@ -37,27 +37,27 @@ class substrateShader(OpenMayaMPx.MPxNode, ShaderNode):
 
         # Export attributes
         self.attributes = {}
-        self.luxType = "substrate"
-        self.attributes['Kd']         = ShaderColorAttribute('substrateKd')
-        self.attributes['Ks']         = ShaderColorAttribute('substrateKs')
-        self.attributes['uroughness'] = ShaderFloatAttribute('substrateURoughness', reciprocal = True)
-        self.attributes['vroughness'] = ShaderFloatAttribute('substrateVRoughness', reciprocal = True)
+        self.luxType = "glossy"
+        self.attributes['Kd']         = ShaderColorAttribute('glossyKd')
+        self.attributes['Ks']         = ShaderColorAttribute('glossyKs')
+        self.attributes['uroughness'] = ShaderFloatAttribute('glossyURoughness', reciprocal = True)
+        self.attributes['vroughness'] = ShaderFloatAttribute('glossyVRoughness', reciprocal = True)
 
     @staticmethod
     def shaderInitializer():
         try:
             # diffuse reflectivity
-            substrateShader.kd = substrateShader.makeColor("substrateKd", "skd", 0.5, 0.5, 0.5)
+            glossyShader.kd = glossyShader.makeColor("glossyKd", "skd", 0.5, 0.5, 0.5)
 
             # specular reflectivity
-            substrateShader.ks = substrateShader.makeColor("substrateKs", "sks", 0.5, 0.5, 0.5)
+            glossyShader.ks = glossyShader.makeColor("glossyKs", "sks", 0.5, 0.5, 0.5)
 
             # U roughness
-            substrateShader.uroughness = substrateShader.makeFloat("substrateURoughness", "sur", 500.0)
+            glossyShader.uroughness = glossyShader.makeFloat("glossyURoughness", "sur", 500.0)
 
             # V roughness
-            substrateShader.vroughness = substrateShader.makeFloat("substrateVRoughness", "svr", 500.0)
+            glossyShader.vroughness = glossyShader.makeFloat("glossyVRoughness", "svr", 500.0)
 
         except:
-            OpenMaya.MGlobal.displayError("Failed to create substrate attributes\n")
+            OpenMaya.MGlobal.displayError("Failed to create glossy attributes\n")
             raise

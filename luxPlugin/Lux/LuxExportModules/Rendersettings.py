@@ -76,7 +76,7 @@ class Rendersettings(ExportModule):
         if accelerator == 'grid':
             self.addToOutput( '\t"bool refineimmediately" ["%s"]' % accelerator_refineimmediately )
             
-        if accelerator in ('kdtree','unsafekdtree'):
+        if accelerator == 'tabreckdtree':
             self.addToOutput( '\t"integer intersectcost" [%i]' % accelerator_intersectcost )
             self.addToOutput( '\t"integer traversalcost" [%i]' % accelerator_traversalcost )
             self.addToOutput( '\t"float emptybonus" [%f]' % accelerator_emptybonus )
@@ -98,13 +98,15 @@ class Rendersettings(ExportModule):
         surface_integrator_strategy             = cmds.getAttr( 'lux_settings.surface_integrator_strategy', asString = True ).lower()
         surface_integrator_rrcontinueprob       = cmds.getAttr( 'lux_settings.surface_integrator_rrcontinueprob' )
         
-        surface_integrator_causticphotons       = cmds.getAttr( 'lux_settings.surface_integrator_causticphotons' )
-        surface_integrator_indirectphotons      = cmds.getAttr( 'lux_settings.surface_integrator_indirectphotons' )
-        surface_integrator_nused                = cmds.getAttr( 'lux_settings.surface_integrator_nused' )
-        surface_integrator_finalgather          = self.intToBoolString( cmds.getAttr( 'lux_settings.surface_integrator_finalgather' ) )
-        surface_integrator_finalgathersamples   = cmds.getAttr( 'lux_settings.surface_integrator_finalgathersamples' )
-        surface_integrator_maxdist              = cmds.getAttr( 'lux_settings.surface_integrator_maxdist' )
-        surface_integrator_gatherangle          = cmds.getAttr( 'lux_settings.surface_integrator_gatherangle' )
+        # old exphotonmap settings
+        #surface_integrator_causticphotons       = cmds.getAttr( 'lux_settings.surface_integrator_causticphotons' )
+        #surface_integrator_indirectphotons      = cmds.getAttr( 'lux_settings.surface_integrator_indirectphotons' )
+        #surface_integrator_nused                = cmds.getAttr( 'lux_settings.surface_integrator_nused' )
+        #surface_integrator_finalgather          = self.intToBoolString( cmds.getAttr( 'lux_settings.surface_integrator_finalgather' ) )
+        #surface_integrator_finalgathersamples   = cmds.getAttr( 'lux_settings.surface_integrator_finalgathersamples' )
+        #surface_integrator_maxdist              = cmds.getAttr( 'lux_settings.surface_integrator_maxdist' )
+        #surface_integrator_gatherangle          = cmds.getAttr( 'lux_settings.surface_integrator_gatherangle' )
+        
         surface_integrator_diffusedepth         = cmds.getAttr( 'lux_settings.surface_integrator_diffusedepth' )
         surface_integrator_glossydepth          = cmds.getAttr( 'lux_settings.surface_integrator_glossydepth' )
         surface_integrator_speculardepth        = cmds.getAttr( 'lux_settings.surface_integrator_speculardepth' )
@@ -118,20 +120,20 @@ class Rendersettings(ExportModule):
         if surface_integrator in ('directlighting', 'path', 'distributedpath'):
             self.addToOutput( '\t"string strategy" ["%s"]' % surface_integrator_strategy )
             
-        if surface_integrator == 'particletracing':
-            self.addToOutput( '\t"float rrcontinueprob" [%f]' % surface_integrator_rrcontinueprob )
+        #if surface_integrator == 'particletracing':
+        #    self.addToOutput( '\t"float rrcontinueprob" [%f]' % surface_integrator_rrcontinueprob )
             
-        if surface_integrator in ('directlighting','particletracing','path', 'exphotonmap'):
+        if surface_integrator in ('directlighting','path'): #'particletracing', 'exphotonmap'
             self.addToOutput( '\t"integer maxdepth" [%i]' % surface_integrator_maxdepth )
             
-        if surface_integrator == 'exphotonmap':
-            self.addToOutput( '\t"integer causticphotons" [%i]' % surface_integrator_causticphotons )
-            self.addToOutput( '\t"integer indirectphotons" [%i]' % surface_integrator_indirectphotons )
-            self.addToOutput( '\t"integer nused" [%i]' % surface_integrator_nused )
-            self.addToOutput( '\t"bool finalgather" ["%s"]' % surface_integrator_finalgather )
-            self.addToOutput( '\t"integer finalgathersamples" [%i]' % surface_integrator_finalgathersamples )
-            self.addToOutput( '\t"float maxdist" [%f]' % surface_integrator_maxdist )
-            self.addToOutput( '\t"float gatherangle" [%f]' % surface_integrator_gatherangle )
+        #if surface_integrator == 'exphotonmap':
+        #    self.addToOutput( '\t"integer causticphotons" [%i]' % surface_integrator_causticphotons )
+        #    self.addToOutput( '\t"integer indirectphotons" [%i]' % surface_integrator_indirectphotons )
+        #    self.addToOutput( '\t"integer nused" [%i]' % surface_integrator_nused )
+        #    self.addToOutput( '\t"bool finalgather" ["%s"]' % surface_integrator_finalgather )
+        #    self.addToOutput( '\t"integer finalgathersamples" [%i]' % surface_integrator_finalgathersamples )
+        #    self.addToOutput( '\t"float maxdist" [%f]' % surface_integrator_maxdist )
+        #    self.addToOutput( '\t"float gatherangle" [%f]' % surface_integrator_gatherangle )
             
         if surface_integrator == 'distributedpath':
             self.addToOutput( '\t"integer diffusedepth" [%i]' % surface_integrator_diffusedepth )
@@ -160,14 +162,16 @@ class Rendersettings(ExportModule):
         
         self.addToOutput( 'Sampler "%s"' % pixel_sampler )
         
+        # DH-0.6RC 24/03/2009 remove halton sampler
+        
         if pixel_sampler == "random":
             self.addToOutput( '\t"integer xsamples" [%i]' % pixel_sampler_xsamples )
             self.addToOutput( '\t"integer ysamples" [%i]' % pixel_sampler_ysamples )
         
-        if pixel_sampler in ('random','lowdiscrepancy','halton'):
+        if pixel_sampler in ('random','lowdiscrepancy'): #,'halton'):
             self.addToOutput( '\t"string pixelsampler" ["%s"]' % pixel_sampler_pixelsampler )
 
-        if pixel_sampler in ('lowdiscrepancy','halton'):
+        if pixel_sampler in ('lowdiscrepancy'): #,'halton'):
             self.addToOutput( '\t"integer pixelsamples" [%i]' % pixel_sampler_pixelsamples )
         
         if pixel_sampler == "metropolis":

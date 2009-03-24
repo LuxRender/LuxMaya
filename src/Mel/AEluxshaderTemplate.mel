@@ -106,20 +106,12 @@
 			editorTemplate -l "Mix amount" -addControl "mixAmount";
 		editorTemplate -endLayout;
 		
-		// Plastic
-		editorTemplate -beginLayout "Plastic Attributes" -collapse 1;
-			editorTemplate -l "Diffuse" -addControl "plasticKd";
-			editorTemplate -l "Specular" -addControl "plasticKs";
-			editorTemplate -l "U Exponent" -addControl "plasticURoughness";
-			editorTemplate -l "V Exponent" -addControl "plasticVRoughness";
-		editorTemplate -endLayout;
-		
-		// Substrate
-		editorTemplate -beginLayout "Substrate Attributes" -collapse 1;
-			editorTemplate -l "Diffuse" -addControl "substrateKd";
-			editorTemplate -l "Specular" -addControl "substrateKs";
-			editorTemplate -l "U Exponent" -addControl "substrateURoughness";
-			editorTemplate -l "V Exponent" -addControl "substrateVRoughness";
+		// Glossy
+		editorTemplate -beginLayout "Glossy Attributes" -collapse 1;
+			editorTemplate -l "Diffuse" -addControl "glossyKd";
+			editorTemplate -l "Specular" -addControl "glossyKs";
+			editorTemplate -l "U Exponent" -addControl "glossyURoughness";
+			editorTemplate -l "V Exponent" -addControl "glossyVRoughness";
 		editorTemplate -endLayout;
 		
 		// AreaLight
@@ -263,34 +255,19 @@ global proc luxshader_changeType( string $nodeName )
 		editorTemplate -dc $nodeName "mirrorKr" true;
 	}
 	
-	if ($type==8) // == Plastic
+	if ($type==9) // == Glossy
 	{
-		editorTemplate -dc $nodeName "plasticKd" false;
-		editorTemplate -dc $nodeName "plasticKs" false;
-		editorTemplate -dc $nodeName "plasticURoughness" false;
-		editorTemplate -dc $nodeName "plasticVRoughness" false;
+		editorTemplate -dc $nodeName "glossyKd" false;
+		editorTemplate -dc $nodeName "glossyKs" false;
+		editorTemplate -dc $nodeName "glossyURoughness" false;
+		editorTemplate -dc $nodeName "glossyVRoughness" false;
 	}
 	else
 	{
-		editorTemplate -dc $nodeName "plasticKd" true;
-		editorTemplate -dc $nodeName "plasticKs" true;
-		editorTemplate -dc $nodeName "plasticURoughness" true;
-		editorTemplate -dc $nodeName "plasticVRoughness" true;
-	}
-	
-	if ($type==9) // == Substrate
-	{
-		editorTemplate -dc $nodeName "substrateKd" false;
-		editorTemplate -dc $nodeName "substrateKs" false;
-		editorTemplate -dc $nodeName "substrateURoughness" false;
-		editorTemplate -dc $nodeName "substrateVRoughness" false;
-	}
-	else
-	{
-		editorTemplate -dc $nodeName "substrateKd" true;
-		editorTemplate -dc $nodeName "substrateKs" true;
-		editorTemplate -dc $nodeName "substrateURoughness" true;
-		editorTemplate -dc $nodeName "substrateVRoughness" true;
+		editorTemplate -dc $nodeName "glossyKd" true;
+		editorTemplate -dc $nodeName "glossyKs" true;
+		editorTemplate -dc $nodeName "glossyURoughness" true;
+		editorTemplate -dc $nodeName "glossyVRoughness" true;
 	}
 	
 	if ($type==10) // == Area Light

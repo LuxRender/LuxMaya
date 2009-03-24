@@ -102,11 +102,22 @@ class ExportModule:
     def detectInput(self, attrType):
         self.inputFound = False
         
+        # maya translations
+        from Lux.LuxNodes.TextureNodes.bumpmapTexture import bumpmapTexture
+        from Lux.LuxNodes.TextureNodes.fileTexture import fileTexture
+        
+        # Lux custom nodes
         from Lux.LuxNodes.TextureNodes.bilerpTexture import bilerpTexture
         from Lux.LuxNodes.TextureNodes.blenderCloudsTexture import blenderCloudsTexture
         from Lux.LuxNodes.TextureNodes.blenderMarbleTexture import blenderMarbleTexture
         from Lux.LuxNodes.TextureNodes.blenderMusgraveTexture import blenderMusgraveTexture
         from Lux.LuxNodes.TextureNodes.blenderWoodTexture import blenderWoodTexture
+        from Lux.LuxNodes.TextureNodes.blenderVoronoiTexture import blenderVoronoiTexture
+        from Lux.LuxNodes.TextureNodes.blenderStucciTexture import blenderStucciTexture
+        from Lux.LuxNodes.TextureNodes.blenderMagicTexture import blenderMagicTexture
+        from Lux.LuxNodes.TextureNodes.blenderNoiseTexture import blenderNoiseTexture
+        from Lux.LuxNodes.TextureNodes.blenderDistortednoiseTexture import blenderDistortednoiseTexture
+        from Lux.LuxNodes.TextureNodes.blenderBlendTexture import blenderBlendTexture
         from Lux.LuxNodes.TextureNodes.checkerboard2dTexture import checkerboard2dTexture
         from Lux.LuxNodes.TextureNodes.checkerboard3dTexture import checkerboard3dTexture
         from Lux.LuxNodes.TextureNodes.dotsTexture import dotsTexture
@@ -117,75 +128,64 @@ class ExportModule:
         from Lux.LuxNodes.TextureNodes.windyTexture import windyTexture
         from Lux.LuxNodes.TextureNodes.wrinkledTexture import wrinkledTexture
         
-        # psuedo-texture nodes
-        from Lux.LuxNodes.TextureNodes.bumpmapTexture import bumpmapTexture
-        from Lux.LuxNodes.TextureNodes.fileTexture import fileTexture
-        
         onPlug = self.shaderNode.findPlug(self.plugName)
         inputPlugs = OpenMaya.MPlugArray()
         onPlug.connectedTo(inputPlugs, True, True)
         
         textureNode = False
         
+        # Maya translations
+        maya_texture_map = {
+            OpenMaya.MFn.kBump:             bumpmapTexture,
+            OpenMaya.MFn.kBump3d:           bumpmapTexture,
+            OpenMaya.MFn.kFileTexture:      fileTexture,
+        }
+        
+        custom_nodes = [
+            bilerpTexture,
+            blenderCloudsTexture,
+            blenderMarbleTexture,
+            blenderMusgraveTexture,
+            blenderWoodTexture,
+            blenderVoronoiTexture,
+            blenderStucciTexture,
+            blenderMagicTexture,
+            blenderNoiseTexture,
+            blenderDistortednoiseTexture,
+            blenderBlendTexture,
+            checkerboard2dTexture,
+            checkerboard3dTexture,
+            dotsTexture,
+            fbmTexture,
+            marbleTexture,
+            mixTexture,
+            scaleTexture,
+            windyTexture,
+            wrinkledTexture,
+        ]
+        
+        # custom Lux nodes
+        lux_texture_map = {}
+        
+        for custom_node in custom_nodes:
+            lux_texture_map[custom_node.nodeName()] = custom_node
+        
         for ftIndex in range(0, inputPlugs.length()):
             inputNode = inputPlugs[ftIndex].node()
             iNFn = OpenMaya.MFnDependencyNode( inputNode )
-            if inputNode.apiType() == OpenMaya.MFn.kBump \
-            or inputNode.apiType() == OpenMaya.MFn.kBump3d:
-                textureNode = bumpmapTexture()
+            
+            # maya translations
+            if inputNode.apiType() in maya_texture_map.keys():
+                textureNode = maya_texture_map[inputNode.apiType()]()
                 break
-            if inputNode.apiType() == OpenMaya.MFn.kFileTexture:
-                textureNode = fileTexture()
-                break
-            if iNFn.typeName() == bilerpTexture.nodeName():
-                textureNode = bilerpTexture()
-                break
-            if iNFn.typeName() == blenderCloudsTexture.nodeName():
-                textureNode = blenderCloudsTexture()
-                break
-            if iNFn.typeName() == blenderMarbleTexture.nodeName():
-                textureNode = blenderMarbleTexture()
-                break
-            if iNFn.typeName() == blenderMusgraveTexture.nodeName():
-                textureNode = blenderMusgraveTexture()
-                break
-            if iNFn.typeName() == blenderWoodTexture.nodeName():
-                textureNode = blenderWoodTexture()
-                break
-            if iNFn.typeName() == checkerboard2dTexture.nodeName():
-                textureNode = checkerboard2dTexture()
-                break
-            if iNFn.typeName() == checkerboard3dTexture.nodeName():
-                textureNode = checkerboard3dTexture()
-                break
-            if iNFn.typeName() == dotsTexture.nodeName():
-                textureNode = dotsTexture()
-                break
-            if iNFn.typeName() == fbmTexture.nodeName():
-                textureNode = fbmTexture()
-                break
-            if iNFn.typeName() == marbleTexture.nodeName():
-                textureNode = marbleTexture()
-                break
-            if iNFn.typeName() == mixTexture.nodeName():
-                textureNode = mixTexture()
-                break
-            if iNFn.typeName() == scaleTexture.nodeName():
-                textureNode = scaleTexture()
-                break
-            if iNFn.typeName() == windyTexture.nodeName():
-                textureNode = windyTexture()
-                break
-            if iNFn.typeName() == fbmTexture.nodeName():
-                textureNode = fbmTexture()
-                break
-            if iNFn.typeName() == wrinkledTexture.nodeName():
-                textureNode = wrinkledTexture()
+            
+            # lux custom nodes
+            if iNFn.typeName() in lux_texture_map.keys():
+                textureNode = lux_texture_map[iNFn.typeName()]()
                 break
             
         if not textureNode == False:
             self.inputFound = True
-            #self.addToOutput(
             return iNFn.name(), textureNode.getTexture( self.plugName, iNFn, iNFn.name(), attrType )
         else:
             return '', ''

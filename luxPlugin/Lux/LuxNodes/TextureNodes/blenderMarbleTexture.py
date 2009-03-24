@@ -142,8 +142,8 @@ class blenderMarbleTexture(OpenMayaMPx.MPxNode, TextureNode):
         self.attributes['rotate'] = TextureVectorAttribute('rotate', self.addToOutput, self.prependToOutput)
         self.attributes['scale'] = TextureVectorAttribute('scale', self.addToOutput, self.prependToOutput)
         
-        self.attributes['tex1']   = TextureFloatAttribute('tex1',  self.addToOutput, self.prependToOutput)
-        self.attributes['tex2']   = TextureFloatAttribute('tex2',  self.addToOutput, self.prependToOutput)
+        self.attributes['tex1']   = TextureColorAttribute('tex1',  self.addToOutput, self.prependToOutput)
+        self.attributes['tex2']   = TextureColorAttribute('tex2',  self.addToOutput, self.prependToOutput)
     
     def postConstructor(self):
         self._setMPSafe( True )
@@ -263,8 +263,8 @@ class blenderMarbleTexture(OpenMayaMPx.MPxNode, TextureNode):
             blenderMarbleTexture.bright = blenderMarbleTexture.makeFloat("bright", "br", 1.0)
             blenderMarbleTexture.contrast = blenderMarbleTexture.makeFloat("contrast", "co", 1.0)
             
-            blenderMarbleTexture.tex1 = blenderMarbleTexture.makeFloat("tex1", "t1", 0.0)
-            blenderMarbleTexture.tex2 = blenderMarbleTexture.makeFloat("tex2", "t2", 1.0)
+            blenderMarbleTexture.tex1 = blenderMarbleTexture.makeColor("tex1", "t1", 0.0, 0.0, 0.0)
+            blenderMarbleTexture.tex2 = blenderMarbleTexture.makeColor("tex2", "t2", 1.0, 1.0, 1.0)
 
 
         except:

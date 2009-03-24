@@ -130,8 +130,8 @@ class blenderCloudsTexture(OpenMayaMPx.MPxNode, TextureNode):
         self.attributes['rotate'] = TextureVectorAttribute('rotate', self.addToOutput, self.prependToOutput)
         self.attributes['scale'] = TextureVectorAttribute('scale', self.addToOutput, self.prependToOutput)
         
-        self.attributes['tex1']   = TextureFloatAttribute('tex1',  self.addToOutput, self.prependToOutput)
-        self.attributes['tex2']   = TextureFloatAttribute('tex2',  self.addToOutput, self.prependToOutput)
+        self.attributes['tex1']   = TextureColorAttribute('tex1',  self.addToOutput, self.prependToOutput)
+        self.attributes['tex2']   = TextureColorAttribute('tex2',  self.addToOutput, self.prependToOutput)
     
     def postConstructor(self):
         self._setMPSafe( True )
@@ -245,8 +245,8 @@ class blenderCloudsTexture(OpenMayaMPx.MPxNode, TextureNode):
             blenderCloudsTexture.bright = blenderCloudsTexture.makeFloat("bright", "br", 1.0)
             blenderCloudsTexture.contrast = blenderCloudsTexture.makeFloat("contrast", "co", 1.0)
             
-            blenderCloudsTexture.tex1 = blenderCloudsTexture.makeFloat("tex1", "t1", 0.0)
-            blenderCloudsTexture.tex2 = blenderCloudsTexture.makeFloat("tex2", "t2", 1.0)
+            blenderCloudsTexture.tex1 = blenderCloudsTexture.makeColor("tex1", "t1", 0.0, 0.0, 0.0)
+            blenderCloudsTexture.tex2 = blenderCloudsTexture.makeColor("tex2", "t2", 1.0, 1.0, 1.0)
 
 
         except:
