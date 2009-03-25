@@ -93,6 +93,18 @@ class LuxNode:
             LuxNode.makeOrdinary( nAttr )
         # nAttr.setDefault( default )
         return attrOut
+    
+    @staticmethod
+    def makeString(longName, shortName, default = "default", input = True):
+        tAttr = OpenMaya.MFnTypedAttribute()
+        attrOut = tAttr.create(longName, shortName, OpenMaya.MFnData.kString)
+        if input:
+            LuxNode.makeInput( tAttr )
+        else:
+            LuxNode.makeOrdinary( tAttr )
+        tAttr.setDefault( OpenMaya.MFnStringData().create(default) )
+        
+        return attrOut
 
 
             

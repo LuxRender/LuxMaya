@@ -304,7 +304,11 @@ class ExportModule:
         nsPlug = shaderNode.findPlug("arealightNumsamples")
         numSamples = nsPlug.asInt()
         
-        outStr  = '\tAreaLightSource "area"' + os.linesep
+        lgPlug = shaderNode.findPlug("arealightGroup")
+        lightGroup = lgPlug.asString()
+        
+        outStr  = ( '\tLightGroup "%s"' % lightGroup ) + os.linesep
+        outStr += ( '\tAreaLightSource "area"' ) + os.linesep
         outStr += ( '\t\t"integer nsamples" [%i]' % numSamples ) + os.linesep
         outStr += ( '\t\t"color L" [%f %f %f]' % (colorR, colorG, colorB) ) + os.linesep
         outStr += ( '\t\t"float gain" [%f]' % gain ) + os.linesep

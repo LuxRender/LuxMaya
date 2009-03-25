@@ -21,17 +21,17 @@ from maya import OpenMayaMPx
 from ShaderNode                            import ShaderNode
 
 from ShaderNodes.carpaintShader            import carpaintShader
-from ShaderNodes.glassShader            import glassShader
-from ShaderNodes.matteShader            import matteShader
-from ShaderNodes.mattetranslucentShader import mattetranslucentShader
-from ShaderNodes.metalShader            import metalShader
-from ShaderNodes.mixShader                import mixShader
-from ShaderNodes.mirrorShader            import mirrorShader
-from ShaderNodes.roughglassShader        import roughglassShader
-from ShaderNodes.shinymetalShader        import shinymetalShader
-from ShaderNodes.glossyShader            import glossyShader
+from ShaderNodes.glassShader               import glassShader
+from ShaderNodes.matteShader               import matteShader
+from ShaderNodes.mattetranslucentShader    import mattetranslucentShader
+from ShaderNodes.metalShader               import metalShader
+from ShaderNodes.mixShader                 import mixShader
+from ShaderNodes.mirrorShader              import mirrorShader
+from ShaderNodes.roughglassShader          import roughglassShader
+from ShaderNodes.shinymetalShader          import shinymetalShader
+from ShaderNodes.glossyShader              import glossyShader
 
-from ShaderNodes.arealightShader        import arealightShader
+from ShaderNodes.arealightShader           import arealightShader
 
 class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
     """
@@ -68,24 +68,24 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
         OpenMayaMPx.MPxNode.__init__(self)
 
         # 4 generic attributes to set up the shader's internal operation
-        iMaterialType        =    OpenMaya.MObject()    # enum
-        bumpMap             =    OpenMaya.MObject()    # point
-        outColor            =    OpenMaya.MObject()    # color
-        transparency        =   OpenMaya.MObject()    # transparency
+        iMaterialType       =  OpenMaya.MObject()    # enum
+        bumpMap             =  OpenMaya.MObject()    # point
+        outColor            =  OpenMaya.MObject()    # color
+        transparency        =  OpenMaya.MObject()    # transparency
         
         # instances of shader types
         carpaint            = carpaintShader()
-        glass                = glassShader()
-        roughglass            = roughglassShader()
-        matte                = matteShader()
+        glass               = glassShader()
+        roughglass          = roughglassShader()
+        matte               = matteShader()
         mattetranslucent    = mattetranslucentShader()
-        metal                = metalShader()
-        mix                   = mixShader()
-        shinymetal            = shinymetalShader()
-        mirror                = mirrorShader
-        glossy                = glossyShader()
+        metal               = metalShader()
+        mix                 = mixShader()
+        shinymetal          = shinymetalShader()
+        mirror              = mirrorShader
+        glossy              = glossyShader()
         
-        arealight            = arealightShader()        # not technically a shader
+        arealight           = arealightShader()        # not technically a shader
         
 
     def postConstructor(self):
@@ -134,18 +134,18 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
         enumAttr    = OpenMaya.MFnEnumAttribute()
 
         # reference instances of shader types
-        luxshader.carpaint            = carpaintShader()
+        luxshader.carpaint          = carpaintShader()
         luxshader.glass             = glassShader()
         luxshader.roughglass        = roughglassShader()
         luxshader.matte             = matteShader()
-        luxshader.mattetranslucent    = mattetranslucentShader()
+        luxshader.mattetranslucent  = mattetranslucentShader()
         luxshader.metal             = metalShader()
-        luxshader.mix                 = mixShader()
+        luxshader.mix               = mixShader()
         luxshader.shinymetal        = shinymetalShader()
         luxshader.mirror            = mirrorShader()
-        luxshader.glossy             = glossyShader()
+        luxshader.glossy            = glossyShader()
 
-        luxshader.arealight            = arealightShader()
+        luxshader.arealight         = arealightShader()
 
         try:
             # set up the base attributes
@@ -284,6 +284,7 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
             luxshader.addAttribute(luxshader.arealight.L)
             luxshader.addAttribute(luxshader.arealight.gain)
             luxshader.addAttribute(luxshader.arealight.numsamples)
+            luxshader.addAttribute(luxshader.arealight.lightGroup)
             
 
         except:
