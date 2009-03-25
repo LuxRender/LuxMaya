@@ -22,7 +22,7 @@ from Lux.LuxNodes.TextureNode import TextureNode
 from Lux.LuxNodes.LuxNode import TextureColorAttribute
 from Lux.LuxNodes.LuxNode import TextureFloatAttribute
 
-# 3D Texture
+# Float Texture
 class mixTexture(OpenMayaMPx.MPxNode, TextureNode):
     """
     Lux Mix Texture node for Maya
@@ -30,23 +30,6 @@ class mixTexture(OpenMayaMPx.MPxNode, TextureNode):
     
     outColor        = OpenMaya.MObject()
     outAlpha        = OpenMaya.MObject()
-    
-    # maya 3d common attributes
-    placementMatrix = OpenMaya.MObject()
-    pointWorld      = OpenMaya.MObject()
-
-    # maya 2d common attributes
-#    UVCoord         = OpenMaya.MObject()
-#    uvFilterSize    = OpenMaya.MObject()
-    
-    # lux common 2D options attributes
-#    mapping         = OpenMaya.MObject()
-#    uscale          = OpenMaya.MObject()
-#    vscale          = OpenMaya.MObject()
-#    udelta          = OpenMaya.MObject()
-#    vdelta          = OpenMaya.MObject()
-#    v1              = OpenMaya.MObject()
-#    v2              = OpenMaya.MObject()
     
     # lux texture specific attributes
     tex1             = OpenMaya.MObject()
@@ -70,7 +53,7 @@ class mixTexture(OpenMayaMPx.MPxNode, TextureNode):
 
     @staticmethod
     def nodeClassify():
-        return "texture/3d"
+        return "texture/other"
     
     def __init__(self):
         OpenMayaMPx.MPxNode.__init__(self)
@@ -85,35 +68,6 @@ class mixTexture(OpenMayaMPx.MPxNode, TextureNode):
         self._setMPSafe( True )
         self.setExistWithoutOutConnections( True )
         self.setExistWithoutInConnections( True )
-
-    
-#    def compute(self, plug, block):
-#        
-#        if plug == self.outColor \
-#        or plug == self.outAlpha:
-#        #or plug.parent() == self.outColor \
-#            worldPos = block.inputValue( self.pointWorld ).asFloatVector()
-#            m = block.inputValue( self.placementMatrix ).asFloatMatrix()
-#            
-#            q = OpenMaya.MFloatPoint(worldPos[0] + m(3,0), worldPos[1] + m(3,1), worldPos[2] + m(3,2))
-#            
-#            #om = block.inputValue( self.roughness ).asFloat()
-#            #oc = block.inputValue( self.octaves ).asInt()
-#            
-#            #fbm = self.FBm(q.x, q.y, q.z, om, oc)
-#            
-#            resultColor = OpenMaya.MFloatVector() #fbm, fbm, fbm)
-#            
-#            outColorHandle = block.outputValue( self.outColor )
-#            outColorHandle.setMFloatVector(resultColor)
-#            outColorHandle.setClean()
-#            
-#            outAlphaHandle = block.outputValue( self.outAlpha )
-#            outAlphaHandle.setFloat( 0.0 )
-#            outAlphaHandle.setClean()
-#
-#        else:
-#            return OpenMaya.kUnknownParameter
     
     @staticmethod
     def nodeInitializer():
@@ -133,27 +87,6 @@ class mixTexture(OpenMayaMPx.MPxNode, TextureNode):
             nAttr.setReadable(1)
             nAttr.setWritable(0)
             
-            # 2D Params
-#            uvChild1 = nAttr.create( "uCoord", "u", OpenMaya.MFnNumericData.kFloat )
-#            uvChild2 = nAttr.create( "vCoord", "v", OpenMaya.MFnNumericData.kFloat )
-#            bilerpTexture.UVCoord = nAttr.create( "uvCoord", "uv", uvChild1, uvChild2 )
-#            bilerpTexture.makeInput( nAttr )
-#            nAttr.setHidden( True )
-#            
-#            uvChild3 = nAttr.create( "uvFilterSizeX", "fsx", OpenMaya.MFnNumericData.kFloat )
-#            uvChild4 = nAttr.create( "uvFilterSizeY", "fsy", OpenMaya.MFnNumericData.kFloat )
-#            bilerpTexture.uvFilterSize = nAttr.create( "uvFilterSize", "fs", uvChild3, uvChild4 )
-#            bilerpTexture.makeInput( nAttr )
-#            nAttr.setHidden( True )
-            
-            # 3D Params
-            mixTexture.placementMatrix = mAttr.create("placementMatrix", "pm")
-            mixTexture.makeInput(mAttr)
-            
-            mixTexture.pointWorld = nAttr.createPoint("pointWorld", "pw")
-            mixTexture.makeInput(nAttr)
-            nAttr.setHidden(True)
-            
             mixTexture.tex1 = mixTexture.makeColor("tex1", "t1")
             mixTexture.tex2 = mixTexture.makeColor("tex2", "t2")
             mixTexture.amount = mixTexture.makeFloat("amount", "am")
@@ -166,27 +99,10 @@ class mixTexture(OpenMayaMPx.MPxNode, TextureNode):
         try:
             mixTexture.addAttribute(mixTexture.outColor)
             mixTexture.addAttribute(mixTexture.outAlpha)
-            mixTexture.addAttribute(mixTexture.placementMatrix)
-            mixTexture.addAttribute(mixTexture.pointWorld)
             
             mixTexture.addAttribute(mixTexture.tex1)
             mixTexture.addAttribute(mixTexture.tex2)
             mixTexture.addAttribute(mixTexture.amount)
-
-            
-#            mixTexture.attributeAffects(mixTexture.tex1, mixTexture.outColor)
-#            mixTexture.attributeAffects(mixTexture.tex2, mixTexture.outColor)
-#            mixTexture.attributeAffects(mixTexture.amount, mixTexture.outColor)
-#
-#            mixTexture.attributeAffects(mixTexture.pointWorld, mixTexture.outColor)
-#            mixTexture.attributeAffects(mixTexture.placementMatrix, mixTexture.outColor)
-#            
-#            mixTexture.attributeAffects(mixTexture.tex1, mixTexture.outAlpha)
-#            mixTexture.attributeAffects(mixTexture.tex2, mixTexture.outAlpha)
-#            mixTexture.attributeAffects(mixTexture.amount, mixTexture.outAlpha)
-#
-#            mixTexture.attributeAffects(mixTexture.pointWorld, mixTexture.outAlpha)
-#            mixTexture.attributeAffects(mixTexture.placementMatrix, mixTexture.outAlpha)
             
         except:
             OpenMaya.MGlobal.displayError("Failed to add attributes\n")

@@ -176,29 +176,7 @@ class dotsTexture(OpenMayaMPx.MPxNode, TextureNode):
             
             dotsTexture.addAttribute(dotsTexture.inside)
             dotsTexture.addAttribute(dotsTexture.outside)
-
-#            dotsTexture.attributeAffects(dotsTexture.inside, dotsTexture.outColor)
-#            dotsTexture.attributeAffects(dotsTexture.outside, dotsTexture.outColor)
-#
-#            dotsTexture.attributeAffects(dotsTexture.mapping, dotsTexture.outColor)
-#            dotsTexture.attributeAffects(dotsTexture.uscale, dotsTexture.outColor)
-#            dotsTexture.attributeAffects(dotsTexture.vscale, dotsTexture.outColor)
-#            dotsTexture.attributeAffects(dotsTexture.udelta, dotsTexture.outColor)
-#            dotsTexture.attributeAffects(dotsTexture.vdelta, dotsTexture.outColor)
-#            dotsTexture.attributeAffects(dotsTexture.v1, dotsTexture.outColor)
-#            dotsTexture.attributeAffects(dotsTexture.v2, dotsTexture.outColor)
-#            
-#            dotsTexture.attributeAffects(dotsTexture.inside, dotsTexture.outAlpha)
-#            dotsTexture.attributeAffects(dotsTexture.outside, dotsTexture.outAlpha)
-#
-#            dotsTexture.attributeAffects(dotsTexture.mapping, dotsTexture.outAlpha)
-#            dotsTexture.attributeAffects(dotsTexture.uscale, dotsTexture.outAlpha)
-#            dotsTexture.attributeAffects(dotsTexture.vscale, dotsTexture.outAlpha)
-#            dotsTexture.attributeAffects(dotsTexture.udelta, dotsTexture.outAlpha)
-#            dotsTexture.attributeAffects(dotsTexture.vdelta, dotsTexture.outAlpha)
-#            dotsTexture.attributeAffects(dotsTexture.v1, dotsTexture.outAlpha)
-#            dotsTexture.attributeAffects(dotsTexture.v2, dotsTexture.outAlpha)
-            
+                        
         except:
             OpenMaya.MGlobal.displayError("Failed to add attributes\n")
             raise

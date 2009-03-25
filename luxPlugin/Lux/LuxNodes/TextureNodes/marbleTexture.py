@@ -142,24 +142,7 @@ class marbleTexture(OpenMayaMPx.MPxNode, TextureNode):
             marbleTexture.addAttribute(marbleTexture.octaves)
             marbleTexture.addAttribute(marbleTexture.roughness)
 #            marbleTexture.addAttribute(marbleTexture.scale)
-            marbleTexture.addAttribute(marbleTexture.variation)
-
-#            marbleTexture.attributeAffects(marbleTexture.octaves, marbleTexture.outColor)
-#            marbleTexture.attributeAffects(marbleTexture.roughness, marbleTexture.outColor)
-#            marbleTexture.attributeAffects(marbleTexture.scale, marbleTexture.outColor)
-#            marbleTexture.attributeAffects(marbleTexture.variation, marbleTexture.outColor)
-#
-#            marbleTexture.attributeAffects(marbleTexture.pointWorld, marbleTexture.outColor)
-#            marbleTexture.attributeAffects(marbleTexture.placementMatrix, marbleTexture.outColor)
-#            
-#            marbleTexture.attributeAffects(marbleTexture.octaves, marbleTexture.outAlpha)
-#            marbleTexture.attributeAffects(marbleTexture.roughness, marbleTexture.outAlpha)
-#            marbleTexture.attributeAffects(marbleTexture.scale, marbleTexture.outAlpha)
-#            marbleTexture.attributeAffects(marbleTexture.variation, marbleTexture.outAlpha)
-#
-#            marbleTexture.attributeAffects(marbleTexture.pointWorld, marbleTexture.outAlpha)
-#            marbleTexture.attributeAffects(marbleTexture.placementMatrix, marbleTexture.outAlpha)
-            
+            marbleTexture.addAttribute(marbleTexture.variation)         
         except:
             OpenMaya.MGlobal.displayError("Failed to add attributes\n")
             raise

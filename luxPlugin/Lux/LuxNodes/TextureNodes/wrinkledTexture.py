@@ -135,31 +135,8 @@ class wrinkledTexture(OpenMayaMPx.MPxNode, TextureNode):
 
             wrinkledTexture.addAttribute(wrinkledTexture.octaves)
             wrinkledTexture.addAttribute(wrinkledTexture.roughness)
-            
-#            wrinkledTexture.attributeAffects(wrinkledTexture.octaves, wrinkledTexture.outColor)
-#            wrinkledTexture.attributeAffects(wrinkledTexture.roughness, wrinkledTexture.outColor)
-#            wrinkledTexture.attributeAffects(wrinkledTexture.pointWorld, wrinkledTexture.outColor)
-#            wrinkledTexture.attributeAffects(wrinkledTexture.placementMatrix, wrinkledTexture.outColor)
-#            
-#            wrinkledTexture.attributeAffects(wrinkledTexture.octaves, wrinkledTexture.outAlpha)
-#            wrinkledTexture.attributeAffects(wrinkledTexture.roughness, wrinkledTexture.outAlpha)
-#            wrinkledTexture.attributeAffects(wrinkledTexture.pointWorld, wrinkledTexture.outAlpha)
-#            wrinkledTexture.attributeAffects(wrinkledTexture.placementMatrix, wrinkledTexture.outAlpha)
-            
+                     
         except:
             OpenMaya.MGlobal.displayError("Failed to add attributes\n")
             raise
-    
-#    def Wrinkled(self, Px, Py, Pz, omega, maxOctaves):
-#
-#        sum = 0.0
-#        llambda = 1.0
-#        o = 1.0
-#        for i in range(0, maxOctaves):
-#            sum += o * abs( self.Noise(llambda*Px, llambda*Py, llambda*Pz) )
-#            llambda *= 1.99
-#            o *= omega
-#            
-#        sum += o * self.SmoothStep(.3, .7, 0) * abs( self.Noise(llambda*Px, llambda*Py, llambda*Pz) )
-#        
-#        return sum
+        

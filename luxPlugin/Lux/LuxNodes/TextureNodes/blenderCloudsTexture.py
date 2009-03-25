@@ -41,19 +41,6 @@ class blenderCloudsTexture(OpenMayaMPx.MPxNode, TextureNode):
     rotate          = OpenMaya.MObject()
     scale           = OpenMaya.MObject()
     
-    # maya 2d common attributes
-#    UVCoord         = OpenMaya.MObject()
-#    uvFilterSize    = OpenMaya.MObject()
-    
-    # lux common 2D options attributes
-#    mapping         = OpenMaya.MObject()
-#    uscale          = OpenMaya.MObject()
-#    vscale          = OpenMaya.MObject()
-#    udelta          = OpenMaya.MObject()
-#    vdelta          = OpenMaya.MObject()
-#    v1              = OpenMaya.MObject()
-#    v2              = OpenMaya.MObject()
-    
     # lux texture specific attributes
     
     noisesize        = OpenMaya.MObject()
@@ -123,6 +110,7 @@ class blenderCloudsTexture(OpenMayaMPx.MPxNode, TextureNode):
         self.attributes['type']       = TextureEnumAttribute('type',  self.addToOutput, self.prependToOutput, asString = True, nameValues = self.aTypes)
         self.attributes['noisetype']  = TextureEnumAttribute('noisetype',  self.addToOutput, self.prependToOutput, asString = True, nameValues = self.aNoiseTypes)
         self.attributes['noisebasis'] = TextureEnumAttribute('noisebasis',  self.addToOutput, self.prependToOutput, asString = True, nameValues = self.aNoises)
+        
         self.attributes['bright']     = TextureFloatAttribute('bright',  self.addToOutput, self.prependToOutput)
         self.attributes['contrast']   = TextureFloatAttribute('contrast',  self.addToOutput, self.prependToOutput)
         
@@ -137,35 +125,6 @@ class blenderCloudsTexture(OpenMayaMPx.MPxNode, TextureNode):
         self._setMPSafe( True )
         self.setExistWithoutOutConnections( True )
         self.setExistWithoutInConnections( True )
-
-    
-#    def compute(self, plug, block):
-#        
-#        if plug == self.outColor \
-#        or plug == self.outAlpha:
-#        #or plug.parent() == self.outColor \
-#            worldPos = block.inputValue( self.pointWorld ).asFloatVector()
-#            m = block.inputValue( self.placementMatrix ).asFloatMatrix()
-#            
-#            q = OpenMaya.MFloatPoint(worldPos[0] + m(3,0), worldPos[1] + m(3,1), worldPos[2] + m(3,2))
-#            
-#            #om = block.inputValue( self.roughness ).asFloat()
-#            #oc = block.inputValue( self.octaves ).asInt()
-#            
-#            #fbm = self.FBm(q.x, q.y, q.z, om, oc)
-#            
-#            resultColor = OpenMaya.MFloatVector() #fbm, fbm, fbm)
-#            
-#            outColorHandle = block.outputValue( self.outColor )
-#            outColorHandle.setMFloatVector(resultColor)
-#            outColorHandle.setClean()
-#            
-#            outAlphaHandle = block.outputValue( self.outAlpha )
-#            outAlphaHandle.setFloat( 0.0 )
-#            outAlphaHandle.setClean()
-#
-#        else:
-#            return OpenMaya.kUnknownParameter
     
     @staticmethod
     def nodeInitializer():
@@ -185,20 +144,6 @@ class blenderCloudsTexture(OpenMayaMPx.MPxNode, TextureNode):
             nAttr.setStorable(0)
             nAttr.setReadable(1)
             nAttr.setWritable(0)
-            
-
-            # 2D Params
-#            uvChild1 = nAttr.create( "uCoord", "u", OpenMaya.MFnNumericData.kFloat )
-#            uvChild2 = nAttr.create( "vCoord", "v", OpenMaya.MFnNumericData.kFloat )
-#            bilerpTexture.UVCoord = nAttr.create( "uvCoord", "uv", uvChild1, uvChild2 )
-#            bilerpTexture.makeInput( nAttr )
-#            nAttr.setHidden( True )
-#            
-#            uvChild3 = nAttr.create( "uvFilterSizeX", "fsx", OpenMaya.MFnNumericData.kFloat )
-#            uvChild4 = nAttr.create( "uvFilterSizeY", "fsy", OpenMaya.MFnNumericData.kFloat )
-#            bilerpTexture.uvFilterSize = nAttr.create( "uvFilterSize", "fs", uvChild3, uvChild4 )
-#            bilerpTexture.makeInput( nAttr )
-#            nAttr.setHidden( True )
             
             # 3D Params
             blenderCloudsTexture.placementMatrix = mAttr.create("placementMatrix", "pm")
@@ -270,43 +215,13 @@ class blenderCloudsTexture(OpenMayaMPx.MPxNode, TextureNode):
             blenderCloudsTexture.addAttribute(blenderCloudsTexture.type)
             blenderCloudsTexture.addAttribute(blenderCloudsTexture.noisetype)
             blenderCloudsTexture.addAttribute(blenderCloudsTexture.noisebasis)
+            
             blenderCloudsTexture.addAttribute(blenderCloudsTexture.bright)
             blenderCloudsTexture.addAttribute(blenderCloudsTexture.contrast)
             
             blenderCloudsTexture.addAttribute(blenderCloudsTexture.tex1)
             blenderCloudsTexture.addAttribute(blenderCloudsTexture.tex2)
-
-            
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.h, blenderCloudsTexture.outColor)
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.lacu, blenderCloudsTexture.outColor)
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.octs, blenderCloudsTexture.outColor)
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.gain, blenderCloudsTexture.outColor)
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.offset, blenderCloudsTexture.outColor)
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.noisesize, blenderCloudsTexture.outColor)
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.outscale, blenderCloudsTexture.outColor)
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.type, blenderCloudsTexture.outColor)
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.noisebasis, blenderCloudsTexture.outColor)
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.bright, blenderCloudsTexture.outColor)
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.contrast, blenderCloudsTexture.outColor)
-#
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.pointWorld, blenderCloudsTexture.outColor)
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.placementMatrix, blenderCloudsTexture.outColor)
-            
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.h, blenderCloudsTexture.outAlpha)
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.lacu, blenderCloudsTexture.outAlpha)
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.octs, blenderCloudsTexture.outAlpha)
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.gain, blenderCloudsTexture.outAlpha)
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.offset, blenderCloudsTexture.outAlpha)
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.noisesize, blenderCloudsTexture.outAlpha)
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.outscale, blenderCloudsTexture.outAlpha)
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.type, blenderCloudsTexture.outAlpha)
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.noisebasis, blenderCloudsTexture.outAlpha)
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.bright, blenderCloudsTexture.outAlpha)
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.contrast, blenderCloudsTexture.outAlpha)
-#
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.pointWorld, blenderCloudsTexture.outAlpha)
-#            blenderCloudsTexture.attributeAffects(blenderCloudsTexture.placementMatrix, blenderCloudsTexture.outAlpha)
-            
+                       
         except:
             OpenMaya.MGlobal.displayError("Failed to add attributes\n")
             raise

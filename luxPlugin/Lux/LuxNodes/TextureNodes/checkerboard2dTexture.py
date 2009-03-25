@@ -192,30 +192,6 @@ class checkerboard2dTexture(OpenMayaMPx.MPxNode, TextureNode):
             checkerboard2dTexture.addAttribute(checkerboard2dTexture.tex2)
             checkerboard2dTexture.addAttribute(checkerboard2dTexture.aamode)
             
-#            checkerboard2dTexture.attributeAffects(checkerboard2dTexture.mapping, checkerboard2dTexture.outColor)
-#            checkerboard2dTexture.attributeAffects(checkerboard2dTexture.uscale, checkerboard2dTexture.outColor)
-#            checkerboard2dTexture.attributeAffects(checkerboard2dTexture.vscale, checkerboard2dTexture.outColor)
-#            checkerboard2dTexture.attributeAffects(checkerboard2dTexture.udelta, checkerboard2dTexture.outColor)
-#            checkerboard2dTexture.attributeAffects(checkerboard2dTexture.vdelta, checkerboard2dTexture.outColor)
-#            checkerboard2dTexture.attributeAffects(checkerboard2dTexture.v1, checkerboard2dTexture.outColor)
-#            checkerboard2dTexture.attributeAffects(checkerboard2dTexture.v2, checkerboard2dTexture.outColor)
-#            
-#            checkerboard2dTexture.attributeAffects(checkerboard2dTexture.tex1, checkerboard2dTexture.outAlpha)
-#            checkerboard2dTexture.attributeAffects(checkerboard2dTexture.tex2, checkerboard2dTexture.outAlpha)
-#            checkerboard2dTexture.attributeAffects(checkerboard2dTexture.aamode, checkerboard2dTexture.outAlpha)
-#            
-#            checkerboard2dTexture.attributeAffects(checkerboard2dTexture.mapping, checkerboard2dTexture.outAlpha)
-#            checkerboard2dTexture.attributeAffects(checkerboard2dTexture.uscale, checkerboard2dTexture.outAlpha)
-#            checkerboard2dTexture.attributeAffects(checkerboard2dTexture.vscale, checkerboard2dTexture.outAlpha)
-#            checkerboard2dTexture.attributeAffects(checkerboard2dTexture.udelta, checkerboard2dTexture.outAlpha)
-#            checkerboard2dTexture.attributeAffects(checkerboard2dTexture.vdelta, checkerboard2dTexture.outAlpha)
-#            checkerboard2dTexture.attributeAffects(checkerboard2dTexture.v1, checkerboard2dTexture.outAlpha)
-#            checkerboard2dTexture.attributeAffects(checkerboard2dTexture.v2, checkerboard2dTexture.outAlpha)
-#            
-#            checkerboard2dTexture.attributeAffects(checkerboard2dTexture.tex1, checkerboard2dTexture.outAlpha)
-#            checkerboard2dTexture.attributeAffects(checkerboard2dTexture.tex2, checkerboard2dTexture.outAlpha)
-#            checkerboard2dTexture.attributeAffects(checkerboard2dTexture.aamode, checkerboard2dTexture.outAlpha)
-
         except:
             OpenMaya.MGlobal.displayError("Failed to add attributes\n")
             raise

@@ -62,7 +62,7 @@ class LuxNode:
         return attrOut
 
     @staticmethod
-    def makeFloat(longName, shortName, default = 0.0, input = False):
+    def makeFloat(longName, shortName, default = 0.0, input = True):
         nAttr = OpenMaya.MFnNumericAttribute()
         attrOut = nAttr.create(longName, shortName, OpenMaya.MFnNumericData.kFloat)
         if input:
@@ -73,7 +73,7 @@ class LuxNode:
         return attrOut
     
     @staticmethod
-    def makeInteger(longName, shortName, default = 0, input = False):
+    def makeInteger(longName, shortName, default = 0, input = True):
         nAttr = OpenMaya.MFnNumericAttribute()
         attrOut = nAttr.create(longName, shortName, OpenMaya.MFnNumericData.kInt)
         if input:
@@ -84,7 +84,7 @@ class LuxNode:
         return attrOut
     
     @staticmethod
-    def makeBoolean(longName, shortName, default = False, input = False):
+    def makeBoolean(longName, shortName, default = False, input = True):
         nAttr = OpenMaya.MFnNumericAttribute()
         attrOut = nAttr.create(longName, shortName, OpenMaya.MFnNumericData.kBoolean)
         if input:

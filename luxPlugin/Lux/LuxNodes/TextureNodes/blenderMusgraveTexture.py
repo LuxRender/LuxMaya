@@ -41,19 +41,6 @@ class blenderMusgraveTexture(OpenMayaMPx.MPxNode, TextureNode):
     translate       = OpenMaya.MObject()
     rotate          = OpenMaya.MObject()
     scale           = OpenMaya.MObject()
-
-    # maya 2d common attributes
-#    UVCoord         = OpenMaya.MObject()
-#    uvFilterSize    = OpenMaya.MObject()
-    
-    # lux common 2D options attributes
-#    mapping         = OpenMaya.MObject()
-#    uscale          = OpenMaya.MObject()
-#    vscale          = OpenMaya.MObject()
-#    udelta          = OpenMaya.MObject()
-#    vdelta          = OpenMaya.MObject()
-#    v1              = OpenMaya.MObject()
-#    v2              = OpenMaya.MObject()
     
     # lux texture specific attributes
     h                = OpenMaya.MObject()
@@ -92,8 +79,6 @@ class blenderMusgraveTexture(OpenMayaMPx.MPxNode, TextureNode):
     # pseudo-mix
     tex1             = OpenMaya.MObject()
     tex2             = OpenMaya.MObject()
-    
-    
     
     @staticmethod
     def nodeName():
@@ -143,35 +128,6 @@ class blenderMusgraveTexture(OpenMayaMPx.MPxNode, TextureNode):
         self._setMPSafe( True )
         self.setExistWithoutOutConnections( True )
         self.setExistWithoutInConnections( True )
-
-    
-#    def compute(self, plug, block):
-#        
-#        if plug == self.outColor \
-#        or plug == self.outAlpha:
-#        #or plug.parent() == self.outColor \
-#            worldPos = block.inputValue( self.pointWorld ).asFloatVector()
-#            m = block.inputValue( self.placementMatrix ).asFloatMatrix()
-#            
-#            q = OpenMaya.MFloatPoint(worldPos[0] + m(3,0), worldPos[1] + m(3,1), worldPos[2] + m(3,2))
-#            
-#            #om = block.inputValue( self.roughness ).asFloat()
-#            #oc = block.inputValue( self.octaves ).asInt()
-#            
-#            #fbm = self.FBm(q.x, q.y, q.z, om, oc)
-#            
-#            resultColor = OpenMaya.MFloatVector() #fbm, fbm, fbm)
-#            
-#            outColorHandle = block.outputValue( self.outColor )
-#            outColorHandle.setMFloatVector(resultColor)
-#            outColorHandle.setClean()
-#            
-#            outAlphaHandle = block.outputValue( self.outAlpha )
-#            outAlphaHandle.setFloat( 0.0 )
-#            outAlphaHandle.setClean()
-#
-#        else:
-#            return OpenMaya.kUnknownParameter
     
     @staticmethod
     def nodeInitializer():
@@ -191,19 +147,6 @@ class blenderMusgraveTexture(OpenMayaMPx.MPxNode, TextureNode):
             nAttr.setStorable(0)
             nAttr.setReadable(1)
             nAttr.setWritable(0)
-            
-            # 2D Params
-#            uvChild1 = nAttr.create( "uCoord", "u", OpenMaya.MFnNumericData.kFloat )
-#            uvChild2 = nAttr.create( "vCoord", "v", OpenMaya.MFnNumericData.kFloat )
-#            bilerpTexture.UVCoord = nAttr.create( "uvCoord", "uv", uvChild1, uvChild2 )
-#            bilerpTexture.makeInput( nAttr )
-#            nAttr.setHidden( True )
-#            
-#            uvChild3 = nAttr.create( "uvFilterSizeX", "fsx", OpenMaya.MFnNumericData.kFloat )
-#            uvChild4 = nAttr.create( "uvFilterSizeY", "fsy", OpenMaya.MFnNumericData.kFloat )
-#            bilerpTexture.uvFilterSize = nAttr.create( "uvFilterSize", "fs", uvChild3, uvChild4 )
-#            bilerpTexture.makeInput( nAttr )
-#            nAttr.setHidden( True )
             
             # 3D Params
             blenderMusgraveTexture.placementMatrix = mAttr.create("placementMatrix", "pm")
@@ -282,38 +225,7 @@ class blenderMusgraveTexture(OpenMayaMPx.MPxNode, TextureNode):
             blenderMusgraveTexture.addAttribute(blenderMusgraveTexture.translate)
             blenderMusgraveTexture.addAttribute(blenderMusgraveTexture.rotate)
             blenderMusgraveTexture.addAttribute(blenderMusgraveTexture.scale)
-
-            
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.h, blenderMusgraveTexture.outColor)
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.lacu, blenderMusgraveTexture.outColor)
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.octs, blenderMusgraveTexture.outColor)
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.gain, blenderMusgraveTexture.outColor)
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.offset, blenderMusgraveTexture.outColor)
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.noisesize, blenderMusgraveTexture.outColor)
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.outscale, blenderMusgraveTexture.outColor)
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.type, blenderMusgraveTexture.outColor)
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.noisebasis, blenderMusgraveTexture.outColor)
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.bright, blenderMusgraveTexture.outColor)
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.contrast, blenderMusgraveTexture.outColor)
-#
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.pointWorld, blenderMusgraveTexture.outColor)
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.placementMatrix, blenderMusgraveTexture.outColor)
-            
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.h, blenderMusgraveTexture.outAlpha)
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.lacu, blenderMusgraveTexture.outAlpha)
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.octs, blenderMusgraveTexture.outAlpha)
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.gain, blenderMusgraveTexture.outAlpha)
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.offset, blenderMusgraveTexture.outAlpha)
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.noisesize, blenderMusgraveTexture.outAlpha)
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.outscale, blenderMusgraveTexture.outAlpha)
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.type, blenderMusgraveTexture.outAlpha)
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.noisebasis, blenderMusgraveTexture.outAlpha)
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.bright, blenderMusgraveTexture.outAlpha)
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.contrast, blenderMusgraveTexture.outAlpha)
-#
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.pointWorld, blenderMusgraveTexture.outAlpha)
-#            blenderMusgraveTexture.attributeAffects(blenderMusgraveTexture.placementMatrix, blenderMusgraveTexture.outAlpha)
-            
+                       
         except:
             OpenMaya.MGlobal.displayError("Failed to add attributes\n")
             raise

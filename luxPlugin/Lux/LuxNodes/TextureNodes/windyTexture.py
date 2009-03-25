@@ -127,13 +127,7 @@ class windyTexture(OpenMayaMPx.MPxNode, TextureNode):
             windyTexture.addAttribute(windyTexture.translate)
             windyTexture.addAttribute(windyTexture.rotate)
             windyTexture.addAttribute(windyTexture.scale)
-
-#            windyTexture.attributeAffects(windyTexture.pointWorld, windyTexture.outColor)
-#            windyTexture.attributeAffects(windyTexture.placementMatrix, windyTexture.outColor)
-#            
-#            windyTexture.attributeAffects(windyTexture.pointWorld, windyTexture.outAlpha)
-#            windyTexture.attributeAffects(windyTexture.placementMatrix, windyTexture.outAlpha)
-            
+                       
         except:
             OpenMaya.MGlobal.displayError("Failed to add attributes\n")
             raise

@@ -135,31 +135,7 @@ class fbmTexture(OpenMayaMPx.MPxNode, TextureNode):
 
             fbmTexture.addAttribute(fbmTexture.octaves)
             fbmTexture.addAttribute(fbmTexture.roughness)
-            
-#            fbmTexture.attributeAffects(fbmTexture.octaves, fbmTexture.outColor)
-#            fbmTexture.attributeAffects(fbmTexture.roughness, fbmTexture.outColor)
-#            fbmTexture.attributeAffects(fbmTexture.pointWorld, fbmTexture.outColor)
-#            fbmTexture.attributeAffects(fbmTexture.placementMatrix, fbmTexture.outColor)
-#            
-#            fbmTexture.attributeAffects(fbmTexture.octaves, fbmTexture.outAlpha)
-#            fbmTexture.attributeAffects(fbmTexture.roughness, fbmTexture.outAlpha)
-#            fbmTexture.attributeAffects(fbmTexture.pointWorld, fbmTexture.outAlpha)
-#            fbmTexture.attributeAffects(fbmTexture.placementMatrix, fbmTexture.outAlpha)
-            
+                      
         except:
             OpenMaya.MGlobal.displayError("Failed to add attributes\n")
             raise
-    
-#    def FBm(self, Px, Py, Pz, omega, maxOctaves):
-#
-#        sum = 0.0
-#        llambda = 1.0
-#        o = 1.0
-#        for i in range(0, maxOctaves):
-#            sum += o * self.Noise(llambda*Px, llambda*Py, llambda*Pz)
-#            llambda *= 1.99
-#            o *= omega
-#            
-#        sum += o * self.SmoothStep(.3, .7, 0) * self.Noise(llambda*Px, llambda*Py, llambda*Pz)
-#        
-#        return sum

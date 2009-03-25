@@ -153,21 +153,7 @@ class checkerboard3dTexture(OpenMayaMPx.MPxNode, TextureNode):
             checkerboard3dTexture.addAttribute(checkerboard3dTexture.tex1)
             checkerboard3dTexture.addAttribute(checkerboard3dTexture.tex2)
             checkerboard3dTexture.addAttribute(checkerboard3dTexture.aamode)
-
-#            checkerboard3dTexture.attributeAffects(checkerboard3dTexture.tex1, checkerboard3dTexture.outColor)
-#            checkerboard3dTexture.attributeAffects(checkerboard3dTexture.tex2, checkerboard3dTexture.outColor)
-#            checkerboard3dTexture.attributeAffects(checkerboard3dTexture.aamode, checkerboard3dTexture.outColor)
-#
-#            checkerboard3dTexture.attributeAffects(checkerboard3dTexture.pointWorld, checkerboard3dTexture.outColor)
-#            checkerboard3dTexture.attributeAffects(checkerboard3dTexture.placementMatrix, checkerboard3dTexture.outColor)
-#            
-#            checkerboard3dTexture.attributeAffects(checkerboard3dTexture.tex1, checkerboard3dTexture.outAlpha)
-#            checkerboard3dTexture.attributeAffects(checkerboard3dTexture.tex2, checkerboard3dTexture.outAlpha)
-#            checkerboard3dTexture.attributeAffects(checkerboard3dTexture.aamode, checkerboard3dTexture.outAlpha)
-#
-#            checkerboard3dTexture.attributeAffects(checkerboard3dTexture.pointWorld, checkerboard3dTexture.outAlpha)
-#            checkerboard3dTexture.attributeAffects(checkerboard3dTexture.placementMatrix, checkerboard3dTexture.outAlpha)
-            
+                        
         except:
             OpenMaya.MGlobal.displayError("Failed to add attributes\n")
             raise

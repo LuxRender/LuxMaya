@@ -19,12 +19,11 @@ from maya import OpenMaya
 from maya import OpenMayaMPx
 
 from Lux.LuxNodes.TextureNode import TextureNode
-from Lux.LuxNodes.LuxNode import TextureIntegerAttribute
 from Lux.LuxNodes.LuxNode import TextureFloatAttribute
 from Lux.LuxNodes.LuxNode import TextureColorAttribute
 from Lux.LuxNodes.LuxNode import TextureEnumAttribute
 
-# 3D Texture
+# 2D Texture
 class bilerpTexture(OpenMayaMPx.MPxNode, TextureNode):
     """
     Lux BiLerp Texture node for Maya
@@ -187,32 +186,6 @@ class bilerpTexture(OpenMayaMPx.MPxNode, TextureNode):
             bilerpTexture.addAttribute(bilerpTexture.v01)
             bilerpTexture.addAttribute(bilerpTexture.v10)
             bilerpTexture.addAttribute(bilerpTexture.v11)
-            
-#            bilerpTexture.attributeAffects(bilerpTexture.mapping, bilerpTexture.outColor)
-#            bilerpTexture.attributeAffects(bilerpTexture.uscale, bilerpTexture.outColor)
-#            bilerpTexture.attributeAffects(bilerpTexture.vscale, bilerpTexture.outColor)
-#            bilerpTexture.attributeAffects(bilerpTexture.udelta, bilerpTexture.outColor)
-#            bilerpTexture.attributeAffects(bilerpTexture.vdelta, bilerpTexture.outColor)
-#            bilerpTexture.attributeAffects(bilerpTexture.v1, bilerpTexture.outColor)
-#            bilerpTexture.attributeAffects(bilerpTexture.v2, bilerpTexture.outColor)
-#
-#            bilerpTexture.attributeAffects(bilerpTexture.v00, bilerpTexture.outColor)
-#            bilerpTexture.attributeAffects(bilerpTexture.v01, bilerpTexture.outColor)
-#            bilerpTexture.attributeAffects(bilerpTexture.v10, bilerpTexture.outColor)
-#            bilerpTexture.attributeAffects(bilerpTexture.v11, bilerpTexture.outColor)
-#            
-#            bilerpTexture.attributeAffects(bilerpTexture.mapping, bilerpTexture.outAlpha)
-#            bilerpTexture.attributeAffects(bilerpTexture.uscale, bilerpTexture.outAlpha)
-#            bilerpTexture.attributeAffects(bilerpTexture.vscale, bilerpTexture.outAlpha)
-#            bilerpTexture.attributeAffects(bilerpTexture.udelta, bilerpTexture.outAlpha)
-#            bilerpTexture.attributeAffects(bilerpTexture.vdelta, bilerpTexture.outAlpha)
-#            bilerpTexture.attributeAffects(bilerpTexture.v1, bilerpTexture.outAlpha)
-#            bilerpTexture.attributeAffects(bilerpTexture.v2, bilerpTexture.outAlpha)
-#            
-#            bilerpTexture.attributeAffects(bilerpTexture.v00, bilerpTexture.outAlpha)
-#            bilerpTexture.attributeAffects(bilerpTexture.v01, bilerpTexture.outAlpha)
-#            bilerpTexture.attributeAffects(bilerpTexture.v10, bilerpTexture.outAlpha)
-#            bilerpTexture.attributeAffects(bilerpTexture.v11, bilerpTexture.outAlpha)
 
         except:
             OpenMaya.MGlobal.displayError("Failed to add attributes\n")

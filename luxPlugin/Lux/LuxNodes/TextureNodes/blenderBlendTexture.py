@@ -97,6 +97,9 @@ class blenderBlendTexture(OpenMayaMPx.MPxNode, TextureNode):
         self.attributes['rotate'] = TextureVectorAttribute('rotate', self.addToOutput, self.prependToOutput)
         self.attributes['scale'] = TextureVectorAttribute('scale', self.addToOutput, self.prependToOutput)
         
+        self.attributes['bright'] = TextureFloatAttribute('bright', self.addToOutput, self.prependToOutput)
+        self.attributes['contrast'] = TextureFloatAttribute('contrast', self.addToOutput, self.prependToOutput)
+        
         self.attributes['tex1']   = TextureColorAttribute('tex1',  self.addToOutput, self.prependToOutput)
         self.attributes['tex2']   = TextureColorAttribute('tex2',  self.addToOutput, self.prependToOutput)
     
@@ -177,6 +180,9 @@ class blenderBlendTexture(OpenMayaMPx.MPxNode, TextureNode):
 
             blenderBlendTexture.addAttribute(blenderBlendTexture.flipxy)
             blenderBlendTexture.addAttribute(blenderBlendTexture.type)
+            
+            blenderBlendTexture.addAttribute(blenderBlendTexture.bright)
+            blenderBlendTexture.addAttribute(blenderBlendTexture.contrast)
 
             blenderBlendTexture.addAttribute(blenderBlendTexture.tex1)
             blenderBlendTexture.addAttribute(blenderBlendTexture.tex2)

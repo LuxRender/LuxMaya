@@ -42,19 +42,6 @@ class blenderMarbleTexture(OpenMayaMPx.MPxNode, TextureNode):
     rotate          = OpenMaya.MObject()
     scale           = OpenMaya.MObject()
     
-    # maya 2d common attributes
-#    UVCoord         = OpenMaya.MObject()
-#    uvFilterSize    = OpenMaya.MObject()
-    
-    # lux common 2D options attributes
-#    mapping         = OpenMaya.MObject()
-#    uscale          = OpenMaya.MObject()
-#    vscale          = OpenMaya.MObject()
-#    udelta          = OpenMaya.MObject()
-#    vdelta          = OpenMaya.MObject()
-#    v1              = OpenMaya.MObject()
-#    v2              = OpenMaya.MObject()
-    
     # lux texture specific attributes
     
     noisesize        = OpenMaya.MObject()
@@ -149,35 +136,6 @@ class blenderMarbleTexture(OpenMayaMPx.MPxNode, TextureNode):
         self._setMPSafe( True )
         self.setExistWithoutOutConnections( True )
         self.setExistWithoutInConnections( True )
-
-    
-#    def compute(self, plug, block):
-#        
-#        if plug == self.outColor \
-#        or plug == self.outAlpha:
-#        #or plug.parent() == self.outColor \
-#            worldPos = block.inputValue( self.pointWorld ).asFloatVector()
-#            m = block.inputValue( self.placementMatrix ).asFloatMatrix()
-#            
-#            q = OpenMaya.MFloatPoint(worldPos[0] + m(3,0), worldPos[1] + m(3,1), worldPos[2] + m(3,2))
-#            
-#            #om = block.inputValue( self.roughness ).asFloat()
-#            #oc = block.inputValue( self.octaves ).asInt()
-#            
-#            #fbm = self.FBm(q.x, q.y, q.z, om, oc)
-#            
-#            resultColor = OpenMaya.MFloatVector() #fbm, fbm, fbm)
-#            
-#            outColorHandle = block.outputValue( self.outColor )
-#            outColorHandle.setMFloatVector(resultColor)
-#            outColorHandle.setClean()
-#            
-#            outAlphaHandle = block.outputValue( self.outAlpha )
-#            outAlphaHandle.setFloat( 0.0 )
-#            outAlphaHandle.setClean()
-#
-#        else:
-#            return OpenMaya.kUnknownParameter
     
     @staticmethod
     def nodeInitializer():
@@ -197,19 +155,6 @@ class blenderMarbleTexture(OpenMayaMPx.MPxNode, TextureNode):
             nAttr.setStorable(0)
             nAttr.setReadable(1)
             nAttr.setWritable(0)
-
-            # 2D Params
-#            uvChild1 = nAttr.create( "uCoord", "u", OpenMaya.MFnNumericData.kFloat )
-#            uvChild2 = nAttr.create( "vCoord", "v", OpenMaya.MFnNumericData.kFloat )
-#            bilerpTexture.UVCoord = nAttr.create( "uvCoord", "uv", uvChild1, uvChild2 )
-#            bilerpTexture.makeInput( nAttr )
-#            nAttr.setHidden( True )
-#            
-#            uvChild3 = nAttr.create( "uvFilterSizeX", "fsx", OpenMaya.MFnNumericData.kFloat )
-#            uvChild4 = nAttr.create( "uvFilterSizeY", "fsy", OpenMaya.MFnNumericData.kFloat )
-#            bilerpTexture.uvFilterSize = nAttr.create( "uvFilterSize", "fs", uvChild3, uvChild4 )
-#            bilerpTexture.makeInput( nAttr )
-#            nAttr.setHidden( True )
             
             # 3D Params
             blenderMarbleTexture.placementMatrix = mAttr.create("placementMatrix", "pm")
@@ -295,37 +240,7 @@ class blenderMarbleTexture(OpenMayaMPx.MPxNode, TextureNode):
 
             blenderMarbleTexture.addAttribute(blenderMarbleTexture.tex1)
             blenderMarbleTexture.addAttribute(blenderMarbleTexture.tex2)
-            
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.h, blenderMarbleTexture.outColor)
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.lacu, blenderMarbleTexture.outColor)
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.octs, blenderMarbleTexture.outColor)
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.gain, blenderMarbleTexture.outColor)
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.offset, blenderMarbleTexture.outColor)
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.noisesize, blenderMarbleTexture.outColor)
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.outscale, blenderMarbleTexture.outColor)
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.type, blenderMarbleTexture.outColor)
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.noisebasis, blenderMarbleTexture.outColor)
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.bright, blenderMarbleTexture.outColor)
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.contrast, blenderMarbleTexture.outColor)
-#
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.pointWorld, blenderMarbleTexture.outColor)
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.placementMatrix, blenderMarbleTexture.outColor)
-            
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.h, blenderMarbleTexture.outAlpha)
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.lacu, blenderMarbleTexture.outAlpha)
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.octs, blenderMarbleTexture.outAlpha)
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.gain, blenderMarbleTexture.outAlpha)
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.offset, blenderMarbleTexture.outAlpha)
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.noisesize, blenderMarbleTexture.outAlpha)
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.outscale, blenderMarbleTexture.outAlpha)
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.type, blenderMarbleTexture.outAlpha)
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.noisebasis, blenderMarbleTexture.outAlpha)
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.bright, blenderMarbleTexture.outAlpha)
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.contrast, blenderMarbleTexture.outAlpha)
-#
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.pointWorld, blenderMarbleTexture.outAlpha)
-#            blenderMarbleTexture.attributeAffects(blenderMarbleTexture.placementMatrix, blenderMarbleTexture.outAlpha)
-            
+                       
         except:
             OpenMaya.MGlobal.displayError("Failed to add attributes\n")
             raise

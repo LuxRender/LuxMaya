@@ -16,15 +16,16 @@
  * ------------------------------------------------------------------------------
  */
  
- global proc AElux_scaleTemplate( string $nodeName )
+ global proc AElux_gaussianTemplate( string $nodeName )
 {
 	//AEswatchDisplay $nodeName;
 	
 	editorTemplate -beginScrollLayout;
 	
-		editorTemplate -beginLayout "Scale Texture Attributes" -collapse 0;
-			editorTemplate -addControl "tex1";
-			editorTemplate -addControl "tex2";
+		editorTemplate -beginLayout "Gaussian Texture Attributes" -collapse 0;
+			editorTemplate -addControl "wavelength";
+			editorTemplate -addControl "width";
+			editorTemplate -addControl "energy";
 		editorTemplate -endLayout;
 
 		// include/call base class/node attributes

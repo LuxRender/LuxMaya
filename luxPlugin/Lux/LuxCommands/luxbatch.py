@@ -352,7 +352,7 @@ class luxbatch(OpenMayaMPx.MPxCommand):
             try:
                 cmdPrefix = 'nice -n %i %s -t %i %s"%s"' % (niceValue, luxPath, threads, servers, sceneFile)
                 if guiMode:
-                    ccmd = '(xterm -T "Lux Render" -e %s)' & cmdPrefix
+                    ccmd = '(xterm -T "Lux Render" -e %s)&' % cmdPrefix
                 else:
                     ccmd = '(%s)' % cmdPrefix
                 

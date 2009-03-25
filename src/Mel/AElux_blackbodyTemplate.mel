@@ -16,15 +16,14 @@
  * ------------------------------------------------------------------------------
  */
  
- global proc AElux_scaleTemplate( string $nodeName )
+ global proc AElux_blackbodyTemplate( string $nodeName )
 {
 	//AEswatchDisplay $nodeName;
 	
 	editorTemplate -beginScrollLayout;
 	
-		editorTemplate -beginLayout "Scale Texture Attributes" -collapse 0;
-			editorTemplate -addControl "tex1";
-			editorTemplate -addControl "tex2";
+		editorTemplate -beginLayout "Blackbody Texture Attributes" -collapse 0;
+			editorTemplate -addControl "temperature";
 		editorTemplate -endLayout;
 
 		// include/call base class/node attributes
