@@ -152,18 +152,18 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
 
             # the different material types available herewithin
             luxshader.iMaterialType = enumAttr.create("material", "mat",    3)
-            enumAttr.addField( "Carpaint",                                    0)
+            enumAttr.addField( "Carpaint",                                  0)
             enumAttr.addField( "Glass",                                     1)
-            enumAttr.addField( "Rough Glass",                                2)
+            enumAttr.addField( "Rough Glass",                               2)
             enumAttr.addField( "Matte",                                     3)
             enumAttr.addField( "Matte Translucent",                         4)
             enumAttr.addField( "Metal",                                     5)
             # hmm out of sequence Enum values have no effect
-            enumAttr.addField( "Mix",                                       11)
-            enumAttr.addField( "Null",                                       12)
-            enumAttr.addField( "Shiny Metal",                                6)
+            enumAttr.addField( "Mix",                                      11)
+            enumAttr.addField( "Null",                                     12)
+            enumAttr.addField( "Shiny Metal",                               6)
             enumAttr.addField( "Mirror",                                    7)
-            enumAttr.addField( "Glossy",                                     9)
+            enumAttr.addField( "Glossy",                                    9)
             enumAttr.addField( "Area Light",                               10)
 
             # hidden attribute to allow attaching bump maps, relevant to every material type
@@ -292,17 +292,17 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
             raise
 
         try:
-            luxshader.attributeAffects(luxshader.bumpMap,                    luxshader.outColor)
+            luxshader.attributeAffects(luxshader.bumpMap,                   luxshader.outColor)
             # and these are the attributes that we use in compute
-            luxshader.attributeAffects(luxshader.carpaint.kd,                luxshader.outColor)
-            luxshader.attributeAffects(luxshader.glass.kt,                    luxshader.outColor)
+            luxshader.attributeAffects(luxshader.carpaint.kd,               luxshader.outColor)
+            luxshader.attributeAffects(luxshader.glass.kt,                  luxshader.outColor)
             luxshader.attributeAffects(luxshader.roughglass.kt,             luxshader.outColor)
-            luxshader.attributeAffects(luxshader.matte.kd,                    luxshader.outColor)
-            luxshader.attributeAffects(luxshader.mattetranslucent.kt,        luxshader.outColor)
-            #luxshader.attributeAffects(luxshader.metal.n,                    luxshader.outColor)
+            luxshader.attributeAffects(luxshader.matte.kd,                  luxshader.outColor)
+            luxshader.attributeAffects(luxshader.mattetranslucent.kt,       luxshader.outColor)
+            #luxshader.attributeAffects(luxshader.metal.n,                   luxshader.outColor)
             luxshader.attributeAffects(luxshader.shinymetal.kr,             luxshader.outColor)
             luxshader.attributeAffects(luxshader.mirror.kr,                 luxshader.outColor)
-            luxshader.attributeAffects(luxshader.glossy.kd,                    luxshader.outColor)
+            luxshader.attributeAffects(luxshader.glossy.kd,                 luxshader.outColor)
             # arealight doesn't affect, values are hardcoded
 
         except:

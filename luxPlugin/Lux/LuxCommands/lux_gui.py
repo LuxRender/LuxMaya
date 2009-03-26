@@ -295,6 +295,10 @@ class lux_gui(OpenMayaMPx.MPxCommand):
             OpenMaya.MGlobal.displayInfo('LuxMaya: Running in console, not building GUI')
             return
         
+        # Create a DB handler object
+        from Lux.LuxMiscModules.lrmdb import lrmdb
+        self.lrmdb = lrmdb()
+        
         # Create window
         cmds.window('luxGuiMain', title="Lux Render Exporter",
                                   height = self.lux_GUI_height,
@@ -311,7 +315,8 @@ class lux_gui(OpenMayaMPx.MPxCommand):
                         self.processFrame: 'Process',
                         self.filmFrame: 'Film',
                         self.cameraFrame: 'Camera',
-                        self.renderFrame: 'Renderer'
+                        self.renderFrame: 'Renderer',
+                        self.databaseFrame: 'Database'
                      })
         self.endRow() # end the tabs
         
@@ -370,6 +375,10 @@ class lux_gui(OpenMayaMPx.MPxCommand):
                 settingsMenu.addItem( label = niceName, command = "from Lux.LuxMiscModules.fn_attr import fn_attr\nfn_attr.applyAttrPreset( 'lux_settings', '%s', 100)" % preset, parent = settingsWPMenu)
         
         settingsMenu.end()
+        
+        dbMenu = mMenu( label = 'Database' )
+        dbMenu.addItem( label = 'TEST', command = self.mnuDbTEST )
+        dbMenu.end()
         
         helpMenu = mMenu( label = 'Help', helpMenu = True )
         helpMenu.addItem( label = 'LuxRender website', command = self.mnuHelpWebsite )
@@ -980,6 +989,21 @@ class lux_gui(OpenMayaMPx.MPxCommand):
         #---
         
         return flexImageFrameContainer
+    
+    def databaseFrame(self, parent):
+        """
+        Make the frame for the 'Database' window tab
+        """
+        
+        #-
+        # LEVEL 2 DATABASE CONTROLS
+        dbFrame, dbFrameContainer = self.newFrame( label = "Database", parent = parent )
+        #--
+        
+        #--
+        self.endFrame()
+        #-
+        return dbFrameContainer
     
     def renderFrame(self, parent):
         """
@@ -1733,6 +1757,10 @@ class lux_gui(OpenMayaMPx.MPxCommand):
         """
         
         cmds.deleteUI( 'luxGuiMain' )
+        
+    def mnuDbTEST(self, *args):
+        # do something with self.lrmdb
+        self.lrmdb.download(None, 70)
     
     def mnuHelpWebsite(self, *args):
         if os.name == 'nt':
