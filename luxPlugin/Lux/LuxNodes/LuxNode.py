@@ -123,8 +123,6 @@ class NodeAttribute(ExportModule):
         self.addToOutput = addTo
         self.prependToOutput = prependTo
         self.plugName = mayaAttrName
-
-    
         
 class ShaderColorAttribute(NodeAttribute):
     """

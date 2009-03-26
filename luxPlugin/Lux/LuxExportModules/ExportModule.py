@@ -289,14 +289,9 @@ class ExportModule:
         Return AreaLightSource syntax with this class' shaderNode's attributes
         """
         
-        colorPlug = shaderNode.findPlug("arealightLR")
-        colorR = self.rgcAndClamp( colorPlug.asFloat() )
-        
-        colorPlug = shaderNode.findPlug("arealightLG")
-        colorG = self.rgcAndClamp( colorPlug.asFloat() )
-        
-        colorPlug = shaderNode.findPlug("arealightLB")
-        colorB = self.rgcAndClamp( colorPlug.asFloat() )
+        from Lux.LuxNodes.LuxNode import ShaderColorAttribute
+        colour_input = ShaderColorAttribute('arealightL')
+        cOutStr = colour_input.getOutput('L', shaderNode, shaderNode.name())
         
         gainPlug = shaderNode.findPlug("arealightGain")
         gain = gainPlug.asFloat()
@@ -310,7 +305,19 @@ class ExportModule:
         outStr  = ( '\tLightGroup "%s"' % lightGroup ) + os.linesep
         outStr += ( '\tAreaLightSource "area"' ) + os.linesep
         outStr += ( '\t\t"integer nsamples" [%i]' % numSamples ) + os.linesep
-        outStr += ( '\t\t"color L" [%f %f %f]' % (colorR, colorG, colorB) ) + os.linesep
+        if colour_input.inputFound:
+            outStr = '\t' + cOutStr + outStr
+            outStr += ( '\t\t"texture L" ["%s"]' % (colour_input.exportName) ) + os.linesep
+        else:
+            colorPlug = shaderNode.findPlug("arealightLR")
+            colorR = self.rgcAndClamp( colorPlug.asFloat() )
+            colorPlug = shaderNode.findPlug("arealightLG")
+            colorG = self.rgcAndClamp( colorPlug.asFloat() )
+            colorPlug = shaderNode.findPlug("arealightLB")
+            colorB = self.rgcAndClamp( colorPlug.asFloat() )
+            
+            outStr += ('\t\t"color L" [%f %f %f]' % (colorR, colorG, colorB)) + os.linesep
+            
         outStr += ( '\t\t"float gain" [%f]' % gain ) + os.linesep
         
         return outStr
