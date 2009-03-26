@@ -119,7 +119,7 @@
 			editorTemplate -l "Colour L" -addControl "arealightL";
 			editorTemplate -l "Gain" -addControl "arealightGain";
 			editorTemplate -l "NumSamples" -addControl "arealightNumsamples";
-			editorTemplate -l "LightGroup" -addControl "arealightGroup";
+			editorTemplate -l "Light Group" -addControl "arealightGroup";
 		editorTemplate -endLayout;
 		
 		

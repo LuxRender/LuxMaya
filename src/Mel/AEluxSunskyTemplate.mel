@@ -27,6 +27,7 @@
 			editorTemplate -addControl "gain";
 			editorTemplate -addControl "turbidity";
 			editorTemplate -label "Relative Size" -addControl "relsize";
+			editorTemplate -l "Light Group" -addControl "lightgroup";
 		editorTemplate -endLayout;
 		
 		editorTemplate -beginLayout "Geographic Sun Calculator" -collapse 1;

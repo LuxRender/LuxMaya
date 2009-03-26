@@ -56,6 +56,7 @@ class luxSunsky(OpenMayaMPx.MPxLocatorNode, glRoutines, LuxNode):
         gain                  = OpenMaya.MObject()
         turbidity             = OpenMaya.MObject()
         relsize               = OpenMaya.MObject()
+        lightGroup            = OpenMaya.MObject()
         
         latitude              = OpenMaya.MObject()
         longitude             = OpenMaya.MObject()
@@ -95,6 +96,7 @@ class luxSunsky(OpenMayaMPx.MPxLocatorNode, glRoutines, LuxNode):
             luxSunsky.gain = luxSunsky.makeFloat( 'gain', 'ga', default = 1.0 )
             luxSunsky.turbidity = luxSunsky.makeFloat( 'turbidity', 'tb', default = 2.0 )
             luxSunsky.relsize = luxSunsky.makeFloat( 'relsize', 'rs', default = 1.0 )
+            luxSunsky.lightGroup = luxSunsky.makeString('lightgroup', 'lg')
             
             luxSunsky.latitude = luxSunsky.makeFloat( 'latitude', 'lat', default = 51.55, input = True )
             luxSunsky.longitude = luxSunsky.makeFloat( 'longitude', 'lon', default = -0.12, input = True )
@@ -153,6 +155,7 @@ class luxSunsky(OpenMayaMPx.MPxLocatorNode, glRoutines, LuxNode):
             luxSunsky.addAttribute(luxSunsky.gain)
             luxSunsky.addAttribute(luxSunsky.turbidity)
             luxSunsky.addAttribute(luxSunsky.relsize)
+            luxSunsky.addAttribute(luxSunsky.lightGroup)
             
             luxSunsky.addAttribute(luxSunsky.latitude)
             luxSunsky.addAttribute(luxSunsky.longitude)

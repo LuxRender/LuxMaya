@@ -87,6 +87,10 @@ class luxSunskyLoader(ExportModule):
         sPlug = self.dpNode.findPlug("relsize")
         relsize = sPlug.asFloat()
         
+        lgPlug = self.dpNode.findPlug('lightgroup')
+        lightGroup = lgPlug.asString()
+        
+        self.addToOutput( '\tLightGroup "%s"' % lightGroup )
         self.addToOutput( '\tLightSource "sunsky"' )
         self.addToOutput( '\t\t"vector sundir" [%f %f %f]' % (dirX, dirY, dirZ) )
         self.addToOutput( '\t\t"integer nsamples" [%i]' % nsamples )
@@ -147,6 +151,10 @@ class luxEnvironmentLightLoader(ExportModule):
         samplesPlug = self.dpNode.findPlug("numSamples")
         numSamples = samplesPlug.asInt()
         
+        lgPlug = self.dpNode.findPlug('lightgroup')
+        lightGroup = lgPlug.asString()
+        
+        self.addToOutput( '\tLightGroup "%s"' % lightGroup )
         self.addToOutput( '\tLightSource "infinite"' )
         if not hdrFileName == "":
             self.addToOutput( '\t\t"string mapname" ["%s"]' % FileCollector.collectHDRI( hdrFileName ) )

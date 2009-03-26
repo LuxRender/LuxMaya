@@ -27,6 +27,7 @@
 			editorTemplate -label "Colour" -addControl "outColorL";
 			editorTemplate -label "Gain" -addControl "gain";
 			editorTemplate -label "NumSamples" -addControl "numSamples";
+			editorTemplate -l "Light Group" -addControl "lightgroup";
 		editorTemplate -endLayout;
 		
 		

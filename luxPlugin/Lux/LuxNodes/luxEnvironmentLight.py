@@ -50,10 +50,11 @@ class luxEnvironmentLight(OpenMayaMPx.MPxLocatorNode, glRoutines, LuxNode):
     def __init__(self):
         OpenMayaMPx.MPxLocatorNode.__init__(self)
         
-        hdrFileName   = OpenMaya.MObject()
-        outColorL      = OpenMaya.MObject()
-        gain          = OpenMaya.MObject()
-        numsamples      = OpenMaya.MObject()
+        hdrFileName = OpenMaya.MObject()
+        outColorL   = OpenMaya.MObject()
+        gain        = OpenMaya.MObject()
+        numsamples  = OpenMaya.MObject()
+        lightGroup  = OpenMaya.MObject()
         
         glRenderer = OpenMayaRender.MHardwareRenderer.theRenderer()
         self.glFT = glRenderer.glFunctionTable()
@@ -72,6 +73,7 @@ class luxEnvironmentLight(OpenMayaMPx.MPxLocatorNode, glRoutines, LuxNode):
             luxEnvironmentLight.outColorL = luxEnvironmentLight.makeColor('outColorL', 'ocl')
             luxEnvironmentLight.gain = luxEnvironmentLight.makeFloat('gain', 'ga', 1.0)
             luxEnvironmentLight.numsamples = luxEnvironmentLight.makeInteger('numSamples', 'ns', 1)
+            luxEnvironmentLight.lightGroup = luxEnvironmentLight.makeString('lightgroup', 'lg')
             
         except:
             OpenMaya.MGlobal.displayError("Failed to create attributes\n")
@@ -83,6 +85,7 @@ class luxEnvironmentLight(OpenMayaMPx.MPxLocatorNode, glRoutines, LuxNode):
             luxEnvironmentLight.addAttribute(luxEnvironmentLight.outColorL)
             luxEnvironmentLight.addAttribute(luxEnvironmentLight.gain)
             luxEnvironmentLight.addAttribute(luxEnvironmentLight.numsamples)
+            luxEnvironmentLight.addAttribute(luxEnvironmentLight.lightGroup)
             
         except:
             OpenMaya.MGlobal.displayError("Failed to add attributes\n")
