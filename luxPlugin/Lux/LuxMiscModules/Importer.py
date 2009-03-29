@@ -14,57 +14,14 @@
 import types
 from maya import OpenMaya
 from Lux.LuxNodes.luxshader import luxshader
-from Lux.LuxNodes.ShaderNodes import *
-from Lux.LuxNodes.TextureNodes import *
+
+from Lux import Registry as LR
 
 class Importer:
     """
     Imports DB format dict (as string) to Maya nodes
     """
-    
-    shader_type_map = {
-        'carpaint': carpaintShader.carpaintShader,
-        'glass': glassShader.glassShader,
-        'glossy': glossyShader.glossyShader,
-        'matte': matteShader.matteShader,
-        'mattetranslucent': mattetranslucentShader.mattetranslucentShader,
-        'metal': metalShader.metalShader,
-        'mirror': mirrorShader.mirrorShader,
-        'mix': mixShader.mixShader,
-        'null': nullShader.nullShader,
-        'roughglass': roughglassShader.roughglassShader,
-        'shinymetal': shinymetalShader.shinymetalShader,
-    }
-    
-    texture_type_map = {
-        'bilerp': bilerpTexture.bilerpTexture,
-        'blackbody': blackbodyTexture.blackbodyTexture,
-        'blenderBlend': blenderBlendTexture.blenderBlendTexture,
-        'blender_clouds': blenderCloudsTexture.blenderCloudsTexture,
-        'blenderDistortednoise': blenderDistortednoiseTexture.blenderDistortednoiseTexture,
-        'blenderMagic': blenderMagicTexture.blenderMagicTexture,
-        'blenderMarble': blenderMarbleTexture.blenderMarbleTexture,
-        'blenderMusgrave': blenderMusgraveTexture.blenderMusgraveTexture,
-        'blenderNoise': blenderNoiseTexture.blenderNoiseTexture,
-        'blenderStucci': blenderStucciTexture.blenderStucciTexture,
-        'blenderVoronoi': blenderVoronoiTexture.blenderVoronoiTexture,
-        'blender_wood': blenderWoodTexture.blenderWoodTexture,
-        #'brick': brickTexture.brickTexture,        # WTF is wrong with this ?
-        'constant': constantTexture.constantTexture,
-        'checkerboard2d': checkerboard2dTexture.checkerboard2dTexture,
-        'checkerboard3d': checkerboard3dTexture.checkerboard3dTexture,
-        'dots': dotsTexture.dotsTexture,
-        'equalenergy': equalenergyTexture.equalenergyTexture,
-        'fbm': fbmTexture.fbmTexture,
-        'frequency': frequencyTexture.frequencyTexture,
-        'gaussian': gaussianTexture.gaussianTexture,
-        'marble': marbleTexture.marbleTexture,
-        'mix': mixTexture.mixTexture,
-        'scale': scaleTexture.scaleTexture,
-        'windy': windyTexture.windyTexture,
-        'wrinkled': wrinkledTexture.wrinkledTexture,
-    }
-    
+ 
     @staticmethod
     def getMatTex(mat, basekey, tex):
         pass
@@ -85,7 +42,7 @@ class Importer:
         new_shader = new_dagnode.create(luxshader.nodeId(), name)
         name = OpenMaya.MFnDependencyNode(new_shader).name()
          
-        shader_object = Importer.shader_type_map[m['type']]()
+        shader_object = LR.Materials().alt_names[m['type']]()
         
         useable_attrs = {}
         for attr in m.keys():
@@ -114,11 +71,10 @@ class Importer:
     def ImportTexture(name, type, m, connectTo = None, connectFrom = None):
         print '%s texture node %s' % (type, name)
         
-        texture_object = Importer.texture_type_map[type]()
+        texture_object = LR.Textures().alt_names[type]()
         
         for attr in texture_object.attributes.keys():
             attr = attr.lower()
-            #print '\t%s: %s' % (attr, m[attr])
             Importer.DetectTexture(name, attr, m)
         
     

@@ -25,11 +25,12 @@
 #  23  0x6C757817    blender_marble           3D Texture
 #  24  0x6C757818    blender_blend            3D Texture
 #  25  0x6C757819    lux_brick                3D Texture
-#  26  0x6C75781A    lux_gaussian             3D Texture
-#  27  0x6C75781B    lux_frequency            3D Texture
-#  28  0x6C75781C    lux_equalenergy          3D Texture
-#  29  0x6C75781D    lux_lampspectrum         3D Texture          *
-#  30  0x6C75781E    lux_blackbody            3D Texture
+#  26  0x6C75781A    lux_gaussian             Float Texture
+#  27  0x6C75781B    lux_frequency            Float Texture
+#  28  0x6C75781C    lux_equalenergy          Float Texture
+#  29  0x6C75781D    lux_lampspectrum         String (?) Texture          *
+#  30  0x6C75781E    lux_blackbody            Float Texture
+#  31  0x6C75781F    lux_constant             Float Texture
 
 
 #?? irregulardata

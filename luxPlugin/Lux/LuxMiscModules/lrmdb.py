@@ -35,8 +35,8 @@ class lrmdb:
             import httplib
             self.WEB_Connect = True
             OpenMaya.MGlobal.displayInfo("INFO: Simple Web support available")
-        except ImportError:
-            OpenMaya.MGlobal.displayWarning("WARNING: Simple Web support not available")
+        except ImportError, err:
+            OpenMaya.MGlobal.displayWarning("WARNING: Simple Web support not available: %s" % err)
             
         try:
             import cookielib, urllib2, xmlrpclib
@@ -139,8 +139,8 @@ class lrmdb:
             self.XMLRPC_CookieTransport = CookieTransport
             
             OpenMaya.MGlobal.displayInfo("INFO: Advanced Web support available")
-        except ImportError:
-            OpenMaya.MGlobal.displayWarning("WARNING: Advanced Web support not available")
+        except ImportError, err:
+            OpenMaya.MGlobal.displayWarning("WARNING: Advanced Web support not available: %s" % err)
     
     def download(self, mat, id):
         if not self.WEB_Connect: return None

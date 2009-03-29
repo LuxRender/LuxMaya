@@ -24,44 +24,10 @@ from maya import OpenMayaMPx
 from maya import cmds
 from maya import mel
 
-#Commands
-#from Lux.LuxMiscModules.geoSunData import updateSunNode
-
-#Nodes
-from Lux.LuxNodes.luxshader import luxshader
-from Lux.LuxNodes.luxObjectLocator import luxObjectLocator
-from Lux.LuxNodes.luxEnvironmentLight import luxEnvironmentLight
-from Lux.LuxNodes.luxSunsky import luxSunsky
-
-#Textures
-from Lux.LuxNodes.TextureNodes.bilerpTexture import bilerpTexture
-from Lux.LuxNodes.TextureNodes.blackbodyTexture import blackbodyTexture
-from Lux.LuxNodes.TextureNodes.blenderBlendTexture import blenderBlendTexture
-from Lux.LuxNodes.TextureNodes.blenderCloudsTexture import blenderCloudsTexture
-from Lux.LuxNodes.TextureNodes.blenderDistortednoiseTexture import blenderDistortednoiseTexture
-from Lux.LuxNodes.TextureNodes.blenderMagicTexture import blenderMagicTexture
-from Lux.LuxNodes.TextureNodes.blenderMarbleTexture import blenderMarbleTexture
-from Lux.LuxNodes.TextureNodes.blenderMusgraveTexture import blenderMusgraveTexture
-from Lux.LuxNodes.TextureNodes.blenderNoiseTexture import blenderNoiseTexture
-from Lux.LuxNodes.TextureNodes.blenderStucciTexture import blenderStucciTexture
-from Lux.LuxNodes.TextureNodes.blenderVoronoiTexture import blenderVoronoiTexture
-from Lux.LuxNodes.TextureNodes.blenderWoodTexture import blenderWoodTexture
-from Lux.LuxNodes.TextureNodes.checkerboard2dTexture import checkerboard2dTexture
-from Lux.LuxNodes.TextureNodes.checkerboard3dTexture import checkerboard3dTexture
-from Lux.LuxNodes.TextureNodes.dotsTexture import dotsTexture
-from Lux.LuxNodes.TextureNodes.equalenergyTexture import equalenergyTexture
-from Lux.LuxNodes.TextureNodes.fbmTexture import fbmTexture
-from Lux.LuxNodes.TextureNodes.frequencyTexture import frequencyTexture
-from Lux.LuxNodes.TextureNodes.gaussianTexture import gaussianTexture
-from Lux.LuxNodes.TextureNodes.marbleTexture import marbleTexture
-from Lux.LuxNodes.TextureNodes.mixTexture import mixTexture
-from Lux.LuxNodes.TextureNodes.scaleTexture import scaleTexture
-from Lux.LuxNodes.TextureNodes.windyTexture import windyTexture
-from Lux.LuxNodes.TextureNodes.wrinkledTexture import wrinkledTexture
-
 #GUI/Commands
 from Lux.LuxCommands.lux_gui import lux_gui
 from Lux.LuxCommands.luxbatch import luxbatch
+#from Lux.LuxMiscModules.geoSunData import updateSunNode
 
 # ------------------------------------------------------------------------------
 
@@ -73,41 +39,15 @@ luxCommands = [
 
 # We need to know the node types when registering, so provide a dict
 # of the nodes and their types.
-luxNodes = {
-    # shaders
-    luxshader: OpenMayaMPx.MPxNode.kDependNode,
-    
-    # locators / lights
-    luxObjectLocator: OpenMayaMPx.MPxNode.kLocatorNode,
-    luxEnvironmentLight: OpenMayaMPx.MPxNode.kLocatorNode,
-    luxSunsky: OpenMayaMPx.MPxNode.kLocatorNode,
-    
-    # textures
-    bilerpTexture: OpenMayaMPx.MPxNode.kDependNode,
-    blackbodyTexture: OpenMayaMPx.MPxNode.kDependNode,
-    blenderBlendTexture: OpenMayaMPx.MPxNode.kDependNode,
-    blenderCloudsTexture: OpenMayaMPx.MPxNode.kDependNode,
-    blenderDistortednoiseTexture: OpenMayaMPx.MPxNode.kDependNode,
-    blenderMagicTexture: OpenMayaMPx.MPxNode.kDependNode,
-    blenderMarbleTexture: OpenMayaMPx.MPxNode.kDependNode,
-    blenderMusgraveTexture: OpenMayaMPx.MPxNode.kDependNode,
-    blenderNoiseTexture: OpenMayaMPx.MPxNode.kDependNode,
-    blenderStucciTexture: OpenMayaMPx.MPxNode.kDependNode,
-    blenderVoronoiTexture: OpenMayaMPx.MPxNode.kDependNode,
-    blenderWoodTexture: OpenMayaMPx.MPxNode.kDependNode,
-    checkerboard2dTexture: OpenMayaMPx.MPxNode.kDependNode,
-    checkerboard3dTexture: OpenMayaMPx.MPxNode.kDependNode,
-    dotsTexture: OpenMayaMPx.MPxNode.kDependNode,
-    equalenergyTexture: OpenMayaMPx.MPxNode.kDependNode,
-    fbmTexture: OpenMayaMPx.MPxNode.kDependNode,
-    frequencyTexture: OpenMayaMPx.MPxNode.kDependNode,
-    gaussianTexture: OpenMayaMPx.MPxNode.kDependNode,
-    marbleTexture: OpenMayaMPx.MPxNode.kDependNode,
-    mixTexture: OpenMayaMPx.MPxNode.kDependNode,
-    scaleTexture: OpenMayaMPx.MPxNode.kDependNode,
-    windyTexture: OpenMayaMPx.MPxNode.kDependNode,
-    wrinkledTexture: OpenMayaMPx.MPxNode.kDependNode
-}
+luxNodes = {}
+
+# This is now done 'dynamically' in the Registry. (ok, it's manual, the
+# dynamic importer doesn't work, but at least all the imports are in one
+# place now)
+from Lux import Registry as LR
+luxNodes.update(LR.Shaders().all())
+luxNodes.update(LR.Locators().all())
+luxNodes.update(LR.Textures().all())
 
 # initialize the script plug-ins
 def initializePlugin(mobject):

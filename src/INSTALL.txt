@@ -35,6 +35,6 @@ click on the "loaded" check box next to the "luxPlugin.py".
 This places three new elements in Maya's Visor/Hypershade:
 
 - a surface shader (luxshader)
-- two 3d textures (Lux_fbm and Lux_wrinkled)
+- several texture nodes (some "2D", some "3D", and some "other")
 
 And also adds a top level menu "Lux" in the Rendering menu set.

@@ -19,6 +19,8 @@ os.altsep = '/'
 from maya import OpenMaya
 from maya import cmds
 
+from Lux import Registry as LR
+
 class ExportModule:
     """
     The ExportModule base class. This base class holds various vars passed by
@@ -106,32 +108,6 @@ class ExportModule:
         from Lux.LuxNodes.TextureNodes.bumpmapTexture import bumpmapTexture
         from Lux.LuxNodes.TextureNodes.fileTexture import fileTexture
         
-        # Lux custom nodes
-        from Lux.LuxNodes.TextureNodes.bilerpTexture import bilerpTexture
-        from Lux.LuxNodes.TextureNodes.blackbodyTexture import blackbodyTexture
-        from Lux.LuxNodes.TextureNodes.blenderBlendTexture import blenderBlendTexture
-        from Lux.LuxNodes.TextureNodes.blenderCloudsTexture import blenderCloudsTexture
-        from Lux.LuxNodes.TextureNodes.blenderDistortednoiseTexture import blenderDistortednoiseTexture
-        from Lux.LuxNodes.TextureNodes.blenderMagicTexture import blenderMagicTexture
-        from Lux.LuxNodes.TextureNodes.blenderMarbleTexture import blenderMarbleTexture
-        from Lux.LuxNodes.TextureNodes.blenderMusgraveTexture import blenderMusgraveTexture
-        from Lux.LuxNodes.TextureNodes.blenderNoiseTexture import blenderNoiseTexture
-        from Lux.LuxNodes.TextureNodes.blenderStucciTexture import blenderStucciTexture
-        from Lux.LuxNodes.TextureNodes.blenderVoronoiTexture import blenderVoronoiTexture
-        from Lux.LuxNodes.TextureNodes.blenderWoodTexture import blenderWoodTexture
-        from Lux.LuxNodes.TextureNodes.checkerboard2dTexture import checkerboard2dTexture
-        from Lux.LuxNodes.TextureNodes.checkerboard3dTexture import checkerboard3dTexture
-        from Lux.LuxNodes.TextureNodes.dotsTexture import dotsTexture
-        from Lux.LuxNodes.TextureNodes.equalenergyTexture import equalenergyTexture
-        from Lux.LuxNodes.TextureNodes.fbmTexture import fbmTexture
-        from Lux.LuxNodes.TextureNodes.frequencyTexture import frequencyTexture
-        from Lux.LuxNodes.TextureNodes.gaussianTexture import gaussianTexture
-        from Lux.LuxNodes.TextureNodes.marbleTexture import marbleTexture
-        from Lux.LuxNodes.TextureNodes.mixTexture import mixTexture
-        from Lux.LuxNodes.TextureNodes.scaleTexture import scaleTexture
-        from Lux.LuxNodes.TextureNodes.windyTexture import windyTexture
-        from Lux.LuxNodes.TextureNodes.wrinkledTexture import wrinkledTexture
-        
         onPlug = self.shaderNode.findPlug(self.plugName)
         inputPlugs = OpenMaya.MPlugArray()
         onPlug.connectedTo(inputPlugs, True, True)
@@ -145,32 +121,9 @@ class ExportModule:
             OpenMaya.MFn.kFileTexture:      fileTexture,
         }
         
-        custom_nodes = [
-            bilerpTexture,
-            blackbodyTexture,
-            blenderBlendTexture,
-            blenderCloudsTexture,
-            blenderDistortednoiseTexture,
-            blenderMagicTexture,
-            blenderMarbleTexture,
-            blenderMusgraveTexture,
-            blenderNoiseTexture,
-            blenderStucciTexture,
-            blenderVoronoiTexture,
-            blenderWoodTexture,
-            checkerboard2dTexture,
-            checkerboard3dTexture,
-            dotsTexture,
-            equalenergyTexture,
-            fbmTexture,
-            frequencyTexture,
-            gaussianTexture,
-            marbleTexture,
-            mixTexture,
-            scaleTexture,
-            windyTexture,
-            wrinkledTexture
-        ]
+        # Get a list of custom textures from the Texture Registry
+        TR = LR.Textures()
+        custom_nodes = TR.list_all()
         
         # custom Lux nodes
         lux_texture_map = {}
