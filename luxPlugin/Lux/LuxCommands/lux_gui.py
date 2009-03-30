@@ -1760,7 +1760,7 @@ class lux_gui(OpenMayaMPx.MPxCommand):
         
     def mnuDbTEST(self, *args):
         # do something with self.lrmdb
-        self.lrmdb.download(None, 70)
+        self.lrmdb.download(None, 60)
     
     def mnuHelpWebsite(self, *args):
         if os.name == 'nt':

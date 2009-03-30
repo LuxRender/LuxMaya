@@ -13,6 +13,7 @@
 # ------------------------------------------------------------------------------
 import types
 from maya import OpenMaya
+from maya import cmds
 from Lux.LuxNodes.luxshader import luxshader
 
 from Lux import Registry as LR
@@ -40,7 +41,8 @@ class Importer:
     def ImportMaterial(name, m, connectTo = None, connectFrom = None):
         new_dagnode = OpenMaya.MFnDependencyNode()
         new_shader = new_dagnode.create(luxshader.nodeId(), name)
-        name = OpenMaya.MFnDependencyNode(new_shader).name()
+        new_shader = OpenMaya.MFnDependencyNode(new_shader)
+        name = new_shader.name()
          
         shader_object = LR.Materials().alt_names[m['type']]()
         
@@ -51,31 +53,56 @@ class Importer:
         
         print 'material %s is a %s and has useable attributes:' % (name, shader_object.luxType)
         for attr in shader_object.attributes.keys():
-            attr = attr.lower()
-            if attr in useable_attrs.keys():
-                print '\t%s: %s' % (attr, useable_attrs[attr])
-                Importer.DetectTexture(name, attr, useable_attrs)
+            attr_l = attr.lower()
+            if attr_l in useable_attrs.keys():
+                print '\t%s: %s' % (shader_object.attributes[attr].plugName, useable_attrs[attr_l])
+                Importer.DetectTexture(name, attr_l, useable_attrs, new_shader, shader_object.attributes[attr].plugName)
                 
     @staticmethod
-    def DetectTexture(name, attr, useable_attrs):
+    def DetectTexture(name, attr, useable_attrs, dest_object, dest_attr):
         if attr+'.texture' in useable_attrs:
             print '\tTextured: %s' % useable_attrs[attr+'.texture']
             future_attrs = {}
             key_len = len(attr)+1
             for fattr in useable_attrs.keys():
-                if fattr[:key_len] == attr+':':
+                if fattr[:key_len] in [attr+':', attr+'.']:
                     future_attrs[fattr[key_len:]] = useable_attrs[fattr]
-            Importer.ImportTexture(name+'-'+attr, useable_attrs[attr+'.texture'], future_attrs)
+            Importer.ImportTexture(name+'_'+attr, useable_attrs[attr+'.texture'], future_attrs, dest_object, dest_attr)
         
     @staticmethod            
-    def ImportTexture(name, type, m, connectTo = None, connectFrom = None):
-        print '%s texture node %s' % (type, name)
-        
+    def ImportTexture(name, type, m, connectFromNode = None, connectFromAttr = None):
+        new_dagnode = OpenMaya.MFnDependencyNode()
         texture_object = LR.Textures().alt_names[type]()
         
-        for attr in texture_object.attributes.keys():
-            attr = attr.lower()
-            Importer.DetectTexture(name, attr, m)
+        new_texture = new_dagnode.create(texture_object.nodeId(), name)
+        new_texture = OpenMaya.MFnDependencyNode(new_texture)
+        name = new_texture.name()
+        
+        if connectFromNode is not None and connectFromAttr is not None:
+            try:
+                cmds.connectAttr(name + '.outColor', connectFromNode.name() + '.' + connectFromAttr)
+            except RuntimeError: # incompatible connection, possible trying to connect colour to float...
+                try:
+                    # ... so try to connect a float value ...
+                    cmds.connectAttr(name + '.outAlpha', connectFromNode.name() + '.' + connectFromAttr)
+                except:
+                    # ... else fail
+                    raise
+        
+        print '%s texture node %s (connect to %s.%s)' % (type, name, connectFromNode.name(), connectFromAttr)
+        
+        for attr in m.keys():
+            print "\t%s: %s" % (attr, m[attr])
+
+        print "\t-"
+        for attr_m in texture_object.attributes.keys():
+            attr = attr_m.lower()
+            print "\t%s (%s): %s" % (attr, texture_object.attributes[attr_m].plugName, texture_object.attributes[attr_m])
+            if attr in m.keys():
+                print "\t -> attr also in m, setting value"
+                texture_object.attributes[attr_m].setValue(name+'.'+attr, m[attr])
+            
+            Importer.DetectTexture(name, attr, m, new_texture, texture_object.attributes[attr_m].plugName)
         
     
     @staticmethod

@@ -287,6 +287,10 @@ class TextureFloatAttribute(NodeAttribute):
         
         return self.outputString
     
+    def setValue(self, node_attr, value):
+        cmds.setAttr(node_attr, value)
+        print "\t\tset %s to %s" % (node_attr, value)
+    
 class TextureColorAttribute(NodeAttribute):
     """
     Color Attribute for Texture nodes
@@ -318,6 +322,16 @@ class TextureColorAttribute(NodeAttribute):
             self.addToOutput( '\t\t"color %s" [%f %f %f]' % (cPlug, valueR, valueG, valueB) )
         
         return self.outputString
+    
+    def setValue(self, node_attr, value):
+        try:
+            value = value.split(" ")
+        except AttributeError:
+            value = [value, value, value]
+        for i,v in enumerate(value):
+            value[i] = float(v)
+        cmds.setAttr(node_attr, *value)
+        print "\t\tset %s to %s" % (node_attr, value)
 
 class TextureVectorAttribute(NodeAttribute):
     """
@@ -364,6 +378,14 @@ class TextureEnumAttribute(NodeAttribute):
             return '\t\t"string %s" ["%s"]' % (self.plugName, eValue)
         else:
             return '\t\t"integer %s" [%i]' % (self.plugName, value)
+        
+    def setValue(self, node_attr, value):
+        try:
+            name_index = self.nameValues.index(value)
+            cmds.setAttr(node_attr, name_index)
+            print "\t\tset %s to %i:%s" % (node_attr, name_index, value)
+        except Exception, err:
+            print "\t\t%s not found in nameValues? (%s)" % (value, err)
 
 class TextureIntegerAttribute(NodeAttribute):
     """
