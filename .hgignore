@@ -1,3 +1,7 @@
 
 syntax: regexp
 ^\.project$
+
+syntax: glob
+*.DS_Store
+*.pyc
