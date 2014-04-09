@@ -124,7 +124,7 @@ class luxshader(OpenMayaMPx.MPxNode, ShaderNode):
             outColorHandle = block.outputValue( self.outColor )
             outColorHandle.setMFloatVector(resultColor)
             outColorHandle.setClean()
-            return OpenMaya.MStatus.kSuccess
+            return True #povman: OpenMaya.MStatus.kSuccess
         else:
             return OpenMaya.kUnknownParameter
 

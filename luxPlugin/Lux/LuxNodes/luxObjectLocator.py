@@ -70,7 +70,7 @@ class luxObjectLocator(OpenMayaMPx.MPxLocatorNode, glRoutines):
             OpenMaya.MGlobal.displayError("Failed to add attributes\n")
             raise
         
-        return OpenMaya.MStatus.kSuccess
+        #povman: return OpenMaya.MStatus.kSuccess
 
     @staticmethod
     def nodeCreator():

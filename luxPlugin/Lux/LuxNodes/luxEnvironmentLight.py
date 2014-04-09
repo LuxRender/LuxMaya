@@ -91,7 +91,8 @@ class luxEnvironmentLight(OpenMayaMPx.MPxLocatorNode, glRoutines, LuxNode):
             OpenMaya.MGlobal.displayError("Failed to add attributes\n")
             raise
         
-        return OpenMaya.MStatus.kSuccess
+        # povman: MStatus is deprecated
+        # return OpenMaya.MStatus.kSuccess
     
     def postConstructor(self):
         self._setMPSafe(True)

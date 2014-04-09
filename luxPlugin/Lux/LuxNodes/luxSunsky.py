@@ -180,7 +180,7 @@ class luxSunsky(OpenMayaMPx.MPxLocatorNode, glRoutines, LuxNode):
             OpenMaya.MGlobal.displayError("Failed to add attributes\n")
             raise
         
-        return OpenMaya.MStatus.kSuccess
+        # povman: return OpenMaya.MStatus.kSuccess
     
     def postConstructor(self):
         self._setMPSafe(True)
